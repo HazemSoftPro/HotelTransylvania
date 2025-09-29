@@ -34,20 +34,7 @@ export default defineNuxtConfig({
   },
   modules: ["@pinia/nuxt", "notivue/nuxt", "@samk-dev/nuxt-vcalendar", "@nuxtjs/i18n"],
   i18n: {
-    locales: [
-      {
-        code: 'en',
-        name: 'English',
-        file: 'en.json'
-      },
-      {
-        code: 'ar',
-        name: 'Arabic',
-        file: 'ar.json'
-      }
-    ],
-    lazy: true,
-    langDir: 'locales',
+    locales: ['en', 'ar'],
     defaultLocale: 'en',
     detectBrowserLanguage: {
       useCookie: true,
