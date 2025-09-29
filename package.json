@@ -1,0 +1,62 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev --host",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "migrate": "prisma migrate dev",
+    "pull": "prisma db pull",
+    "push": "prisma db push",
+    "deploy": "prisma db push && nuxt build",
+    "studio": "prisma studio"
+  },
+  "prisma": {
+    "schema": "server/schema.prisma"
+  },
+  "dependencies": {
+    "@nuxt/types": "^2.17.3",
+    "@nuxtjs/eslint-config-typescript": "^12.1.0",
+    "@nuxtjs/i18n": "^10.1.0",
+    "@pinia/nuxt": "^0.5.1",
+    "@prisma/client": "^5.14.0-dev.67",
+    "@samk-dev/nuxt-vcalendar": "^1.0.3",
+    "@sentry/node": "^7.110.0",
+    "@sentry/profiling-node": "^7.110.0",
+    "@sentry/types": "^7.110.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/bootstrap": "^5.2.10",
+    "@types/jsonwebtoken": "^9.0.6",
+    "animate.css": "^4.1.1",
+    "bcryptjs": "^2.4.3",
+    "bootstrap": "^5.3.3",
+    "chart.js": "^4.4.2",
+    "dotenv": "^16.4.5",
+    "dotenv-cli": "^7.4.1",
+    "jsonwebtoken": "^9.0.2",
+    "notivue": "^2.4.4",
+    "nuxt": "^3.11.1",
+    "pinia": "^2.1.7",
+    "vue": "^3.4.21",
+    "vue-chartjs": "^5.3.1",
+    "vue-router": "^4.3.0",
+    "winston": "^3.13.0"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "@nuxt/eslint-config": "^0.2.0",
+    "@types/node": "^20.12.2",
+    "@vue/eslint-config-prettier": "^8.0.0",
+    "eslint": "^8.56.0",
+    "nuxt-modal": "^1.0.2",
+    "prettier": "^3.1.1",
+    "prisma": "^5.14.0-dev.67",
+    "sass": "^1.74.1",
+    "sass-loader": "^14.2.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.3"
+  }
+}

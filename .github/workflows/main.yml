@@ -1,0 +1,56 @@
+name: 🚀 Deploy website on push
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: self-hosted
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v4
+
+      - name: 📦 Deploy to server
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.11.1"
+
+      - name: 📦 Install packages Project
+        run: |
+          npm install
+      - name: 🔨 Create .env file
+        run: |
+          echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
+          echo NUXT_ACCESS_TOKEN=${{ secrets.NUXT_ACCESS_TOKEN }} >> .env
+          echo NUXT_ACCESS_TOKEN_EXP=${{ secrets.NUXT_ACCESS_TOKEN_EXP }} >> .env
+          echo NUXT_REFRESH_TOKEN=${{ secrets.NUXT_REFRESH_TOKEN }} >> .env
+          echo NUXT_REFRESH_TOKEN_EXP=${{ secrets.NUXT_REFRESH_TOKEN_EXP }} >> .env
+          echo NUXT_PUBLIC_SENTRY_DSN=${{ secrets.NUXT_PUBLIC_SENTRY_DSN }} >> .env
+          echo NUXT_PUBLIC_ENV=${{ secrets.NUXT_PUBLIC_ENV }} >> .env
+      - name: 🔨 Create ecosystem.config.cjs file
+        run: |
+          echo "const dotenv = require('dotenv');" >> ecosystem.config.cjs
+          echo "dotenv.config();" >> ecosystem.config.cjs
+          echo "module.exports = {" >> ecosystem.config.cjs
+          echo "  apps: [" >> ecosystem.config.cjs
+          echo "    {" >> ecosystem.config.cjs
+          echo "      name: \"HMS\"," >> ecosystem.config.cjs
+          echo "      port: \"3000\"," >> ecosystem.config.cjs
+          echo "      exec_mode: \"cluster\"," >> ecosystem.config.cjs
+          echo "      instances: \"max\"," >> ecosystem.config.cjs
+          echo "      script: \"./.output/server/index.mjs\"," >> ecosystem.config.cjs
+          echo "    }," >> ecosystem.config.cjs
+          echo "  ]," >> ecosystem.config.cjs
+          echo "};" >> ecosystem.config.cjs
+
+      - name: 🔨 Build Project
+        run: |
+          npm run build
+
+      - name: 🚀 Deploy Project [1/2]
+        run: npm install pm2 -g
+
+      - name: 🚀 Deploy Project [2/2]
+        run: pm2 start ecosystem.config.cjs

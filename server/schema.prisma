@@ -1,0 +1,160 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 String   @id @default(cuid())
+  email              String   @unique
+  username           String   @unique
+  name               String?
+  surname            String?
+  phone              String?
+  salt               String
+  password           String
+  createdAt          DateTime @default(now())
+  refreshToken       String?
+  role               UserRole @default(USER)
+}
+
+model Hotel {
+  id          Int    @id @default(autoincrement())
+  name        String
+  star        Int
+  address     String
+  city        String
+  country     String
+  phone       String
+  email       String
+  website     String
+  zip_code    String
+  description String
+}
+
+model Guest {
+  id           Int           @id @default(autoincrement())
+  name         String
+  surname      String
+  phone        String
+  email        String       @unique
+  address      String
+  city         String
+  country      String
+  zip_code     String
+  description  String?
+  nip          String?
+  bookings   Booking[]
+}
+
+model Room {
+  id             Int       @id @default(autoincrement())
+  number         String    @unique
+  type           RoomStandard
+  maxGuests      Int
+  pricePerNight  Float
+  status         RoomStatus
+  equipment      Equipment? @relation(fields: [equipmentId], references: [id])
+  equipmentId    Int?
+  bookings   Booking[]
+}
+
+model Equipment {
+  id             Int      @id @default(autoincrement())
+  singleBeds     Int      @default(0)
+  doubleBeds     Int      @default(0)
+  hasTV          Boolean  @default(false)
+  hasWifi        Boolean  @default(false)
+  hasBathroom    Boolean  @default(false)
+  bathroomType   BathroomType?
+  hasKitchen     Boolean  @default(false)
+  hasFridge      Boolean  @default(false)
+  hasBalcony     Boolean  @default(false)
+  hasAirConditioning Boolean @default(false)
+  hasWardrobe    Boolean  @default(false)
+  hasHairDryer   Boolean  @default(false)
+  hasCoffeeAndTeaSet Boolean @default(false)
+  hasCosmetics   Boolean  @default(false)
+  hasTowels      Boolean  @default(false)
+  rooms          Room[]
+}
+
+
+model Booking {
+  id           Int      @id @default(autoincrement())
+  room         Room     @relation(fields: [roomId], references: [id])
+  roomId       Int
+  guest        Guest    @relation(fields: [guestId], references: [id])
+  guestId      Int
+  startDate    DateTime @db.Date
+  endDate      DateTime @db.Date
+  price        Float
+  status       BookingStatus
+  source       BookingSource
+  OTA          String?
+  createdAt    DateTime @default(now())
+  additions    BookingAdditions[]
+}
+
+model BookingAdditions {
+  id           Int      @id @default(autoincrement())
+  booking      Booking  @relation(fields: [bookingId], references: [id])
+  bookingId    Int
+  addition     Addition @relation(fields: [additionId], references: [id])
+  additionId   Int
+  quantity     Int     @default(0)
+}
+
+model Addition {
+  id           Int      @id @default(autoincrement())
+  name         String
+  price        Float
+  bookings     BookingAdditions[]
+}
+
+
+enum RoomStatus {
+  CLEAN
+  DIRTY
+  SERVICE
+  OCCUPIED
+  ARRIVAL
+}
+
+enum RoomStandard {
+  ECONOMY
+  STANDARD
+  LUXURY
+  APARTMENT
+}
+
+enum BathroomType {
+  SHOWER
+  BATHTUB
+  BOTH
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  GUARANTEED
+  CANCELED
+  CHECKED_IN
+  CHECKED_OUT
+}
+
+enum BookingSource {
+  DIRECT
+  EMAIL
+  PHONE
+  BOOKING
+  OTHER
+}
