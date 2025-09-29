@@ -1,9 +1,13 @@
-import { createI18n } from 'vue-i18n'
+import en from './locales/en.json'
+import ar from './locales/ar.json'
 
 export default defineI18nConfiguration(() => {
   return {
     legacy: false,
     locale: 'en',
-    messages: {}
+    messages: {
+      en,
+      ar
+    }
   }
 })
