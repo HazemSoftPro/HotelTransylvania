@@ -2,6 +2,8 @@
 export default defineNuxtConfig({
   extends: ["nuxt-modal"],
   devtools: { enabled: true },
+  ssr: false, // Disable SSR for Electron compatibility
+  target: 'static', // Generate static files for Electron
   runtimeConfig: {
     access: {
       token: import.meta.env.NUXT_ACCESS_TOKEN,

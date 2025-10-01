@@ -186,10 +186,10 @@
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
 import { useMyDashboardStore } from "~/stores/dashboard";
-import { useBookingStore } from "~/stores/bookings";
+import { useMyBookingsStore } from "~/stores/bookings";
 
 const store = useMyDashboardStore();
-const bookingStore = useBookingStore();
+const bookingStore = useMyBookingsStore();
 
 const currentDay = ref("");
 const currentDate = ref("");

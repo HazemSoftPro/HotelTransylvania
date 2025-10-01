@@ -286,9 +286,7 @@
                   <i class="bi bi-house-door-fill"></i>
                   Pokój: {{ selectedRoom?.number }}
                   <i class="text-muted">
-                    ({{
-                      "{{ $t('price_per_night') }} " + selectedRoom?.pricePerNight + " zł"
-                    }})</i
+                    ({{ $t('price_per_night') }} {{ selectedRoom?.pricePerNight }} zł)</i
                   >
                 </p>
 
