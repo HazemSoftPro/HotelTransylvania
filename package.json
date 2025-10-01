@@ -1,7 +1,12 @@
 {
-  "name": "nuxt-app",
+  "name": "hmsuite",
+  "version": "1.0.0",
+  "description": "Hotel Management Suite - A comprehensive hotel management system",
+  "author": "HazemSoftPro",
   "private": true,
   "type": "module",
+  "main": "electron/main.js",
+  "homepage": "./",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev --host",
@@ -12,10 +17,75 @@
     "pull": "prisma db pull",
     "push": "prisma db push",
     "deploy": "prisma db push && nuxt build",
-    "studio": "prisma studio"
+    "studio": "prisma studio",
+    "electron": "cross-env NODE_ENV=development concurrently \"pnpm dev\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron:build": "pnpm generate && electron-builder",
+    "electron:build:win": "pnpm generate && electron-builder --win",
+    "electron:build:mac": "pnpm generate && electron-builder --mac",
+    "electron:build:linux": "pnpm generate && electron-builder --linux",
+    "dist": "pnpm electron:build:win"
   },
   "prisma": {
     "schema": "server/schema.prisma"
+  },
+  "build": {
+    "appId": "com.hmsuite.app",
+    "productName": "HMSuite",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "files": [
+      "electron/**/*",
+      ".output/**/*",
+      "public/**/*",
+      "!node_modules/**/*",
+      "!src/**/*",
+      "!.nuxt/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": ".output",
+        "to": ".output"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
   },
   "dependencies": {
     "@nuxt/types": "^2.17.3",
@@ -24,9 +94,6 @@
     "@pinia/nuxt": "^0.5.1",
     "@prisma/client": "^5.14.0-dev.67",
     "@samk-dev/nuxt-vcalendar": "^1.0.3",
-    "@sentry/node": "^7.110.0",
-    "@sentry/profiling-node": "^7.110.0",
-    "@sentry/types": "^7.110.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/bootstrap": "^5.2.10",
     "@types/jsonwebtoken": "^9.0.6",
@@ -50,6 +117,10 @@
     "@nuxt/eslint-config": "^0.2.0",
     "@types/node": "^20.12.2",
     "@vue/eslint-config-prettier": "^8.0.0",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
+    "electron": "^38.2.0",
+    "electron-builder": "^26.0.12",
     "eslint": "^8.56.0",
     "nuxt-modal": "^1.0.2",
     "prettier": "^3.1.1",
@@ -58,6 +129,8 @@
     "sass-loader": "^14.2.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.3",
-    "vite": "^7.1.7"
-  }
+    "vite": "^7.1.7",
+    "wait-on": "^9.0.1"
+  },
+  "packageManager": "pnpm@10.15.0+sha512.486ebc259d3e999a4e8691ce03b5cac4a71cbeca39372a9b762cb500cfdf0873e2cb16abe3d951b1ee2cf012503f027b98b6584e4df22524e0c7450d9ec7aa7b"
 }

@@ -83,7 +83,7 @@ export const useMyBookingsStore = defineStore({
       },
       {
         id: 2,
-        title: $t('select_room'),
+        title: "Wybierz pokój",
         icon: "hotel",
         completed: false,
       },
@@ -140,7 +140,7 @@ export const useMyBookingsStore = defineStore({
         }
       } catch (error) {
         console.error("Failed to fetch bookings:", error);
-        push.error($t('error_fetching_data'));
+        push.error('Error fetching data');
       } finally {
         this.loading = false;
 
@@ -261,7 +261,7 @@ export const useMyBookingsStore = defineStore({
           this.additions = response;
         }
       } catch (error) {
-        push.error($t('error_fetching_additions'));
+        push.error('Error fetching additions');
       }
     },
     updateAddition(additionId: number, quantity: number) {
@@ -293,12 +293,12 @@ export const useMyBookingsStore = defineStore({
         });
 
         if (response) {
-          push.success($t('successfully_added_checkin'));
+          push.success('Successfully added checkin');
           this.stepper("close");
           this.resetValues();
         }
       } catch (error) {
-        push.error($t('error_adding_checkin'));
+        push.error('Error adding checkin');
       }
     },
     resetValues() {
@@ -334,12 +334,12 @@ export const useMyBookingsStore = defineStore({
         });
 
         if (response) {
-          push.success($t('successfully_added_booking'));
+          push.success('Successfully added booking');
           this.stepper("close");
           this.resetValues();
         }
       } catch (error) {
-        push.error($t('error_adding_booking'));
+        push.error('Error adding booking');
       }
     },
     resetValues2() {
@@ -361,7 +361,7 @@ export const useMyBookingsStore = defineStore({
         this.modalAction = action;
         this.isModalOpen = true;
       } else {
-        push.error($t('booking_not_found'));
+        push.error('Booking not found');
       }
     },
     closeModal() {
@@ -396,11 +396,11 @@ export const useMyBookingsStore = defineStore({
         }
       } catch (error) {
         console.error("Error:", error);
-        push.error($t('error_occurred'));
+        push.error('Error occurred');
       } finally {
-        if (action === "checkout") push.info($t('guest_checked_out'));
-        if (action === "checkin") push.info($t('guest_checked_in'));
-        if (action === "cancel") push.info($t('booking_cancelled'));
+        if (action === "checkout") push.info('Guest checked out');
+        if (action === "checkin") push.info('Guest checked in');
+        if (action === "cancel") push.info('Booking cancelled');
         this.selectBooking = {} as Booking;
         this.closeModal();
       }

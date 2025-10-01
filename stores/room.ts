@@ -179,9 +179,9 @@ export const useMyRoomStore = defineStore({
           },
         });
       } catch (error) {
-        push.error($t('error_while_deleting_room'));
+        push.error('Error while deleting room');
       } finally {
-        push.success($t('room_deleted_successfully'));
+        push.success('Room deleted successfully');
         this.closeModal();
       }
     },
@@ -206,9 +206,9 @@ export const useMyRoomStore = defineStore({
           throw new Error(`HTTP error! status: ${response}`);
         }
       } catch (error) {
-        push.error($t('error_while_updating_room'));
+        push.error('Error while updating room');
       } finally {
-        push.success($t('room_updated_successfully'));
+        push.success('Room updated successfully');
         this.closeModal();
         this.room = {} as Room;
       }
@@ -230,11 +230,11 @@ export const useMyRoomStore = defineStore({
         });
 
         if (response) {
-          push.success($t('room_added_successfully'));
+          push.success('Room added successfully');
           this.closeModal();
         }
       } catch (error) {
-        push.error($t('error_while_adding_room'));
+        push.error('Error while adding room');
       }
     },
   },

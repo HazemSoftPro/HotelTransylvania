@@ -79,7 +79,7 @@ export const useMyDashboardStore = defineStore({
         }
       } catch (error) {
         console.error("Failed to fetch bookings:", error);
-        push.error($t('error_fetching_data'));
+        push.error('Error fetching data');
       }
     },
     async fetchStays(status: string[]) {
@@ -100,7 +100,7 @@ export const useMyDashboardStore = defineStore({
         }
       } catch (error) {
         console.error("Failed to fetch bookings:", error);
-        push.error($t('error_fetching_data'));
+        push.error('Error fetching data');
       }
     },
     async fetchTodayArrivals(
@@ -127,7 +127,7 @@ export const useMyDashboardStore = defineStore({
         }
       } catch (error) {
         console.error("Failed to fetch bookings:", error);
-        push.error($t('error_fetching_data'));
+        push.error('Error fetching data');
       }
     },
     async fetchNewBookings(status: string[], startDate: string) {
@@ -149,7 +149,7 @@ export const useMyDashboardStore = defineStore({
         }
       } catch (error) {
         console.error("Failed to fetch bookings:", error);
-        push.error($t('error_fetching_data'));
+        push.error('Error fetching data');
       }
     },
     async fetchWeeklyBookings(
@@ -176,7 +176,7 @@ export const useMyDashboardStore = defineStore({
         }
       } catch (error) {
         console.error("Failed to fetch bookings:", error);
-        push.error($t('error_fetching_data'));
+        push.error('Error fetching data');
       }
     },
     async fetchRooms() {

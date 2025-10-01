@@ -1,6 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+import pkg from "@prisma/client";
+const { PrismaClient } = pkg;
 
-let _prisma: PrismaClient;
+let _prisma: any;
 
 export const usePrisma = () => {
   if (!_prisma) {

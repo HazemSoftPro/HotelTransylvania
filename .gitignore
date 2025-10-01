@@ -6,6 +6,10 @@
 .cache
 dist
 
+# Electron build outputs
+dist-electron
+out
+
 # Node dependencies
 node_modules
 
