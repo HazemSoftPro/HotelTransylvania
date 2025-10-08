@@ -1,0 +1,50 @@
+{
+  "services": [
+    {
+      "id": 1,
+      "name": "Breakfast",
+      "description": "Continental breakfast",
+      "price": 20.00,
+      "branch_id": 1
+    },
+    {
+      "id": 2,
+      "name": "Spa",
+      "description": "Relaxing spa session",
+      "price": 50.00,
+      "branch_id": 2
+    }
+  ],
+  "room_services": [
+    {
+      "room_id": 101,
+      "service_id": 1,
+      "branch_id": 1
+    },
+    {
+      "room_id": 101,
+      "service_id": 2,
+      "branch_id": 1
+    },
+    {
+      "room_id": 102,
+      "service_id": 1,
+      "branch_id": 1
+    },
+    {
+      "room_id": 201,
+      "service_id": 3,
+      "branch_id": 1
+    }
+  ],
+  "reservation_services": [
+    {
+      "reservation_service_id": 1,
+      "reservation_id": 1,
+      "service_id": 1,
+      "quantity": 2,
+      "total_price": 40.00,
+      "branch_id": 1
+    }
+  ]
+}

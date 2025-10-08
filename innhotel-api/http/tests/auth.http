@@ -1,0 +1,43 @@
+@baseUrl = https://localhost:57679
+@cookieJar = api/auth
+
+### Login
+# @name login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "super@innhotel.com",
+    "password": "Sup3rP@ssword!"
+}
+
+### Refresh Token
+# @name refresh
+POST {{baseUrl}}/api/auth/refresh
+Cookie: {{cookieJar}}
+
+### Register (Admin/SuperAdmin only)
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.accessToken}}
+
+{
+    "email": "newuser@example.com",
+    "password": "NewUser123!",
+    "firstName": "John",
+    "lastName": "Doe",
+    "branchId": 1,
+    "hireDate": "2024-05-01",
+    "position": "Receptionist"
+}
+
+### Logout
+# @name logout
+POST {{baseUrl}}/api/auth/logout
+Cookie: {{cookieJar}}
+Authorization: Bearer {{login.response.body.accessToken}}
+
+### Test Refresh After Logout (should fail)
+# @name refreshAfterLogout
+POST {{baseUrl}}/api/auth/refresh
+Cookie: {{cookieJar}}
