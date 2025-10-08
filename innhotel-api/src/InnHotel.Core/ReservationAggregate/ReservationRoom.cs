@@ -2,11 +2,22 @@
 
 namespace InnHotel.Core.ReservationAggregate;
 
-public class ReservationRoom(int reservationId, int roomId, decimal pricePerNight) : EntityBase
+public class ReservationRoom : EntityBase
 {
-    public int ReservationId { get; private set;  } = Guard.Against.NegativeOrZero(reservationId, nameof(reservationId));
-    public Reservation Reservation { get; private set; } = null!;
-    public int RoomId { get; private set; } = Guard.Against.NegativeOrZero(roomId, nameof(roomId));
-    public Room Room { get; private set; } = null!;
-    public decimal PricePerNight { get; private set; } = Guard.Against.NegativeOrZero(pricePerNight, nameof(pricePerNight));
+    public int ReservationId { get; set; }
+    public Reservation Reservation { get; set; } = null!;
+    public int RoomId { get; set; }
+    public Room Room { get; set; } = null!;
+    public decimal PricePerNight { get; set; }
+
+    public ReservationRoom()
+    {
+    }
+
+    public ReservationRoom(int reservationId, int roomId, decimal pricePerNight)
+    {
+        ReservationId = Guard.Against.NegativeOrZero(reservationId, nameof(reservationId));
+        RoomId = Guard.Against.NegativeOrZero(roomId, nameof(roomId));
+        PricePerNight = Guard.Against.NegativeOrZero(pricePerNight, nameof(pricePerNight));
+    }
 }

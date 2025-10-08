@@ -6,7 +6,7 @@ services:
     image: postgres:15-alpine
     container_name: innhotel-postgres
     environment:
-      POSTGRES_DB: innhotel_db
+      POSTGRES_DB: innhotel-db
       POSTGRES_USER: innhotel_user
       POSTGRES_PASSWORD: innhotel_secure_password_2024
     ports:
@@ -21,16 +21,38 @@ services:
   api:
     build:
       context: ./innhotel-api
-      dockerfile: Dockerfile
+      dockerfile: ../Dockerfile.api
     container_name: innhotel-api
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__PostgreSQLConnection: Host=postgres;Port=5432;Username=innhotel_user;Password=innhotel_secure_password_2024;Database=innhotel_db
+      ConnectionStrings__PostgreSQLConnection: Host=postgres;Port=5432;Username=innhotel_user;Password=innhotel_secure_password_2024;Database=innhotel-db
       ALLOWED_ORIGINS: http://localhost:3000,http://localhost:5173,https://localhost:5173
     ports:
       - "57679:80"
     depends_on:
       - postgres
+    networks:
+      - innhotel-network
+
+  # InnHotel Desktop Client (React dev server)
+  client:
+    build:
+      context: ./innhotel-desktop-client
+      dockerfile: Dockerfile
+    container_name: innhotel-client
+    environment:
+      NODE_ENV: development
+      VITE_API_BASE_URL: http://localhost:57679/api
+      VITE_ENABLE_LOGGING: "true"
+      CHOKIDAR_USEPOLLING: "true"
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./innhotel-desktop-client:/app
+      - /app/node_modules
+    command: sh -c "corepack enable && (test -d node_modules || pnpm install --frozen-lockfile) && pnpm run dev:react -- --host 0.0.0.0 --port 5173"
+    depends_on:
+      - api
     networks:
       - innhotel-network
 
