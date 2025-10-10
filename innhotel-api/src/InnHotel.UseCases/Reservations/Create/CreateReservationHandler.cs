@@ -108,11 +108,14 @@ public class CreateReservationHandler : IRequestHandler<CreateReservationCommand
                 reservation.Id, reservation.GuestId);
 
             // Map to DTO
+            var firstRoom = rooms.FirstOrDefault();
             var dto = new ReservationDto
             {
                 Id = reservation.Id,
                 GuestId = reservation.GuestId,
                 GuestName = $"{guest.FirstName} {guest.LastName}",
+                BranchId = firstRoom?.BranchId,
+                BranchName = firstRoom?.Branch?.Name ?? "Unknown",
                 CheckInDate = reservation.CheckInDate,
                 CheckOutDate = reservation.CheckOutDate,
                 ReservationDate = reservation.ReservationDate,

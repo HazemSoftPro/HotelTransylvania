@@ -28,6 +28,8 @@ public class List(IMediator _mediator)
                 r.Id,
                 r.GuestId,
                 r.GuestName,
+                r.BranchId,
+                r.BranchName,
                 r.CheckInDate,
                 r.CheckOutDate,
                 r.ReservationDate,

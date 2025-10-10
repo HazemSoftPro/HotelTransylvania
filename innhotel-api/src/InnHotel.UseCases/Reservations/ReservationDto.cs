@@ -5,6 +5,8 @@ public record ReservationDto
     public int Id { get; init; }
     public int GuestId { get; init; }
     public string GuestName { get; init; } = string.Empty;
+    public int? BranchId { get; init; }
+    public string BranchName { get; init; } = string.Empty;
     public DateOnly CheckInDate { get; init; }
     public DateOnly CheckOutDate { get; init; }
     public DateTime ReservationDate { get; init; }

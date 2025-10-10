@@ -82,6 +82,8 @@ public class Create(IMediator _mediator)
                 result.Value.Id,
                 result.Value.GuestId,
                 result.Value.GuestName,
+                result.Value.BranchId,
+                result.Value.BranchName,
                 result.Value.CheckInDate,
                 result.Value.CheckOutDate,
                 result.Value.ReservationDate,

@@ -7,6 +7,8 @@ public record ReservationRecord(
     int Id,
     int GuestId,
     string GuestName,
+    int? BranchId,
+    string BranchName,
     DateOnly CheckInDate,
     DateOnly CheckOutDate,
     DateTime ReservationDate,

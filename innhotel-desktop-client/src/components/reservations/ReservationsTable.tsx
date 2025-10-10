@@ -1,5 +1,5 @@
 import { ChevronRight, Building2, Calendar, BedDouble, User2 } from "lucide-react";
-import type { Reservation } from "@/types/reservation";
+import type { ReservationResponse } from "@/types/api/reservation";
 import {
   Table,
   TableBody,
@@ -13,15 +13,16 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 interface ReservationsTableProps {
-  reservations: Reservation[];
-  onReservationClick?: (reservation: Reservation) => void;
+  reservations: ReservationResponse[];
+  onReservationClick?: (reservation: ReservationResponse) => void;
 }
 
-const statusStyles: Record<string, { color: string; bg: string }> = {
-  'Pending': { color: 'text-yellow-600', bg: 'border-yellow-600/20' },
-  'Confirmed': { color: 'text-blue-600', bg: 'border-blue-600/20' },
-  'Checked In': { color: 'text-green-600', bg: 'border-green-600/20' },
-  'Checked Out': { color: 'text-gray-600', bg: 'border-gray-600/20' },
+const statusStyles: Record<string, { color: string; bg: string; label: string }> = {
+  'Pending': { color: 'text-yellow-600', bg: 'border-yellow-600/20', label: 'Pending' },
+  'Confirmed': { color: 'text-blue-600', bg: 'border-blue-600/20', label: 'Confirmed' },
+  'CheckedIn': { color: 'text-green-600', bg: 'border-green-600/20', label: 'Checked In' },
+  'CheckedOut': { color: 'text-gray-600', bg: 'border-gray-600/20', label: 'Checked Out' },
+  'Cancelled': { color: 'text-red-600', bg: 'border-red-600/20', label: 'Cancelled' },
 };
 
 export const ReservationsTable = ({ reservations, onReservationClick }: ReservationsTableProps) => {
@@ -57,13 +58,13 @@ export const ReservationsTable = ({ reservations, onReservationClick }: Reservat
               <TableCell>
                 <div className="flex items-center gap-2">
                   <User2 className="h-4 w-4 text-muted-foreground" />
-                  <span className="font-medium">{reservation.guest_name}</span>
+                  <span className="font-medium">{reservation.guestName}</span>
                 </div>
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Building2 className="h-4 w-4" />
-                  <span>{reservation.branch_name}</span>
+                  <span>{reservation.branchName}</span>
                 </div>
               </TableCell>
               <TableCell>
@@ -71,18 +72,18 @@ export const ReservationsTable = ({ reservations, onReservationClick }: Reservat
                   <div className="flex items-center gap-2 text-sm">
                     <Calendar className="h-4 w-4 text-muted-foreground" />
                     <span>
-                      {formatDate(reservation.check_in_date)} - {formatDate(reservation.check_out_date)}
+                      {formatDate(reservation.checkInDate)} - {formatDate(reservation.checkOutDate)}
                     </span>
                   </div>
                   <span className="text-xs text-muted-foreground">
-                    Reserved on {formatDate(reservation.reservation_date)}
+                    Reserved on {formatDate(reservation.reservationDate)}
                   </span>
                 </div>
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
                   <BedDouble className="h-4 w-4 text-muted-foreground" />
-                  <span>{reservation.rooms.map(room => room.room_number).join(', ')}</span>
+                  <span>{reservation.rooms.map(room => room.roomNumber).join(', ')}</span>
                 </div>
               </TableCell>
               <TableCell>
@@ -90,15 +91,15 @@ export const ReservationsTable = ({ reservations, onReservationClick }: Reservat
                   variant="outline"
                   className={cn(
                     "font-medium text-xs tracking-wide",
-                    statusStyles[reservation.status].color,
-                    statusStyles[reservation.status].bg
+                    statusStyles[reservation.status || 'Pending']?.color || 'text-gray-600',
+                    statusStyles[reservation.status || 'Pending']?.bg || 'border-gray-600/20'
                   )}
                 >
-                  {reservation.status}
+                  {statusStyles[reservation.status || 'Pending']?.label || reservation.status}
                 </Badge>
               </TableCell>
               <TableCell className="text-right font-medium">
-                ${reservation.total_cost.toFixed(2)}
+                ${reservation.totalCost.toFixed(2)}
               </TableCell>
               <TableCell>
                 <Button

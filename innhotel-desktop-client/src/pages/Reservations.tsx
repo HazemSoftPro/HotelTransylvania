@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ReservationsTable } from "@/components/reservations/ReservationsTable";
-import type { Reservation, ReservationStatus } from "@/types/reservation";
-import reservationsData from "@/mocks/reservations.json";
+import type { ReservationResponse } from "@/types/api/reservation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Search, Filter } from "lucide-react";
@@ -14,25 +13,45 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { reservationService } from "@/services/reservationService";
+import { toast } from "sonner";
+import type { ReservationStatus } from "@/types/reservation";
 
 const Reservations = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<ReservationStatus | "all">("all");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [reservations, setReservations] = useState<ReservationResponse[]>([]);
+  const [, setIsLoading] = useState(true);
 
-  const allReservations = (reservationsData as { reservations: Reservation[] }).reservations;
+  useEffect(() => {
+    const fetchReservations = async () => {
+      try {
+        setIsLoading(true);
+        const response = await reservationService.getAll(1, 100);
+        setReservations(response.items);
+      } catch (error) {
+        toast.error("Failed to fetch reservations");
+        console.error("Error fetching reservations:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const filteredReservations = allReservations.filter(reservation => {
-    const matchesSearch = reservation.guest_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      reservation.branch_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      reservation.rooms.some(room => room.room_number.includes(searchQuery));
+    fetchReservations();
+  }, []);
+
+  const filteredReservations = reservations.filter(reservation => {
+    const matchesSearch = 
+      reservation.guestName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      reservation.rooms.some(room => room.roomNumber.includes(searchQuery));
 
     const matchesStatus = statusFilter === "all" || reservation.status === statusFilter;
 
     return matchesSearch && matchesStatus;
   });
 
-  const handleReservationClick = (reservation: Reservation) => {
+  const handleReservationClick = (reservation: ReservationResponse) => {
     console.log("Reservation clicked:", reservation);
   };
 
@@ -75,8 +94,9 @@ const Reservations = () => {
             <SelectItem value="all">All Statuses</SelectItem>
             <SelectItem value="Pending">Pending</SelectItem>
             <SelectItem value="Confirmed">Confirmed</SelectItem>
-            <SelectItem value="Checked In">Checked In</SelectItem>
-            <SelectItem value="Checked Out">Checked Out</SelectItem>
+            <SelectItem value="CheckedIn">Checked In</SelectItem>
+            <SelectItem value="CheckedOut">Checked Out</SelectItem>
+            <SelectItem value="Cancelled">Cancelled</SelectItem>
           </SelectContent>
         </Select>
       </div>

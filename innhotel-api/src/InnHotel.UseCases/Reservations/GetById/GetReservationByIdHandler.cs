@@ -32,11 +32,14 @@ public class GetReservationByIdHandler : IRequestHandler<GetReservationByIdQuery
                 return Result<ReservationDto>.NotFound($"Reservation with ID {request.Id} not found.");
             }
 
+            var firstRoom = reservation.Rooms.FirstOrDefault();
             var dto = new ReservationDto
             {
                 Id = reservation.Id,
                 GuestId = reservation.GuestId,
                 GuestName = reservation.Guest != null ? $"{reservation.Guest.FirstName} {reservation.Guest.LastName}" : "Unknown",
+                BranchId = firstRoom?.Room?.BranchId,
+                BranchName = firstRoom?.Room?.Branch?.Name ?? "Unknown",
                 CheckInDate = reservation.CheckInDate,
                 CheckOutDate = reservation.CheckOutDate,
                 ReservationDate = reservation.ReservationDate,

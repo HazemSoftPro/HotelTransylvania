@@ -12,6 +12,9 @@ public class ReservationByIdSpec : Specification<Reservation>
             .Include(r => r.Rooms)
                 .ThenInclude(rr => rr.Room)
                     .ThenInclude(r => r.RoomType)
+            .Include(r => r.Rooms)
+                .ThenInclude(rr => rr.Room)
+                    .ThenInclude(r => r.Branch)
             .Include(r => r.Services)
                 .ThenInclude(rs => rs.Service);
     }

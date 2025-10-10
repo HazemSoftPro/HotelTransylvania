@@ -1,16 +1,33 @@
 import type { Pagination, UpdateResponse } from './global';
 
-// Room in a reservation
+// Room in a reservation (for creation)
 export interface ReservationRoom {
   roomId: number;
   pricePerNight: number;
 }
 
-// Service in a reservation
+// Room in a reservation response
+export interface ReservationRoomResponse {
+  roomId: number;
+  roomNumber: string;
+  roomTypeName: string;
+  pricePerNight: number;
+}
+
+// Service in a reservation (for creation)
 export interface ReservationService {
   serviceId: number;
   quantity: number;
   unitPrice: number;
+}
+
+// Service in a reservation response
+export interface ReservationServiceResponse {
+  serviceId: number;
+  serviceName: string;
+  quantity: number;
+  unitPrice: number;
+  totalPrice: number;
 }
 
 // Reservation interface for creation
@@ -24,10 +41,19 @@ export interface Reservation {
 }
 
 // Response of successful reservation creation and getById
-export interface ReservationResponse extends Reservation {
+export interface ReservationResponse {
   id: number;
-  reservationDate: string; // DateTime format
+  guestId: number;
+  guestName: string;
+  branchId?: number;
+  branchName: string;
+  checkInDate: string;
+  checkOutDate: string;
+  reservationDate: string;
+  status: 'Pending' | 'Confirmed' | 'CheckedIn' | 'CheckedOut' | 'Cancelled';
   totalCost: number;
+  rooms: ReservationRoomResponse[];
+  services: ReservationServiceResponse[];
 }
 
 // Response of successful get all reservations

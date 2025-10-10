@@ -8,6 +8,7 @@ public class RoomsByIdsSpec : Specification<Room>
     {
         Query
             .Where(room => roomIds.Contains(room.Id))
-            .Include(room => room.RoomType);
+            .Include(room => room.RoomType)
+            .Include(room => room.Branch);
     }
 }
