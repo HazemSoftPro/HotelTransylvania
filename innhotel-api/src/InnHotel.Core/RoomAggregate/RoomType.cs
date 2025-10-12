@@ -15,5 +15,19 @@ public class RoomType(int branchId, string name, decimal basePrice, int capacity
     public string Name { get; private set; } = Guard.Against.NullOrEmpty(name, nameof(name));
     public decimal BasePrice { get; private set; } = Guard.Against.NegativeOrZero(basePrice, nameof(basePrice));
     public int Capacity { get; private set; } = Guard.Against.NegativeOrZero(capacity, nameof(capacity));
-    public string? Description { get; } = description;
+    public string? Description { get; private set; } = description;
+
+    public void UpdateDetails(
+        int branchId,
+        string name,
+        decimal basePrice,
+        int capacity,
+        string? description)
+    {
+        BranchId = Guard.Against.NegativeOrZero(branchId, nameof(branchId));
+        Name = Guard.Against.NullOrEmpty(name, nameof(name));
+        BasePrice = Guard.Against.NegativeOrZero(basePrice, nameof(basePrice));
+        Capacity = Guard.Against.NegativeOrZero(capacity, nameof(capacity));
+        Description = description;
+    }
 }
