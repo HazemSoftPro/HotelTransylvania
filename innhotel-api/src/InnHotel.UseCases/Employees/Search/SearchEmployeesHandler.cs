@@ -22,13 +22,11 @@ public class SearchEmployeesHandler(IReadRepository<Employee> _repository)
         var employeeDtos = employees.Select(e => new EmployeeDTO(
             e.Id,
             e.BranchId,
-            e.Branch.Name,
             e.FirstName,
             e.LastName,
             e.HireDate,
             e.Position,
-            e.UserId,
-            e.User?.Email)).ToList();
+            e.UserId)).ToList();
 
         return Result.Success(employeeDtos.AsEnumerable());
     }

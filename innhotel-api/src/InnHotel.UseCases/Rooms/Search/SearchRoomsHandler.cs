@@ -25,6 +25,8 @@ public class SearchRoomsHandler(IReadRepository<Room> _repository)
             r.Branch.Name,
             r.RoomTypeId,
             r.RoomType.Name,
+            r.RoomType.BasePrice,
+            r.RoomType.Capacity,
             r.RoomNumber,
             r.Status,
             r.Floor)).ToList();

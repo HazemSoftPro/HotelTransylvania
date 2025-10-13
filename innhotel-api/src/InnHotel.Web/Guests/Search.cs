@@ -1,5 +1,6 @@
 using InnHotel.UseCases.Guests.Search;
 using InnHotel.Web.Common;
+using InnHotel.Core.GuestAggregate.ValueObjects;
 using AuthRoles = InnHotel.Core.AuthAggregate.Roles;
 
 namespace InnHotel.Web.Guests;
@@ -22,8 +23,8 @@ public class Search(IMediator _mediator)
             s.ExampleRequest = new SearchGuestsRequest
             {
                 SearchTerm = "john",
-                Gender = Core.GuestAggregate.Gender.Male,
-                IdProofType = Core.GuestAggregate.IdProofType.Passport,
+                Gender = Gender.Male,
+                IdProofType = IdProofType.Passport,
                 PageNumber = 1,
                 PageSize = 10
             };

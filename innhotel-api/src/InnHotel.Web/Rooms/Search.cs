@@ -1,5 +1,6 @@
 using InnHotel.UseCases.Rooms.Search;
 using InnHotel.Web.Common;
+using InnHotel.Core.RoomAggregate;
 using AuthRoles = InnHotel.Core.AuthAggregate.Roles;
 
 namespace InnHotel.Web.Rooms;
@@ -24,7 +25,7 @@ public class Search(IMediator _mediator)
                 SearchTerm = "101",
                 BranchId = 1,
                 RoomTypeId = 1,
-                Status = Core.RoomAggregate.RoomStatus.Available,
+                Status = RoomStatus.Available,
                 Floor = 1,
                 PageNumber = 1,
                 PageSize = 10
@@ -64,6 +65,8 @@ public class Search(IMediator _mediator)
                 r.BranchName,
                 r.RoomTypeId,
                 r.RoomTypeName,
+                r.BasePrice,
+                r.Capacity,
                 r.RoomNumber,
                 r.Status,
                 r.Floor)).ToList();

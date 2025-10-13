@@ -20,9 +20,10 @@ import { Button } from "@/components/ui/button";
 import type { CreateRoomRequest, UpdateRoomRequest, RoomStatus } from "@/types/api/room";
 import { useState, useEffect } from "react";
 import { branchService } from "@/services/branchService";
+import { roomTypeService } from "@/services/roomTypeService";
 import { roomSchema } from "@/schemas/roomSchema";
 import type { RoomFormValues } from "@/types/room";
-import { roomStatusOptions, roomTypeOptions } from "@/types/room";
+import { roomStatusOptions } from "@/types/room";
 
 interface BaseRoomFormProps {
   defaultValues?: Partial<RoomFormValues>;
@@ -46,6 +47,12 @@ interface Branch {
   name: string;
 }
 
+interface RoomType {
+  id: number;
+  name: string;
+  branchId: number;
+}
+
 export const RoomForm = ({ 
   onSubmit, 
   defaultValues,
@@ -53,19 +60,23 @@ export const RoomForm = ({
   mode 
 }: RoomFormProps) => {
   const [branches, setBranches] = useState<Branch[]>([]);
+  const [roomTypes, setRoomTypes] = useState<RoomType[]>([]);
   const [isLoadingBranches, setIsLoadingBranches] = useState(false);
+  const [isLoadingRoomTypes, setIsLoadingRoomTypes] = useState(false);
 
   const form = useForm<RoomFormValues>({
     resolver: zodResolver(roomSchema),
     defaultValues: {
       room_number: "",
-      room_type_id: "1",
+      room_type_id: "",
       status: "0",
       floor: 1,
       branch_id: "",
       ...defaultValues
     }
   });
+
+  const selectedBranchId = form.watch("branch_id");
 
   useEffect(() => {
     const fetchBranches = async () => {
@@ -87,6 +98,40 @@ export const RoomForm = ({
       fetchBranches();
     }
   }, [mode]);
+
+  useEffect(() => {
+    const fetchRoomTypes = async () => {
+      if (!selectedBranchId) {
+        setRoomTypes([]);
+        return;
+      }
+
+      try {
+        setIsLoadingRoomTypes(true);
+        const response = await roomTypeService.getAll();
+        const filteredRoomTypes = response.data
+          .filter((rt: any) => rt.branchId === parseInt(selectedBranchId))
+          .map((rt: any) => ({
+            id: rt.id,
+            name: rt.name,
+            branchId: rt.branchId
+          }));
+        setRoomTypes(filteredRoomTypes);
+        
+        // Reset room type selection when branch changes
+        form.setValue("room_type_id", "");
+      } catch (error) {
+        console.error('Failed to fetch room types:', error);
+        setRoomTypes([]);
+      } finally {
+        setIsLoadingRoomTypes(false);
+      }
+    };
+
+    if (mode === 'create') {
+      fetchRoomTypes();
+    }
+  }, [selectedBranchId, mode, form]);
 
   const handleSubmit = (values: RoomFormValues) => {
     if (mode === 'create') {
@@ -112,6 +157,33 @@ export const RoomForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+        {mode === 'create' && (
+          <FormField
+            control={form.control}
+            name="branch_id"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Branch <span className="text-destructive">*</span></FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select branch" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {branches.map((branch) => (
+                      <SelectItem key={branch.id} value={branch.id.toString()}>
+                        {branch.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
         <FormField
           control={form.control}
           name="room_number"
@@ -136,15 +208,27 @@ export const RoomForm = ({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Room Type <span className="text-destructive">*</span></FormLabel>
-              <Select onValueChange={field.onChange} value={field.value}>
+              <Select 
+                onValueChange={field.onChange} 
+                value={field.value}
+                disabled={mode === 'create' && (!selectedBranchId || isLoadingRoomTypes)}
+              >
                 <FormControl>
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select room type" />
+                    <SelectValue placeholder={
+                      mode === 'create' && !selectedBranchId 
+                        ? "Select branch first" 
+                        : isLoadingRoomTypes 
+                        ? "Loading room types..." 
+                        : roomTypes.length === 0 
+                        ? "No room types available for this branch"
+                        : "Select room type"
+                    } />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {roomTypeOptions.map((type) => (
-                    <SelectItem key={type.id} value={type.id}>
+                  {roomTypes.map((type) => (
+                    <SelectItem key={type.id} value={type.id.toString()}>
                       {type.name}
                     </SelectItem>
                   ))}
@@ -201,34 +285,7 @@ export const RoomForm = ({
           )}
         />
 
-        {mode === 'create' && (
-          <FormField
-            control={form.control}
-            name="branch_id"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Branch <span className="text-destructive">*</span></FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select branch" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {branches.map((branch) => (
-                      <SelectItem key={branch.id} value={branch.id.toString()}>
-                        {branch.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        )}
-
-        <Button type="submit" disabled={isLoading || isLoadingBranches}>
+        <Button type="submit" disabled={isLoading || isLoadingBranches || isLoadingRoomTypes}>
           {isLoading 
             ? (mode === 'update' ? "Saving Changes..." : "Creating Room...") 
             : (mode === 'update' ? "Save Changes" : "Create Room")

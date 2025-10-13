@@ -24,7 +24,7 @@ public sealed class EmployeeSearchSpec : Specification<Employee>
             Query.Where(e => e.FirstName.ToLower().Contains(lowerSearchTerm) ||
                            e.LastName.ToLower().Contains(lowerSearchTerm) ||
                            e.Position.ToLower().Contains(lowerSearchTerm) ||
-                           (e.User != null && e.User.Email.ToLower().Contains(lowerSearchTerm)));
+                           (e.User != null && e.User.Email != null && e.User.Email.ToLower().Contains(lowerSearchTerm)));
         }
 
         // Apply branch filter
@@ -43,12 +43,12 @@ public sealed class EmployeeSearchSpec : Specification<Employee>
         // Apply hire date range filter
         if (hireDateFrom.HasValue)
         {
-            Query.Where(e => e.HireDate >= hireDateFrom.Value);
+            Query.Where(e => e.HireDate >= DateOnly.FromDateTime(hireDateFrom.Value));
         }
 
         if (hireDateTo.HasValue)
         {
-            Query.Where(e => e.HireDate <= hireDateTo.Value);
+            Query.Where(e => e.HireDate <= DateOnly.FromDateTime(hireDateTo.Value));
         }
 
         // Apply pagination and ordering

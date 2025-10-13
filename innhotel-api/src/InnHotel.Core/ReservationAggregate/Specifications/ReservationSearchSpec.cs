@@ -17,10 +17,10 @@ public sealed class ReservationSearchSpec : Specification<Reservation>
     {
         Query
             .Include(r => r.Guest)
-            .Include(r => r.ReservationRooms)
+            .Include(r => r.Rooms)
                 .ThenInclude(rr => rr.Room)
                 .ThenInclude(r => r.RoomType)
-            .Include(r => r.ReservationRooms)
+            .Include(r => r.Rooms)
                 .ThenInclude(rr => rr.Room)
                 .ThenInclude(r => r.Branch);
 
@@ -30,7 +30,7 @@ public sealed class ReservationSearchSpec : Specification<Reservation>
             var lowerSearchTerm = searchTerm.ToLower();
             Query.Where(r => r.Guest.FirstName.ToLower().Contains(lowerSearchTerm) ||
                            r.Guest.LastName.ToLower().Contains(lowerSearchTerm) ||
-                           r.ReservationRooms.Any(rr => rr.Room.RoomNumber.Contains(searchTerm)));
+                           r.Rooms.Any(rr => rr.Room.RoomNumber.Contains(searchTerm)));
         }
 
         // Apply guest filter
@@ -48,23 +48,23 @@ public sealed class ReservationSearchSpec : Specification<Reservation>
         // Apply check-in date range filter
         if (checkInDateFrom.HasValue)
         {
-            Query.Where(r => r.CheckInDate >= checkInDateFrom.Value);
+            Query.Where(r => r.CheckInDate >= DateOnly.FromDateTime(checkInDateFrom.Value));
         }
 
         if (checkInDateTo.HasValue)
         {
-            Query.Where(r => r.CheckInDate <= checkInDateTo.Value);
+            Query.Where(r => r.CheckInDate <= DateOnly.FromDateTime(checkInDateTo.Value));
         }
 
         // Apply check-out date range filter
         if (checkOutDateFrom.HasValue)
         {
-            Query.Where(r => r.CheckOutDate >= checkOutDateFrom.Value);
+            Query.Where(r => r.CheckOutDate >= DateOnly.FromDateTime(checkOutDateFrom.Value));
         }
 
         if (checkOutDateTo.HasValue)
         {
-            Query.Where(r => r.CheckOutDate <= checkOutDateTo.Value);
+            Query.Where(r => r.CheckOutDate <= DateOnly.FromDateTime(checkOutDateTo.Value));
         }
 
         // Apply pagination and ordering

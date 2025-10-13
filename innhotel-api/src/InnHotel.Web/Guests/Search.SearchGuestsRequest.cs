@@ -1,4 +1,5 @@
 using InnHotel.Core.GuestAggregate;
+using InnHotel.Core.GuestAggregate.ValueObjects;
 
 namespace InnHotel.Web.Guests;
 

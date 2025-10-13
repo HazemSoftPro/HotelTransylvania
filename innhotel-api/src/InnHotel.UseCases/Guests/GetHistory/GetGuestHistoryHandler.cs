@@ -1,15 +1,16 @@
 using InnHotel.Core.GuestAggregate;
 using InnHotel.Core.GuestAggregate.Specifications;
 using InnHotel.Core.ReservationAggregate;
+using InnHotel.UseCases.Reservations;
 
 namespace InnHotel.UseCases.Guests.GetHistory;
 
 public class GetGuestHistoryHandler(
     IReadRepository<Guest> _guestRepository,
     IReadRepository<Reservation> _reservationRepository)
-    : IQueryHandler<GetGuestHistoryQuery, Result<IEnumerable<ReservationDTO>>>
+    : IQueryHandler<GetGuestHistoryQuery, Result<IEnumerable<ReservationDto>>>
 {
-    public async Task<Result<IEnumerable<ReservationDTO>>> Handle(GetGuestHistoryQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<ReservationDto>>> Handle(GetGuestHistoryQuery request, CancellationToken cancellationToken)
     {
         // First verify the guest exists
         var guest = await _guestRepository.GetByIdAsync(request.GuestId, cancellationToken);
@@ -22,22 +23,37 @@ public class GetGuestHistoryHandler(
         var spec = new GuestHistorySpec(request.GuestId, request.PageNumber, request.PageSize);
         var reservations = await _reservationRepository.ListAsync(spec, cancellationToken);
 
-        var reservationDtos = reservations.Select(r => new ReservationDTO(
-            r.Id,
-            r.GuestId,
-            $"{r.Guest.FirstName} {r.Guest.LastName}",
-            r.CheckInDate,
-            r.CheckOutDate,
-            r.Status,
-            r.ReservationRooms.Select(rr => new ReservationRoomDTO(
-                rr.RoomId,
-                rr.Room.RoomNumber,
-                rr.Room.RoomType.Name,
-                rr.Room.Branch.Name)).ToList(),
-            r.ReservationServices.Select(rs => new ReservationServiceDTO(
-                rs.ServiceId,
-                rs.Service.Name,
-                rs.Service.Price)).ToList())).ToList();
+        var reservationDtos = reservations.Select(r =>
+        {
+            var firstRoom = r.Rooms.FirstOrDefault();
+            return new ReservationDto
+            {
+                Id = r.Id,
+                GuestId = r.GuestId,
+                GuestName = $"{r.Guest.FirstName} {r.Guest.LastName}",
+                BranchId = firstRoom?.Room?.BranchId,
+                BranchName = firstRoom?.Room?.Branch?.Name ?? "Unknown",
+                CheckInDate = r.CheckInDate,
+                CheckOutDate = r.CheckOutDate,
+                ReservationDate = r.ReservationDate,
+                Status = r.Status,
+                TotalCost = r.TotalCost,
+                Rooms = r.Rooms.Select(rr => new ReservationRoomDto
+                {
+                    RoomId = rr.RoomId,
+                    RoomNumber = rr.Room?.RoomNumber ?? "Unknown",
+                    RoomTypeName = rr.Room?.RoomType?.Name ?? "Unknown",
+                    PricePerNight = rr.PricePerNight
+                }).ToList(),
+                Services = r.Services.Select(rs => new ReservationServiceDto
+                {
+                    ServiceId = rs.ServiceId,
+                    ServiceName = rs.Service?.Name ?? "Service",
+                    Quantity = rs.Quantity,
+                    UnitPrice = rs.UnitPrice
+                }).ToList()
+            };
+        }).ToList();
 
         return Result.Success(reservationDtos.AsEnumerable());
     }

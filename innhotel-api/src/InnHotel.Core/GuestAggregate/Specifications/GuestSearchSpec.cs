@@ -1,4 +1,5 @@
 using Ardalis.Specification;
+using InnHotel.Core.GuestAggregate.ValueObjects;
 
 namespace InnHotel.Core.GuestAggregate.Specifications;
 
@@ -17,9 +18,9 @@ public sealed class GuestSearchSpec : Specification<Guest>
             var lowerSearchTerm = searchTerm.ToLower();
             Query.Where(g => g.FirstName.ToLower().Contains(lowerSearchTerm) ||
                            g.LastName.ToLower().Contains(lowerSearchTerm) ||
-                           g.Email.ToLower().Contains(lowerSearchTerm) ||
-                           g.Phone.Contains(searchTerm) ||
-                           g.IdProofNumber.Contains(searchTerm));
+                           (g.Email != null && g.Email.ToLower().Contains(lowerSearchTerm)) ||
+                           (g.Phone != null && g.Phone.Contains(searchTerm)) ||
+                           (g.IdProofNumber != null && g.IdProofNumber.Contains(searchTerm)));
         }
 
         // Apply gender filter

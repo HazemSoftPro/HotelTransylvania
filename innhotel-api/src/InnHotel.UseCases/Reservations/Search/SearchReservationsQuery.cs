@@ -11,4 +11,4 @@ public record SearchReservationsQuery(
     DateTime? CheckOutDateFrom = null,
     DateTime? CheckOutDateTo = null,
     int PageNumber = 1,
-    int PageSize = 10) : IQuery<Result<IEnumerable<ReservationDTO>>>;
+    int PageSize = 10) : IQuery<Result<IEnumerable<ReservationDto>>>;
