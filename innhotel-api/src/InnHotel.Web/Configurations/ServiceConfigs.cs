@@ -1,6 +1,7 @@
 ﻿using InnHotel.Core.Interfaces;
 using InnHotel.Infrastructure;
 using InnHotel.Infrastructure.Email;
+using InnHotel.Web.Services;
 
 namespace InnHotel.Web.Configurations;
 
@@ -10,6 +11,9 @@ public static class ServiceConfigs
   {
     services.AddInfrastructureServices(builder.Configuration, logger)
             .AddMediatrConfigs();
+
+    // Register SignalR notification service
+    services.AddScoped<IRoomNotificationService, RoomNotificationService>();
 
 
     if (builder.Environment.IsDevelopment())

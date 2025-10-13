@@ -8,9 +8,12 @@ import { Plus } from "lucide-react";
 import { ROUTES } from "@/constants/routes";
 import { Pagination } from "@/components/pagination/Pagination";
 import { PAGE_SIZE_OPTIONS } from "@/constants/pagination";
+import { ConnectionStatus } from "@/components/ui/connection-status";
+import { useRoomsStore } from "@/store/rooms.store";
 
 const Rooms = () => {
   const navigate = useNavigate();
+  const { joinBranchGroup } = useRoomsStore();
   const [rooms, setRooms] = useState<RoomResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,6 +33,10 @@ const Rooms = () => {
         setTotalCount(response.totalCount);
         setHasPreviousPage(response.hasPreviousPage);
         setHasNextPage(response.hasNextPage);
+
+        // Join branch groups for real-time updates
+        const branchIds = [...new Set(response.items.map(room => room.branchId))];
+        branchIds.forEach(branchId => joinBranchGroup(branchId));
       } catch (error) {
         console.error('Failed to fetch rooms:', error);
       } finally {
@@ -60,13 +67,16 @@ const Rooms = () => {
           <h1 className="text-2xl font-bold">Rooms Management</h1>
           <p className="text-muted-foreground">Manage your hotel rooms and their status.</p>
         </div>
-        <Button 
-          onClick={() => navigate(ROUTES.ADD_ROOM)} 
-          className="gap-2"
-        >
-          <Plus className="h-4 w-4" />
-          Add Room
-        </Button>
+        <div className="flex items-center gap-4">
+          <ConnectionStatus />
+          <Button 
+            onClick={() => navigate(ROUTES.ADD_ROOM)} 
+            className="gap-2"
+          >
+            <Plus className="h-4 w-4" />
+            Add Room
+          </Button>
+        </div>
       </div>
 
       <RoomsListing 

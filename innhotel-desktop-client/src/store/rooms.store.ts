@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import type { Room } from '@/types/api/room';
+import { getSignalRService, type RoomStatusUpdate, type RoomUpdate } from '@/services/signalRService';
+import { toast } from 'sonner';
 
 interface RoomsState {
   rooms: Room[];
@@ -19,6 +21,9 @@ interface RoomsState {
     pageSize: number;
     totalResults: number;
   };
+  // Real-time connection state
+  isConnected: boolean;
+  connectionError: string | null;
 }
 
 interface RoomsActions {
@@ -41,6 +46,12 @@ interface RoomsActions {
   // Pagination
   setPagination: (pagination: Partial<RoomsState['pagination']>) => void;
   
+  // Real-time connection management
+  initializeRealTimeConnection: (apiBaseUrl: string, getAuthToken: () => string | null) => void;
+  setConnectionState: (isConnected: boolean, error?: string | null) => void;
+  joinBranchGroup: (branchId: number) => void;
+  leaveBranchGroup: (branchId: number) => void;
+  
   // Reset state
   reset: () => void;
 }
@@ -59,6 +70,8 @@ const initialState: RoomsState = {
     pageSize: 10,
     totalResults: 0,
   },
+  isConnected: false,
+  connectionError: null,
 };
 
 export const useRoomsStore = create<RoomsStore>()(
@@ -124,6 +137,104 @@ export const useRoomsStore = create<RoomsStore>()(
         false,
         'setPagination'
       ),
+      
+      // Real-time connection management
+      initializeRealTimeConnection: (apiBaseUrl: string, getAuthToken: () => string | null) => {
+        try {
+          const signalRService = getSignalRService(apiBaseUrl, getAuthToken);
+          
+          // Set up event handlers
+          signalRService.onRoomStatusChanged((update: RoomStatusUpdate) => {
+            const { updateRoom } = get();
+            const room = get().rooms.find(r => r.id === update.roomId);
+            if (room) {
+              updateRoom({ ...room, status: update.newStatus });
+              toast.success(`Room ${room.roomNumber} status updated to ${update.newStatus}`);
+            }
+          });
+
+          signalRService.onRoomUpdated((update: RoomUpdate) => {
+            const { updateRoom } = get();
+            if (update.data) {
+              updateRoom(update.data);
+              toast.info(`Room ${update.data.roomNumber} has been updated`);
+            }
+          });
+
+          signalRService.onRoomCreated((data: any) => {
+            const { addRoom } = get();
+            if (data.data) {
+              addRoom(data.data);
+              toast.success(`New room ${data.data.roomNumber} has been created`);
+            }
+          });
+
+          signalRService.onRoomDeleted((roomId: number) => {
+            const { removeRoom } = get();
+            const room = get().rooms.find(r => r.id === roomId);
+            removeRoom(roomId);
+            toast.info(`Room ${room?.roomNumber || roomId} has been deleted`);
+          });
+
+          signalRService.onSystemNotification((notification) => {
+            switch (notification.type) {
+              case 'error':
+                toast.error(notification.message);
+                break;
+              case 'warning':
+                toast.warning(notification.message);
+                break;
+              case 'success':
+                toast.success(notification.message);
+                break;
+              default:
+                toast.info(notification.message);
+            }
+          });
+
+          signalRService.onConnectionStateChanged((state) => {
+            const isConnected = state === 1; // Connected state
+            set({ isConnected, connectionError: null }, false, 'connectionStateChanged');
+          });
+
+          // Connect to SignalR
+          signalRService.connect().catch((error) => {
+            set({ 
+              isConnected: false, 
+              connectionError: error.message 
+            }, false, 'connectionError');
+          });
+
+        } catch (error) {
+          set({ 
+            isConnected: false, 
+            connectionError: error instanceof Error ? error.message : 'Unknown connection error' 
+          }, false, 'initializationError');
+        }
+      },
+
+      setConnectionState: (isConnected: boolean, error?: string | null) => set({
+        isConnected,
+        connectionError: error || null
+      }, false, 'setConnectionState'),
+
+      joinBranchGroup: (branchId: number) => {
+        try {
+          const signalRService = getSignalRService();
+          signalRService.joinBranchGroup(branchId);
+        } catch (error) {
+          console.error('Failed to join branch group:', error);
+        }
+      },
+
+      leaveBranchGroup: (branchId: number) => {
+        try {
+          const signalRService = getSignalRService();
+          signalRService.leaveBranchGroup(branchId);
+        } catch (error) {
+          console.error('Failed to leave branch group:', error);
+        }
+      },
       
       // Reset state
       reset: () => set(initialState, false, 'reset'),
