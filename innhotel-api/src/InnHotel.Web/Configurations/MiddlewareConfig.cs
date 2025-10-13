@@ -1,5 +1,6 @@
 ﻿using Ardalis.ListStartupServices;
 using InnHotel.Infrastructure.Data;
+using InnHotel.Web.Hubs;
 using Microsoft.EntityFrameworkCore;
 
 namespace InnHotel.Web.Configurations;
@@ -24,6 +25,9 @@ public static class MiddlewareConfig
        .UseSwaggerGen();
 
     app.UseHttpsRedirection();
+
+    // Configure SignalR Hub
+    app.MapHub<RoomStatusHub>("/api/hubs/roomstatus");
 
     // now seed
     await SeedDatabase(app);

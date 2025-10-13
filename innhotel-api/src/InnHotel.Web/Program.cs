@@ -89,6 +89,14 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 
+// SignalR configuration
+builder.Services.AddSignalR(options =>
+{
+    options.EnableDetailedErrors = builder.Environment.IsDevelopment();
+    options.KeepAliveInterval = TimeSpan.FromSeconds(15);
+    options.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
+});
+
 // CORS configuration
 var allowedOriginsEnv = DotNetEnv.Env.GetString("ALLOWED_ORIGINS")
     ?? throw new InvalidOperationException("ALLOWED_ORIGINS environment variable is required");

@@ -1,6 +1,7 @@
 using InnHotel.UseCases.Rooms.UpdateStatus;
 using InnHotel.Web.Common;
 using InnHotel.Core.RoomAggregate;
+using InnHotel.Web.Services;
 
 namespace InnHotel.Web.Rooms;
 
@@ -10,7 +11,7 @@ namespace InnHotel.Web.Rooms;
 /// <remarks>
 /// Update the status of an existing room.
 /// </remarks>
-public class UpdateStatus(IMediator _mediator)
+public class UpdateStatus(IMediator _mediator, IRoomNotificationService _notificationService)
     : Endpoint<UpdateRoomStatusRequest, object>
 {
     public override void Configure()
@@ -61,6 +62,13 @@ public class UpdateStatus(IMediator _mediator)
                 result.Value.Status,
                 result.Value.Floor);
 
+            // Send real-time notification
+            await _notificationService.NotifyRoomStatusChanged(
+                result.Value.Id,
+                result.Value.BranchId,
+                result.Value.Status,
+                roomRecord);
+
             await SendAsync(
                 new { status = 200, message = "Room status updated successfully", data = roomRecord },
                 statusCode: 200,
@@ -73,4 +81,4 @@ public class UpdateStatus(IMediator _mediator)
             statusCode: 500,
             cancellation: cancellationToken);
     }
-} 
+}

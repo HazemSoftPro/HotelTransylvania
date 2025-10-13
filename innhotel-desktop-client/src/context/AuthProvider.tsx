@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuthStore } from "@/store/auth.store";
+import { useRoomsStore } from "@/store/rooms.store";
 import type { AuthContextType } from "@/types/api/auth";
 import { useMemo, useEffect, createContext, useRef } from "react";
 import LoadingSpinner from "../components/Loader/LoadingSpinner";
@@ -11,9 +12,11 @@ import { isAxiosError } from "axios";
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const { setAuth, isLoading, setLoading } = useAuthStore();
+  const { setAuth, isLoading, setLoading, accessToken } = useAuthStore();
+  const { initializeRealTimeConnection } = useRoomsStore();
   const log = logger();
   const refreshAttempted = useRef(false);
+  const realTimeInitialized = useRef(false);
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -57,6 +60,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
     initializeAuth();
   }, []);
+
+  // Initialize real-time connection when authenticated
+  useEffect(() => {
+    if (accessToken && !realTimeInitialized.current) {
+      realTimeInitialized.current = true;
+      
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+      
+      initializeRealTimeConnection(apiBaseUrl, () => accessToken);
+      
+      log.info('Real-time connection initialized');
+    }
+  }, [accessToken, initializeRealTimeConnection]);
 
   const contextValue = useMemo(() => {
     log.debug('Auth context value updated:', { isLoading });
