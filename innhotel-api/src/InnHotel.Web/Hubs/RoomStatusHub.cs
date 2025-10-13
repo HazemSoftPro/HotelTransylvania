@@ -1,14 +1,27 @@
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Authorization;
-using InnHotel.Core.AuthAggregate;
+using Microsoft.AspNetCore.SignalR;
 
 namespace InnHotel.Web.Hubs;
+
+/// <summary>
+/// SignalR client contract for room status notifications.
+/// </summary>
+public interface IRoomStatusClient
+{
+    Task RoomStatusChanged(object updateData);
+    Task RoomUpdated(object updateData);
+    Task RoomCreated(object data);
+    Task RoomDeleted(int roomId);
+    Task BulkRoomsUpdated(object updateData);
+    Task MaintenanceScheduleChanged(object updateData);
+    Task SystemNotification(object notification);
+}
 
 /// <summary>
 /// SignalR Hub for real-time room status updates
 /// </summary>
 [Authorize]
-public class RoomStatusHub : Hub
+public class RoomStatusHub : Hub<IRoomStatusClient>
 {
     private readonly ILogger<RoomStatusHub> _logger;
 
@@ -74,45 +87,4 @@ public class RoomStatusHub : Hub
             Context.UserIdentifier, exception?.Message);
         await base.OnDisconnectedAsync(exception);
     }
-}
-
-/// <summary>
-/// Interface for strongly-typed SignalR client methods
-/// </summary>
-public interface IRoomStatusClient
-{
-    /// <summary>
-    /// Notify clients of room status change
-    /// </summary>
-    Task RoomStatusChanged(object roomUpdate);
-
-    /// <summary>
-    /// Notify clients of room details update
-    /// </summary>
-    Task RoomUpdated(object roomUpdate);
-
-    /// <summary>
-    /// Notify clients of new room creation
-    /// </summary>
-    Task RoomCreated(object roomData);
-
-    /// <summary>
-    /// Notify clients of room deletion
-    /// </summary>
-    Task RoomDeleted(int roomId);
-
-    /// <summary>
-    /// Notify clients of bulk room updates
-    /// </summary>
-    Task BulkRoomsUpdated(object bulkUpdateData);
-
-    /// <summary>
-    /// Notify clients of maintenance schedule changes
-    /// </summary>
-    Task MaintenanceScheduleChanged(object maintenanceData);
-
-    /// <summary>
-    /// Send system notifications
-    /// </summary>
-    Task SystemNotification(object notification);
 }
