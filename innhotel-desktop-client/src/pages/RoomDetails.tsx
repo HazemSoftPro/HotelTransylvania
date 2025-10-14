@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import type { RoomResponse, RoomStatus } from "@/types/api/room";
+import type { RoomFormValues } from "@/schemas/roomSchema";
 import { roomService } from "@/services/roomService";
 import { ROUTES } from "@/constants/routes";
 import { Button } from "@/components/ui/button";
@@ -61,7 +62,7 @@ const RoomDetails = () => {
     fetchRoom();
   }, [id, navigate]);
 
-  const handleUpdate = async (data: any) => {
+  const handleUpdate = async (data: RoomFormValues) => {
     if (!id || !room) return;
 
     console.log('Update data:', data); // Debug log
@@ -69,11 +70,11 @@ const RoomDetails = () => {
     try {
       setIsUpdating(true);
       const response = await roomService.update(parseInt(id), {
-        roomTypeId: parseInt(data.roomTypeId),
-        roomNumber: data.roomNumber,
+        roomTypeId: parseInt(data.room_type_id),
+        roomNumber: data.room_number,
         status: parseInt(data.status) as RoomStatus,
         floor: data.floor,
-        priceOverride: data.priceOverride
+        priceOverride: data.price_override
       });
       setRoom(response.data);
       toast.success('Room updated successfully');
@@ -141,7 +142,7 @@ const RoomDetails = () => {
         </div>
         <div className="flex items-center gap-2">
           <DollarSign className="h-4 w-4" />
-          <span>${room.basePrice} per night</span>
+          <span>${room.priceOverride ?? room.basePrice} per night</span>
         </div>
       </CardDescription>
     </>
@@ -165,7 +166,7 @@ const RoomDetails = () => {
             status: room.status.toString(),
             floor: room.floor,
             branch_id: room.branchId.toString(),
-            price_override: room.priceOverride
+            price_override: room.priceOverride ?? room.basePrice
           }}
           isLoading={isUpdating}
           mode="update"
