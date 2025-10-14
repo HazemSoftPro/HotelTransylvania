@@ -64,13 +64,16 @@ const RoomDetails = () => {
   const handleUpdate = async (data: any) => {
     if (!id || !room) return;
 
+    console.log('Update data:', data); // Debug log
+
     try {
       setIsUpdating(true);
       const response = await roomService.update(parseInt(id), {
         roomTypeId: parseInt(data.roomTypeId),
         roomNumber: data.roomNumber,
         status: parseInt(data.status) as RoomStatus,
-        floor: data.floor
+        floor: data.floor,
+        priceOverride: data.priceOverride
       });
       setRoom(response.data);
       toast.success('Room updated successfully');
@@ -161,7 +164,8 @@ const RoomDetails = () => {
             room_type_id: room.roomTypeId.toString(),
             status: room.status.toString(),
             floor: room.floor,
-            branch_id: room.branchId.toString()
+            branch_id: room.branchId.toString(),
+            price_override: room.priceOverride
           }}
           isLoading={isUpdating}
           mode="update"

@@ -29,7 +29,8 @@ public class SearchRoomsHandler(IReadRepository<Room> _repository)
             r.RoomType.Capacity,
             r.RoomNumber,
             r.Status,
-            r.Floor)).ToList();
+            r.Floor,
+            r.PriceOverride)).ToList();
 
         return Result.Success(roomDtos.AsEnumerable());
     }

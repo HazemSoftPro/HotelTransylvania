@@ -1,4 +1,4 @@
-﻿using InnHotel.UseCases.Rooms.Update;
+using InnHotel.UseCases.Rooms.Update;
 using InnHotel.Web.Common;
 using AuthRoles = InnHotel.Core.AuthAggregate.Roles;
 
@@ -8,7 +8,7 @@ namespace InnHotel.Web.Rooms;
 /// Update an existing Room.
 /// </summary>
 /// <remarks>
-/// Update an existing Room by providing updated details.
+/// Updates an existing Room with the provided details.
 /// </remarks>
 public class Update(IMediator _mediator)
     : Endpoint<UpdateRoomRequest, object>
@@ -17,25 +17,40 @@ public class Update(IMediator _mediator)
     {
         Put(UpdateRoomRequest.Route);
         Roles(AuthRoles.SuperAdmin, AuthRoles.Admin);
+        Summary(s =>
+        {
+            s.ExampleRequest = new UpdateRoomRequest
+            {
+                RoomId = 1,
+                RoomTypeId = 1,
+                RoomNumber = "101",
+                Status = 0,
+                Floor = 1,
+                PriceOverride = null
+            };
+        });
     }
 
     public override async Task HandleAsync(
         UpdateRoomRequest request,
         CancellationToken cancellationToken)
     {
+        Console.WriteLine($"Update request: RoomId={request.RoomId}, PriceOverride={request.PriceOverride}"); // Debug log
+
         var command = new UpdateRoomCommand(
             request.RoomId,
             request.RoomTypeId,
-            request.RoomNumber,
+            request.RoomNumber!,
             (RoomStatus)request.Status,
-            request.Floor);
+            request.Floor,
+            request.PriceOverride);
 
         var result = await _mediator.Send(command, cancellationToken);
 
         if (result.Status == ResultStatus.NotFound)
         {
             await SendAsync(
-                new FailureResponse(404, $"Room with ID {request.RoomId} not found"),
+                new FailureResponse(404, result.Errors.First()),
                 statusCode: 404,
                 cancellation: cancellationToken);
             return;
@@ -62,7 +77,8 @@ public class Update(IMediator _mediator)
                 result.Value.Capacity,
                 result.Value.RoomNumber,
                 result.Value.Status,
-                result.Value.Floor);
+                result.Value.Floor,
+                result.Value.PriceOverride);
 
             await SendAsync(
                 new { status = 200, message = "Room updated successfully", data = roomRecord },

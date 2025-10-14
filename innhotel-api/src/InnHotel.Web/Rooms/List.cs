@@ -1,4 +1,4 @@
-﻿using FastEndpoints;
+using FastEndpoints;
 using InnHotel.UseCases.Rooms.List;
 using InnHotel.Web.Common;
 using Microsoft.AspNetCore.Authorization;
@@ -41,7 +41,8 @@ public class List(IMediator _mediator)
                     room.Capacity,
                     room.RoomNumber,
                     room.Status,
-                    room.Floor)).ToList();
+                    room.Floor,
+                    room.PriceOverride)).ToList();
 
             var response = new PagedResponse<RoomRecord>(
                 roomRecords, 

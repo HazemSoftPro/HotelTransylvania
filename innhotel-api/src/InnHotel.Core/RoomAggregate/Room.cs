@@ -1,4 +1,4 @@
-﻿using InnHotel.Core.BranchAggregate;
+using InnHotel.Core.BranchAggregate;
 using Ardalis.SharedKernel;
 
 namespace InnHotel.Core.RoomAggregate;
@@ -26,6 +26,8 @@ public class Room(
     public int Floor { get; private set; }
         = Guard.Against.Negative(floor, nameof(floor));                 
 
+    public decimal? PriceOverride { get; private set; }
+
     public Branch Branch { get; set; } = null!;      
     public RoomType RoomType { get; set; } = null!;   
 
@@ -36,12 +38,13 @@ public class Room(
         int roomTypeId,
         string roomNumber,
         RoomStatus status,
-        int floor)
+        int floor,
+        decimal? priceOverride)
     {
         RoomTypeId = Guard.Against.NegativeOrZero(roomTypeId, nameof(roomTypeId));
         RoomNumber = Guard.Against.NullOrEmpty(roomNumber, nameof(roomNumber));
         Status = status;
         Floor = Guard.Against.Negative(floor, nameof(floor));
+        PriceOverride = priceOverride;
     }
 }
-

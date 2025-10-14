@@ -27,6 +27,7 @@ public class UpdateRoomStatusHandler(IRepository<Room> _repository)
             room.RoomType.Capacity,
             room.RoomNumber,
             room.Status,
-            room.Floor);
+            room.Floor,
+            room.PriceOverride);
     }
 } 

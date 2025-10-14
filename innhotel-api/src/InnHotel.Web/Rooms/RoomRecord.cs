@@ -10,4 +10,5 @@ public record RoomRecord(
     int Capacity,
     string RoomNumber,
     RoomStatus Status,
-    int Floor);
+    int Floor,
+    decimal? PriceOverride);

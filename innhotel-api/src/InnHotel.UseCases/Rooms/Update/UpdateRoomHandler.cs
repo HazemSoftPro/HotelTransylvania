@@ -1,61 +1,64 @@
 using InnHotel.Core.RoomAggregate;
 using InnHotel.Core.RoomAggregate.Specifications;
 using InnHotel.Core.BranchAggregate;
-using Microsoft.EntityFrameworkCore;
+using InnHotel.Core.BranchAggregate.Specifications;
 
 namespace InnHotel.UseCases.Rooms.Update;
 
 public class UpdateRoomHandler(
-    IRepository<Room> _repository,
+    IRepository<Room> _roomRepository,
+    IReadRepository<Branch> _branchRepository,
     IReadRepository<RoomType> _roomTypeRepository)
     : ICommandHandler<UpdateRoomCommand, Result<RoomDTO>>
 {
     public async Task<Result<RoomDTO>> Handle(UpdateRoomCommand request, CancellationToken cancellationToken)
     {
-        var spec = new RoomByIdWithDetailsSpec(request.RoomId);
-        var room = await _repository.FirstOrDefaultAsync(spec, cancellationToken);
-        
-        if (room == null)
-            return Result.NotFound();
+        Console.WriteLine($"UpdateRoomHandler: RoomId={request.RoomId}, PriceOverride={request.PriceOverride}"); // Debug log
 
-        // Validate room type exists and belongs to the same branch
+        // Get the existing room
+        var room = await _roomRepository.GetByIdAsync(request.RoomId, cancellationToken);
+        if (room == null)
+            return Result.NotFound("Room not found");
+
+        // Validate room type exists
         var roomType = await _roomTypeRepository.GetByIdAsync(request.RoomTypeId, cancellationToken);
         if (roomType == null)
             return Result.NotFound("Room type not found");
-        if (roomType.BranchId != room.BranchId)
-            return Result.Error("Room type does not belong to the room's branch");
 
-        // Check if room number is unique in the branch
-        var uniqueSpec = new RoomByBranchAndNumberSpec(room.BranchId, request.RoomNumber);
-        var existingRoom = await _repository.FirstOrDefaultAsync(uniqueSpec, cancellationToken);
+        // Check if room number is unique in the branch (excluding current room)
+        var spec = new RoomByBranchAndNumberSpec(room.BranchId, request.RoomNumber);
+        var existingRoom = await _roomRepository.FirstOrDefaultAsync(spec, cancellationToken);
         if (existingRoom != null && existingRoom.Id != request.RoomId)
             return Result.Error("A room with this number already exists in the branch");
 
+        // Update room details
         room.UpdateDetails(
             request.RoomTypeId,
             request.RoomNumber,
             request.Status,
-            request.Floor);
+            request.Floor,
+            request.PriceOverride);
 
-        try
-        {
-            await _repository.UpdateAsync(room, cancellationToken);
-        }
-        catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("UX_rooms_branch_roomnumber") == true)
-        {
-            return Result.Error("A room with this number already exists in the branch");
-        }
+        await _roomRepository.UpdateAsync(room, cancellationToken);
+
+        Console.WriteLine($"After update: Room PriceOverride={room.PriceOverride}"); // Debug log
+
+        // Get branch for the response
+        var branch = await _branchRepository.GetByIdAsync(room.BranchId, cancellationToken);
+        if (branch == null)
+            return Result.Error("Branch not found");
 
         return new RoomDTO(
             room.Id,
             room.BranchId,
-            room.Branch.Name,
+            branch.Name,
             room.RoomTypeId,
-            room.RoomType.Name,
-            room.RoomType.BasePrice,
-            room.RoomType.Capacity,
+            roomType.Name,
+            roomType.BasePrice,
+            roomType.Capacity,
             room.RoomNumber,
             room.Status,
-            room.Floor);
+            room.Floor,
+            room.PriceOverride);
     }
 }

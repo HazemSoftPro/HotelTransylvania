@@ -10,4 +10,5 @@ public class UpdateRoomRequest
     public string RoomNumber { get; set; } = string.Empty;
     public int Status { get; set; }
     public int Floor { get; set; }
+    public decimal? PriceOverride { get; set; }
 }

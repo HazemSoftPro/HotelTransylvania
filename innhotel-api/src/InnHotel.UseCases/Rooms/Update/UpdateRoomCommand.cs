@@ -5,4 +5,5 @@ public record UpdateRoomCommand(
     int RoomTypeId,
     string RoomNumber,
     RoomStatus Status,
-    int Floor) : ICommand<Result<RoomDTO>>;
+    int Floor,
+    decimal? PriceOverride) : ICommand<Result<RoomDTO>>;

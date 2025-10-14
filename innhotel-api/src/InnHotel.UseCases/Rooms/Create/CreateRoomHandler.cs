@@ -50,6 +50,7 @@ public class CreateRoomHandler(
             roomType.Capacity,
             room.RoomNumber,
             room.Status,
-            room.Floor);
+            room.Floor,
+            room.PriceOverride);
     }
 }

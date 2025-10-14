@@ -52,7 +52,8 @@ Authorization: Bearer {{login.response.body.accessToken}}
     "roomTypeId": 1,
     "roomNumber": "109",
     "status": 1,
-    "floor": 3
+    "floor": 3,
+    "priceOverride": 150.00
 }
 
 ### Delete Room

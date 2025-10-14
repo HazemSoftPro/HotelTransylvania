@@ -26,7 +26,8 @@ public class ListRoomHandler(IReadRepository<Room> _repository)
             room.RoomType.Capacity,
             room.RoomNumber,
             room.Status,
-            room.Floor)).ToList();
+            room.Floor,
+            room.PriceOverride)).ToList();
 
         return (roomDtos, totalCount);
     }

@@ -60,7 +60,8 @@ public class UpdateStatus(IMediator _mediator, IRoomNotificationService _notific
                 result.Value.Capacity,
                 result.Value.RoomNumber,
                 result.Value.Status,
-                result.Value.Floor);
+                result.Value.Floor,
+                result.Value.PriceOverride);
 
             // Send real-time notification
             await _notificationService.NotifyRoomStatusChanged(

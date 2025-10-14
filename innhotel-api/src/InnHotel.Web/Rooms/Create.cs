@@ -1,4 +1,4 @@
-﻿using InnHotel.UseCases.Rooms.Create;
+using InnHotel.UseCases.Rooms.Create;
 using InnHotel.Web.Common;
 using AuthRoles = InnHotel.Core.AuthAggregate.Roles;
 
@@ -73,7 +73,8 @@ public class Create(IMediator _mediator)
                 result.Value.Capacity,
                 result.Value.RoomNumber,
                 result.Value.Status,
-                result.Value.Floor);
+                result.Value.Floor,
+                result.Value.PriceOverride);
 
             await SendAsync(
                 new { status = 201, message = "Room created successfully", data = roomRecord },

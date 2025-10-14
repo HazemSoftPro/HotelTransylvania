@@ -69,7 +69,8 @@ public class Search(IMediator _mediator)
                 r.Capacity,
                 r.RoomNumber,
                 r.Status,
-                r.Floor)).ToList();
+                r.Floor,
+                r.PriceOverride)).ToList();
 
             await SendAsync(
                 new { 
@@ -79,7 +80,7 @@ public class Search(IMediator _mediator)
                     pagination = new {
                         pageNumber = request.PageNumber,
                         pageSize = request.PageSize,
-                        totalResults = roomRecords.Count
+                        totalResults = roomRecords.Count()
                     }
                 },
                 statusCode: 200,

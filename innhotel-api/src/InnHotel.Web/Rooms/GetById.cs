@@ -1,4 +1,4 @@
-﻿using FastEndpoints;
+using FastEndpoints;
 using InnHotel.UseCases.Rooms.Get;
 using InnHotel.Web.Common;
 
@@ -48,7 +48,8 @@ public class GetById(IMediator _mediator)
                 room.Capacity,
                 room.RoomNumber,
                 room.Status,
-                room.Floor);
+                room.Floor,
+                room.PriceOverride);
             await SendOkAsync(Response, cancellationToken);
             return;
         }

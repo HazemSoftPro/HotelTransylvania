@@ -24,7 +24,8 @@ public class GetRoomHandler(IReadRepository<Room> _repository)
             room.RoomType.Capacity,
             room.RoomNumber,
             room.Status,
-            room.Floor);
+            room.Floor,
+            room.PriceOverride);
 
         return roomDto;
     }
