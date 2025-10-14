@@ -1,0 +1,251 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+env:
+  DOTNET_VERSION: '8.0.x'
+  SOLUTION_PATH: 'innhotel-api/InnHotel.sln'
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: innhotel_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Cache NuGet packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+
+    - name: Restore dependencies
+      run: dotnet restore ${{ env.SOLUTION_PATH }}
+
+    - name: Build solution
+      run: dotnet build ${{ env.SOLUTION_PATH }} --no-restore --configuration Release
+
+    - name: Run Unit Tests
+      run: |
+        dotnet test innhotel-api/tests/InnHotel.UnitTests/InnHotel.UnitTests.csproj \
+          --no-build \
+          --configuration Release \
+          --logger trx \
+          --results-directory TestResults \
+          --collect:"XPlat Code Coverage"
+
+    - name: Run Integration Tests
+      env:
+        ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=innhotel_test;Username=postgres;Password=postgres"
+      run: |
+        dotnet test innhotel-api/tests/InnHotel.IntegrationTests/InnHotel.IntegrationTests.csproj \
+          --no-build \
+          --configuration Release \
+          --logger trx \
+          --results-directory TestResults \
+          --collect:"XPlat Code Coverage"
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: test-results
+        path: TestResults
+
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        directory: TestResults
+        flags: unittests
+        name: codecov-umbrella
+
+  database-migration-test:
+    name: Test Database Migration
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: innhotel_migration_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Install EF Core tools
+      run: dotnet tool install --global dotnet-ef
+
+    - name: Restore dependencies
+      run: dotnet restore ${{ env.SOLUTION_PATH }}
+
+    - name: Build solution
+      run: dotnet build ${{ env.SOLUTION_PATH }} --no-restore --configuration Release
+
+    - name: Test Database Migration
+      env:
+        ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=innhotel_migration_test;Username=postgres;Password=postgres"
+      run: |
+        cd innhotel-api/src/InnHotel.Web
+        
+        # Apply all migrations
+        dotnet ef database update --verbose
+        
+        # Verify migration was successful
+        dotnet ef migrations list
+        
+        # Test rollback (optional - comment out if not needed)
+        # dotnet ef database update 20251014192327_AddPriceOverrideToRoom
+        # dotnet ef database update
+
+    - name: Verify Data Integrity After Migration
+      env:
+        ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=innhotel_migration_test;Username=postgres;Password=postgres"
+      run: |
+        # Run a simple query to verify the schema changes
+        PGPASSWORD=postgres psql -h localhost -U postgres -d innhotel_migration_test -c "
+        SELECT 
+          COUNT(*) as room_count,
+          COUNT(manual_price) as rooms_with_manual_price,
+          MIN(manual_price) as min_price,
+          MAX(manual_price) as max_price
+        FROM rooms;
+        "
+        
+        # Verify that all rooms have manual_price > 0
+        PGPASSWORD=postgres psql -h localhost -U postgres -d innhotel_migration_test -c "
+        SELECT COUNT(*) as invalid_prices 
+        FROM rooms 
+        WHERE manual_price <= 0;
+        " | grep "0" || (echo "Found rooms with invalid manual_price!" && exit 1)
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+  build-and-deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    needs: [test, database-migration-test, security-scan]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Restore dependencies
+      run: dotnet restore ${{ env.SOLUTION_PATH }}
+
+    - name: Build for production
+      run: dotnet build ${{ env.SOLUTION_PATH }} --no-restore --configuration Release
+
+    - name: Publish application
+      run: |
+        dotnet publish innhotel-api/src/InnHotel.Web/InnHotel.Web.csproj \
+          --configuration Release \
+          --output ./publish \
+          --no-build
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: published-app
+        path: ./publish
+
+    # Add your deployment steps here
+    # Example for Azure App Service:
+    # - name: Deploy to Azure App Service
+    #   uses: azure/webapps-deploy@v2
+    #   with:
+    #     app-name: 'your-app-name'
+    #     publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+    #     package: ./publish
+
+  notify:
+    name: Notify Results
+    runs-on: ubuntu-latest
+    needs: [test, database-migration-test, security-scan]
+    if: always()
+    
+    steps:
+    - name: Notify Success
+      if: needs.test.result == 'success' && needs.database-migration-test.result == 'success' && needs.security-scan.result == 'success'
+      run: |
+        echo "✅ All checks passed successfully!"
+        echo "- Unit and Integration tests: PASSED"
+        echo "- Database migration: PASSED"
+        echo "- Security scan: PASSED"
+
+    - name: Notify Failure
+      if: needs.test.result == 'failure' || needs.database-migration-test.result == 'failure' || needs.security-scan.result == 'failure'
+      run: |
+        echo "❌ Some checks failed:"
+        echo "- Unit and Integration tests: ${{ needs.test.result }}"
+        echo "- Database migration: ${{ needs.database-migration-test.result }}"
+        echo "- Security scan: ${{ needs.security-scan.result }}"
+        exit 1
