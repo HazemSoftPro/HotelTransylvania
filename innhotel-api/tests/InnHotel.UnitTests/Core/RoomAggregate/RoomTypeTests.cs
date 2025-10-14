@@ -63,7 +63,7 @@ public class RoomTypeTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
-    public void Constructor_WithInvalidName_ShouldThrowArgumentException(string invalidName)
+    public void Constructor_WithInvalidName_ShouldThrowArgumentException(string? invalidName)
     {
         // Arrange
         var branchId = 1;
@@ -72,7 +72,7 @@ public class RoomTypeTests
 
         // Act & Assert
         Assert.Throws<ArgumentException>(() => 
-            new RoomType(branchId, invalidName, capacity, description));
+            new RoomType(branchId, invalidName!, capacity, description));
     }
 
     [Theory]
@@ -147,14 +147,14 @@ public class RoomTypeTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
-    public void UpdateDetails_WithInvalidName_ShouldThrowArgumentException(string invalidName)
+    public void UpdateDetails_WithInvalidName_ShouldThrowArgumentException(string? invalidName)
     {
         // Arrange
         var roomType = new RoomType(1, "Standard Room", 2, "Description");
 
         // Act & Assert
         Assert.Throws<ArgumentException>(() => 
-            roomType.UpdateDetails(1, invalidName, 2, "Valid Description"));
+            roomType.UpdateDetails(1, invalidName!, 2, "Valid Description"));
     }
 
     [Theory]

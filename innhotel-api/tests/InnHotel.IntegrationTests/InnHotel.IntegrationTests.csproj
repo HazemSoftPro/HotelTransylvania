@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\InnHotel.Infrastructure\InnHotel.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\InnHotel.Web\InnHotel.Web.csproj" />
     <ProjectReference Include="..\InnHotel.UnitTests\InnHotel.UnitTests.csproj" />
   </ItemGroup>
 

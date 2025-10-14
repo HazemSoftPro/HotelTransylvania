@@ -90,7 +90,7 @@ public class RoomEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
         {
             RoomTypeId = 1,
             RoomNumber = "TEST-103-UPDATED",
-            Status = RoomStatus.Occupied,
+            Status = (int)RoomStatus.Occupied,
             Floor = 2,
             ManualPrice = 200.50m
         };
@@ -105,7 +105,7 @@ public class RoomEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
         Assert.NotNull(updatedRoom);
         Assert.Equal(updateRequest.ManualPrice, updatedRoom.ManualPrice);
         Assert.Equal(updateRequest.RoomNumber, updatedRoom.RoomNumber);
-        Assert.Equal(updateRequest.Status, updatedRoom.Status);
+        Assert.Equal((RoomStatus)updateRequest.Status, updatedRoom.Status);
     }
 
     [Theory]
@@ -132,7 +132,7 @@ public class RoomEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
         {
             RoomTypeId = 1,
             RoomNumber = "TEST-104",
-            Status = RoomStatus.Available,
+            Status = (int)RoomStatus.Available,
             Floor = 1,
             ManualPrice = invalidPrice
         };

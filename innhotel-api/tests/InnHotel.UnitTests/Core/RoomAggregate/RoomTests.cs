@@ -121,7 +121,7 @@ public class RoomTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
-    public void Constructor_WithInvalidRoomNumber_ShouldThrowArgumentException(string invalidRoomNumber)
+    public void Constructor_WithInvalidRoomNumber_ShouldThrowArgumentException(string? invalidRoomNumber)
     {
         // Arrange
         var branchId = 1;
@@ -132,7 +132,7 @@ public class RoomTests
 
         // Act & Assert
         Assert.Throws<ArgumentException>(() => 
-            new Room(branchId, roomTypeId, invalidRoomNumber, status, floor, manualPrice));
+            new Room(branchId, roomTypeId, invalidRoomNumber!, status, floor, manualPrice));
     }
 
     [Theory]

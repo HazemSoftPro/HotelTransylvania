@@ -75,7 +75,7 @@ public static class SeedData
     }
   }
 
-  private static async Task SeedApplicationDataAsync(AppDbContext context)
+  public static async Task SeedApplicationDataAsync(AppDbContext context)
   {
     if (await context.Branches.AnyAsync()) return;
 
