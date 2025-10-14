@@ -22,7 +22,7 @@ namespace InnHotel.Infrastructure.Data.Migrations
             // If PriceOverride exists, use it; otherwise use basePrice from room_types
             migrationBuilder.Sql(@"
                 UPDATE rooms 
-                SET manual_price = COALESCE(""PriceOverride"", rt.base_price)
+                SET manual_price = COALESCE(price_override, rt.base_price)
                 FROM room_types rt 
                 WHERE rooms.room_type_id = rt.id;
             ");
@@ -35,7 +35,7 @@ namespace InnHotel.Infrastructure.Data.Migrations
 
             // Step 4: Drop PriceOverride column from rooms table
             migrationBuilder.DropColumn(
-                name: "PriceOverride",
+                name: "price_override",
                 table: "rooms");
 
             // Step 5: Drop BasePrice column and its constraint from room_types table
@@ -66,7 +66,7 @@ namespace InnHotel.Infrastructure.Data.Migrations
 
             // Rollback Step 4: Re-add PriceOverride column to rooms
             migrationBuilder.AddColumn<decimal>(
-                name: "PriceOverride",
+                name: "price_override",
                 table: "rooms",
                 type: "numeric",
                 nullable: true);
