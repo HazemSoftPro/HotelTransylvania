@@ -92,9 +92,11 @@ export const ReservationForm = ({ onSubmit, isLoading }: ReservationFormProps) =
     const room = rooms.find(r => r.id.toString() === roomId);
     if (room && !selectedRooms.find(r => r.id === room.id)) {
       setSelectedRooms([...selectedRooms, room]);
+      // استخدم السعر اليدوي (priceOverride) إذا كان موجودًا، وإلا استخدم السعر الأساسي
+      const effectivePrice = room.priceOverride ?? room.basePrice;
       form.setValue('rooms', [
         ...form.getValues('rooms'),
-        { roomId: parseInt(roomId), pricePerNight: room.basePrice }
+        { roomId: parseInt(roomId), pricePerNight: effectivePrice }
       ]);
     }
   };
@@ -281,33 +283,39 @@ export const ReservationForm = ({ onSubmit, isLoading }: ReservationFormProps) =
             <SelectContent>
               {rooms
                 .filter(room => !selectedRooms.find(r => r.id === room.id))
-                .map((room) => (
-                  <SelectItem key={room.id} value={room.id.toString()}>
-                    Room {room.roomNumber} - {room.roomTypeName} (${room.basePrice}/night)
-                  </SelectItem>
-                ))}
+                .map((room) => {
+                  const effectivePrice = room.priceOverride ?? room.basePrice;
+                  return (
+                    <SelectItem key={room.id} value={room.id.toString()}>
+                      Room {room.roomNumber} - {room.roomTypeName} (${effectivePrice}/night)
+                    </SelectItem>
+                  );
+                })}
             </SelectContent>
           </Select>
-          {selectedRooms.map((room) => (
-            <div
-              key={room.id}
-              className="flex items-center justify-between p-3 border rounded-lg bg-muted/50"
-            >
-              <div className="flex items-center gap-2">
-                <span>Room {room.roomNumber} - {room.roomTypeName}</span>
-                <span className="text-sm text-muted-foreground">
-                  ${room.basePrice}/night
-                </span>
-              </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => handleRemoveRoom(room.id)}
+          {selectedRooms.map((room) => {
+            const effectivePrice = room.priceOverride ?? room.basePrice;
+            return (
+              <div
+                key={room.id}
+                className="flex items-center justify-between p-3 border rounded-lg bg-muted/50"
               >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-          ))}
+                <div className="flex items-center gap-2">
+                  <span>Room {room.roomNumber} - {room.roomTypeName}</span>
+                  <span className="text-sm text-muted-foreground">
+                    ${effectivePrice}/night
+                  </span>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleRemoveRoom(room.id)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            );
+          })}
         </FormItem>
 
         {/* Services Selection */}

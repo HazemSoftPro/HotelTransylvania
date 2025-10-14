@@ -110,7 +110,7 @@ export const RoomForm = ({ mode, onSubmit, defaultValues, isLoading }: RoomFormP
       room_number: '',
       status: '',
       floor: 0,
-      price_override: undefined,
+      price_override: 0,
       ...defaultValues,
     },
   });
@@ -280,14 +280,14 @@ export const RoomForm = ({ mode, onSubmit, defaultValues, isLoading }: RoomFormP
           name="price_override"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Price Override (optional)</FormLabel>
+              <FormLabel>Room Price <span className="text-destructive">*</span></FormLabel>
               <FormControl>
                 <Input
                   type="number"
                   step="0.01"
-                  placeholder="Enter price override"
+                  placeholder="Enter room price"
                   {...field}
-                  onChange={(e) => field.onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) => field.onChange(e.target.value ? parseFloat(e.target.value) : 0)}
                 />
               </FormControl>
               <FormMessage />
