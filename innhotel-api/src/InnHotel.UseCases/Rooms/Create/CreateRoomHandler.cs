@@ -36,7 +36,8 @@ public class CreateRoomHandler(
             request.RoomTypeId,
             request.RoomNumber,
             request.Status,
-            request.Floor);
+            request.Floor,
+            request.ManualPrice);
 
         await _roomRepository.AddAsync(room, cancellationToken);
 
@@ -46,11 +47,10 @@ public class CreateRoomHandler(
             branch.Name,
             room.RoomTypeId,
             roomType.Name,
-            roomType.BasePrice,
             roomType.Capacity,
             room.RoomNumber,
             room.Status,
             room.Floor,
-            room.PriceOverride);
+            room.ManualPrice);
     }
 }

@@ -65,12 +65,11 @@ public class Search(IMediator _mediator)
                 r.BranchName,
                 r.RoomTypeId,
                 r.RoomTypeName,
-                r.BasePrice,
                 r.Capacity,
                 r.RoomNumber,
                 r.Status,
                 r.Floor,
-                r.PriceOverride)).ToList();
+                r.ManualPrice)).ToList();
 
             await SendAsync(
                 new { 

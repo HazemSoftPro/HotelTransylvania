@@ -5,6 +5,5 @@ public record RoomTypeDTO(
     int BranchId,
     string BranchName,
     string Name,
-    decimal BasePrice,
     int Capacity,
     string? Description);

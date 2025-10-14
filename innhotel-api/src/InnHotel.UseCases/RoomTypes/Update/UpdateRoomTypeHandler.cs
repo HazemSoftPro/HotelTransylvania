@@ -28,7 +28,6 @@ public class UpdateRoomTypeHandler(IRepository<RoomType> _roomTypeRepository, IR
         roomType.UpdateDetails(
             request.BranchId,
             request.Name,
-            request.BasePrice,
             request.Capacity,
             request.Description);
 
@@ -40,7 +39,6 @@ public class UpdateRoomTypeHandler(IRepository<RoomType> _roomTypeRepository, IR
             roomType.BranchId,
             branch.Name,
             roomType.Name,
-            roomType.BasePrice,
             roomType.Capacity,
             roomType.Description);
 

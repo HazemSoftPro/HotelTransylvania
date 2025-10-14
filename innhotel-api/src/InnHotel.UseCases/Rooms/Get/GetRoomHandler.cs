@@ -20,12 +20,11 @@ public class GetRoomHandler(IReadRepository<Room> _repository)
             room.Branch.Name,
             room.RoomTypeId,
             room.RoomType.Name,
-            room.RoomType.BasePrice,
             room.RoomType.Capacity,
             room.RoomNumber,
             room.Status,
             room.Floor,
-            room.PriceOverride);
+            room.ManualPrice);
 
         return roomDto;
     }

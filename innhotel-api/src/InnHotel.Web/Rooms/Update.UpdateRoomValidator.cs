@@ -4,14 +4,14 @@ using FluentValidation;
 namespace InnHotel.Web.Rooms;
 
 /// <summary>
-/// Validates incoming CreateRoomRequest
+/// Validates incoming UpdateRoomRequest
 /// </summary>
-public class CreateRoomValidator : Validator<CreateRoomRequest>
+public class UpdateRoomValidator : Validator<UpdateRoomRequest>
 {
-    public CreateRoomValidator()
+    public UpdateRoomValidator()
     {
-        RuleFor(x => x.BranchId)
-            .GreaterThan(0).WithMessage("Branch ID must be greater than 0");
+        RuleFor(x => x.RoomId)
+            .GreaterThan(0).WithMessage("Room ID must be greater than 0");
 
         RuleFor(x => x.RoomTypeId)
             .GreaterThan(0).WithMessage("Room Type ID must be greater than 0");

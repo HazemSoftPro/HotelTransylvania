@@ -26,7 +26,7 @@ public class Update(IMediator _mediator)
                 RoomNumber = "101",
                 Status = 0,
                 Floor = 1,
-                PriceOverride = null
+                ManualPrice = 150.00m
             };
         });
     }
@@ -35,15 +35,13 @@ public class Update(IMediator _mediator)
         UpdateRoomRequest request,
         CancellationToken cancellationToken)
     {
-        Console.WriteLine($"Update request: RoomId={request.RoomId}, PriceOverride={request.PriceOverride}"); // Debug log
-
         var command = new UpdateRoomCommand(
             request.RoomId,
             request.RoomTypeId,
             request.RoomNumber!,
             (RoomStatus)request.Status,
             request.Floor,
-            request.PriceOverride);
+            request.ManualPrice);
 
         var result = await _mediator.Send(command, cancellationToken);
 
@@ -73,12 +71,11 @@ public class Update(IMediator _mediator)
                 result.Value.BranchName,
                 result.Value.RoomTypeId,
                 result.Value.RoomTypeName,
-                result.Value.BasePrice,
                 result.Value.Capacity,
                 result.Value.RoomNumber,
                 result.Value.Status,
                 result.Value.Floor,
-                result.Value.PriceOverride);
+                result.Value.ManualPrice);
 
             await SendAsync(
                 new { status = 200, message = "Room updated successfully", data = roomRecord },

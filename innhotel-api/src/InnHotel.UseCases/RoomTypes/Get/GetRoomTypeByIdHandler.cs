@@ -21,7 +21,6 @@ public class GetRoomTypeByIdHandler(IReadRepository<RoomType> _repository)
             roomType.BranchId,
             roomType.Branch.Name,
             roomType.Name,
-            roomType.BasePrice,
             roomType.Capacity,
             roomType.Description);
 

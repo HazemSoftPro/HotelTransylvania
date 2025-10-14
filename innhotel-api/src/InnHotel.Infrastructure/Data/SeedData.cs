@@ -21,28 +21,24 @@ public static class SeedData
   public static readonly RoomType StandardRoom = new(
       branchId: 1,
       name: "Standard",
-      basePrice: 99.99m,
       capacity: 2,
       description: "Comfortable standard room with queen bed");
 
   public static readonly RoomType Suite = new(
       branchId: 1,
       name: "Suite",
-      basePrice: 199.99m,
       capacity: 4,
       description: "Luxurious suite with king bed and ocean view");
 
   public static readonly RoomType DeluxeRoom = new(
       branchId: 2,
       name: "Deluxe Room",
-      basePrice: 299.99m,
       capacity: 4,
       description: "Luxurious suite with king bed and ocean view");
 
   public static readonly RoomType DeluxeSuite = new(
       branchId: 2,
       name: "Deluxe Suite",
-      basePrice: 399.99m,
       capacity: 4,
       description: "Luxurious suite with king bed and ocean view");
 
@@ -91,9 +87,9 @@ public static class SeedData
 
     var rooms = new List<Room>
         {
-            new(MainBranch.Id, StandardRoom.Id, "101", RoomStatus.Available, 1),
-            new(MainBranch.Id, StandardRoom.Id, "102", RoomStatus.Available, 1),
-            new(MainBranch.Id, Suite.Id, "201", RoomStatus.Available, 2)
+            new(MainBranch.Id, StandardRoom.Id, "101", RoomStatus.Available, 1, 99.99m),
+            new(MainBranch.Id, StandardRoom.Id, "102", RoomStatus.Available, 1, 89.99m),
+            new(MainBranch.Id, Suite.Id, "201", RoomStatus.Available, 2, 199.99m)
         };
     context.Rooms.AddRange(rooms);
 

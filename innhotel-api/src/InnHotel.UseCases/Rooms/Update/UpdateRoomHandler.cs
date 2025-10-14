@@ -13,7 +13,7 @@ public class UpdateRoomHandler(
 {
     public async Task<Result<RoomDTO>> Handle(UpdateRoomCommand request, CancellationToken cancellationToken)
     {
-        Console.WriteLine($"UpdateRoomHandler: RoomId={request.RoomId}, PriceOverride={request.PriceOverride}"); // Debug log
+
 
         // Get the existing room
         var room = await _roomRepository.GetByIdAsync(request.RoomId, cancellationToken);
@@ -37,11 +37,11 @@ public class UpdateRoomHandler(
             request.RoomNumber,
             request.Status,
             request.Floor,
-            request.PriceOverride);
+            request.ManualPrice);
 
         await _roomRepository.UpdateAsync(room, cancellationToken);
 
-        Console.WriteLine($"After update: Room PriceOverride={room.PriceOverride}"); // Debug log
+
 
         // Get branch for the response
         var branch = await _branchRepository.GetByIdAsync(room.BranchId, cancellationToken);
@@ -54,11 +54,10 @@ public class UpdateRoomHandler(
             branch.Name,
             room.RoomTypeId,
             roomType.Name,
-            roomType.BasePrice,
             roomType.Capacity,
             room.RoomNumber,
             room.Status,
             room.Floor,
-            room.PriceOverride);
+            room.ManualPrice);
     }
 }

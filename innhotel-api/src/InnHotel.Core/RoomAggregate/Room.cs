@@ -8,7 +8,8 @@ public class Room(
     int roomTypeId,
     string roomNumber,
     RoomStatus status,
-    int floor
+    int floor,
+    decimal manualPrice
 ) : EntityBase, IAggregateRoot
 {
     public int BranchId { get; private set; }
@@ -26,7 +27,8 @@ public class Room(
     public int Floor { get; private set; }
         = Guard.Against.Negative(floor, nameof(floor));                 
 
-    public decimal? PriceOverride { get; private set; }
+    public decimal ManualPrice { get; private set; }
+        = Guard.Against.NegativeOrZero(manualPrice, nameof(manualPrice));
 
     public Branch Branch { get; set; } = null!;      
     public RoomType RoomType { get; set; } = null!;   
@@ -39,12 +41,12 @@ public class Room(
         string roomNumber,
         RoomStatus status,
         int floor,
-        decimal? priceOverride)
+        decimal manualPrice)
     {
         RoomTypeId = Guard.Against.NegativeOrZero(roomTypeId, nameof(roomTypeId));
         RoomNumber = Guard.Against.NullOrEmpty(roomNumber, nameof(roomNumber));
         Status = status;
         Floor = Guard.Against.Negative(floor, nameof(floor));
-        PriceOverride = priceOverride;
+        ManualPrice = Guard.Against.NegativeOrZero(manualPrice, nameof(manualPrice));
     }
 }

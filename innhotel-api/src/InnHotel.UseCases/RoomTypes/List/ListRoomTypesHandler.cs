@@ -16,7 +16,6 @@ public class ListRoomTypesHandler(IReadRepository<RoomType> _repository)
             rt.BranchId,
             rt.Branch.Name,
             rt.Name,
-            rt.BasePrice,
             rt.Capacity,
             rt.Description)).ToList();
 

@@ -23,7 +23,6 @@ public class Create(IMediator _mediator)
             {
                 BranchId = 1,
                 Name = "Standard Room",
-                BasePrice = 100.00m,
                 Capacity = 2,
                 Description = "A comfortable standard room with basic amenities"
             };
@@ -37,7 +36,6 @@ public class Create(IMediator _mediator)
         var command = new CreateRoomTypeCommand(
             request.BranchId,
             request.Name!,
-            request.BasePrice,
             request.Capacity,
             request.Description);
 
@@ -68,7 +66,6 @@ public class Create(IMediator _mediator)
                 result.Value.BranchId,
                 result.Value.BranchName,
                 result.Value.Name,
-                result.Value.BasePrice,
                 result.Value.Capacity,
                 result.Value.Description);
 

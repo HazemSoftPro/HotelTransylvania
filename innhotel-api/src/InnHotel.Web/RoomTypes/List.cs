@@ -40,7 +40,6 @@ public class List(IMediator _mediator)
                 rt.BranchId,
                 rt.BranchName,
                 rt.Name,
-                rt.BasePrice,
                 rt.Capacity,
                 rt.Description)).ToList();
 

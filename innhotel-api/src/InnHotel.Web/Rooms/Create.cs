@@ -25,7 +25,8 @@ public class Create(IMediator _mediator)
                 RoomTypeId = 1,
                 RoomNumber = "101",
                 Status = RoomStatus.Available,
-                Floor = 1
+                Floor = 1,
+                ManualPrice = 120.00m
             };
         });
     }
@@ -39,7 +40,8 @@ public class Create(IMediator _mediator)
             request.RoomTypeId,
             request.RoomNumber!,
             request.Status,
-            request.Floor);
+            request.Floor,
+            request.ManualPrice);
 
         var result = await _mediator.Send(command, cancellationToken);
 
@@ -69,12 +71,11 @@ public class Create(IMediator _mediator)
                 result.Value.BranchName,
                 result.Value.RoomTypeId,
                 result.Value.RoomTypeName,
-                result.Value.BasePrice,
                 result.Value.Capacity,
                 result.Value.RoomNumber,
                 result.Value.Status,
                 result.Value.Floor,
-                result.Value.PriceOverride);
+                result.Value.ManualPrice);
 
             await SendAsync(
                 new { status = 201, message = "Room created successfully", data = roomRecord },

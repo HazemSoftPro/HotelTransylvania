@@ -23,9 +23,7 @@ public class UpdateRoomTypeValidator : Validator<UpdateRoomTypeRequest>
             .MaximumLength(100)
             .WithMessage("Name cannot exceed 100 characters");
 
-        RuleFor(x => x.BasePrice)
-            .GreaterThan(0)
-            .WithMessage("Base price must be greater than 0");
+
 
         RuleFor(x => x.Capacity)
             .GreaterThan(0)
