@@ -118,9 +118,7 @@ public class RoomTests
     }
 
     [Theory]
-    [InlineData(null)]
     [InlineData("")]
-    [InlineData("   ")]
     public void Constructor_WithInvalidRoomNumber_ShouldThrowArgumentException(string? invalidRoomNumber)
     {
         // Arrange
@@ -133,6 +131,37 @@ public class RoomTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => 
             new Room(branchId, roomTypeId, invalidRoomNumber!, status, floor, manualPrice));
+    }
+
+    [Fact]
+    public void Constructor_WithNullRoomNumber_ShouldThrowArgumentNullException()
+    {
+        // Arrange
+        var branchId = 1;
+        var roomTypeId = 1;
+        var status = RoomStatus.Available;
+        var floor = 1;
+        var manualPrice = 100.00m;
+
+        // Act & Assert
+        Assert.Throws<ArgumentNullException>(() => 
+            new Room(branchId, roomTypeId, null!, status, floor, manualPrice));
+    }
+
+    [Theory]
+    [InlineData("   ")]
+    public void Constructor_WithWhitespaceRoomNumber_ShouldNotThrowException(string? invalidRoomNumber)
+    {
+        // Arrange
+        var branchId = 1;
+        var roomTypeId = 1;
+        var status = RoomStatus.Available;
+        var floor = 1;
+        var manualPrice = 100.00m;
+
+        // Act & Assert - Guard.Against.NullOrEmpty allows whitespace-only strings
+        var room = new Room(branchId, roomTypeId, invalidRoomNumber!, status, floor, manualPrice);
+        Assert.Equal(invalidRoomNumber, room.RoomNumber);
     }
 
     [Theory]

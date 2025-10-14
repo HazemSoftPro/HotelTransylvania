@@ -60,9 +60,7 @@ public class RoomTypeTests
     }
 
     [Theory]
-    [InlineData(null)]
     [InlineData("")]
-    [InlineData("   ")]
     public void Constructor_WithInvalidName_ShouldThrowArgumentException(string? invalidName)
     {
         // Arrange
@@ -73,6 +71,33 @@ public class RoomTypeTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => 
             new RoomType(branchId, invalidName!, capacity, description));
+    }
+
+    [Fact]
+    public void Constructor_WithNullName_ShouldThrowArgumentNullException()
+    {
+        // Arrange
+        var branchId = 1;
+        var capacity = 2;
+        var description = "A comfortable standard room";
+
+        // Act & Assert
+        Assert.Throws<ArgumentNullException>(() => 
+            new RoomType(branchId, null!, capacity, description));
+    }
+
+    [Theory]
+    [InlineData("   ")]
+    public void Constructor_WithWhitespaceName_ShouldNotThrowException(string? invalidName)
+    {
+        // Arrange
+        var branchId = 1;
+        var capacity = 2;
+        var description = "A comfortable standard room";
+
+        // Act & Assert - Guard.Against.NullOrEmpty allows whitespace-only strings
+        var roomType = new RoomType(branchId, invalidName!, capacity, description);
+        Assert.Equal(invalidName, roomType.Name);
     }
 
     [Theory]
@@ -144,9 +169,7 @@ public class RoomTypeTests
     }
 
     [Theory]
-    [InlineData(null)]
     [InlineData("")]
-    [InlineData("   ")]
     public void UpdateDetails_WithInvalidName_ShouldThrowArgumentException(string? invalidName)
     {
         // Arrange
@@ -155,6 +178,29 @@ public class RoomTypeTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => 
             roomType.UpdateDetails(1, invalidName!, 2, "Valid Description"));
+    }
+
+    [Fact]
+    public void UpdateDetails_WithNullName_ShouldThrowArgumentNullException()
+    {
+        // Arrange
+        var roomType = new RoomType(1, "Standard Room", 2, "Description");
+
+        // Act & Assert
+        Assert.Throws<ArgumentNullException>(() => 
+            roomType.UpdateDetails(1, null!, 2, "Valid Description"));
+    }
+
+    [Theory]
+    [InlineData("   ")]
+    public void UpdateDetails_WithWhitespaceName_ShouldNotThrowException(string? invalidName)
+    {
+        // Arrange
+        var roomType = new RoomType(1, "Standard Room", 2, "Description");
+
+        // Act & Assert - Guard.Against.NullOrEmpty allows whitespace-only strings
+        roomType.UpdateDetails(1, invalidName!, 2, "Valid Description");
+        Assert.Equal(invalidName, roomType.Name);
     }
 
     [Theory]
