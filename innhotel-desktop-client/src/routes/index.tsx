@@ -17,6 +17,12 @@ import AddReservation from '@/pages/AddReservation';
 import BranchDetails from '@/pages/BranchDetails';
 import GuestDetails from '@/pages/GuestDetails';
 import RoomDetails from '@/pages/RoomDetails';
+import RoomTypes from '@/pages/RoomTypes';
+import AddRoomType from '@/pages/AddRoomType';
+import RoomTypeDetails from '@/pages/RoomTypeDetails';
+import Services from '@/pages/Services';
+import AddService from '@/pages/AddService';
+import ServiceDetails from '@/pages/ServiceDetails';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import AddGuest from '@/pages/AddGuest';
 
@@ -46,6 +52,9 @@ const AppRoutes = () => {
         <Route path={ROUTES.ROOMS} element={<Rooms />} />
         <Route path={ROUTES.ADD_ROOM} element={<AddRoom />} />
         <Route path={ROUTES.ROOM_DETAILS} element={<RoomDetails />} />
+        <Route path={ROUTES.ROOM_TYPES} element={<RoomTypes />} />
+        <Route path={ROUTES.ADD_ROOM_TYPE} element={<AddRoomType />} />
+        <Route path={ROUTES.ROOM_TYPE_DETAILS} element={<RoomTypeDetails />} />
         <Route path={ROUTES.GUESTS} element={<Guests />} />
         <Route path={ROUTES.ADD_GUEST} element={<AddGuest />} />
         <Route path={ROUTES.GUEST_DETAILS} element={<GuestDetails />} />
@@ -57,6 +66,9 @@ const AppRoutes = () => {
         <Route path={ROUTES.RESERVATIONS} element={<Reservations />} />
         <Route path={ROUTES.ADD_RESERVATION} element={<AddReservation />} />
         <Route path={ROUTES.BRANCH_DETAILS} element={<BranchDetails />} />
+        <Route path={ROUTES.SERVICES} element={<Services />} />
+        <Route path={ROUTES.ADD_SERVICE} element={<AddService />} />
+        <Route path={ROUTES.SERVICE_DETAILS} element={<ServiceDetails />} />
       </Route>
     </Routes>
   );

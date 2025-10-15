@@ -1,6 +1,8 @@
 // Export all store hooks for easy importing
 export { useAuthStore } from './auth.store';
 export { useRoomsStore } from './rooms.store';
+export { useRoomTypeStore } from './roomTypes.store';
+export { useServiceStore } from './services.store';
 export { useGuestsStore } from './guests.store';
 export { useReservationsStore } from './reservations.store';
 export { useEmployeesStore } from './employees.store';

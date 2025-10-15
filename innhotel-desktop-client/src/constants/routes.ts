@@ -15,8 +15,12 @@ export const ROUTES = {
   ROOM_DETAILS: '/rooms/:id',
   RESERVATIONS: '/reservations',
   ADD_RESERVATION: '/reservations/add',
+  ROOM_TYPES: '/room-types',
+  ADD_ROOM_TYPE: '/room-types/add',
+  ROOM_TYPE_DETAILS: '/room-types/:id',
   SERVICES: '/services',
-  ADD_SERVICE: '/services/add'
+  ADD_SERVICE: '/services/add',
+  SERVICE_DETAILS: '/services/:id'
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;
