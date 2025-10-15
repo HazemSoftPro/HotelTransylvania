@@ -12,6 +12,7 @@ public class RoomConfiguration : IEntityTypeConfiguration<Room>
         {
             t.HasCheckConstraint("CK_rooms_status", "status IN ('Available','Occupied','UnderMaintenance')");
             t.HasCheckConstraint("CK_rooms_floor", "floor >= 0");
+            t.HasCheckConstraint("CK_rooms_manual_price", "manual_price > 0");
         });
 
         r.HasKey(x => x.Id).HasName("room_id");
@@ -37,6 +38,11 @@ public class RoomConfiguration : IEntityTypeConfiguration<Room>
 
         r.Property(x => x.Floor)
           .HasColumnName("floor")
+          .IsRequired();
+
+        r.Property(x => x.ManualPrice)
+          .HasColumnName("manual_price")
+          .HasColumnType("numeric(10,2)")
           .IsRequired();
 
         r.HasIndex(x => new { x.BranchId, x.RoomNumber })

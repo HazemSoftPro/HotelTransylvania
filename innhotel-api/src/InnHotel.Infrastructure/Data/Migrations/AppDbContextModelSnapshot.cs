@@ -410,8 +410,9 @@ namespace InnHotel.Infrastructure.Data.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("floor");
 
-                    b.Property<decimal?>("PriceOverride")
-                        .HasColumnType("numeric");
+                    b.Property<decimal>("ManualPrice")
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("manual_price");
 
                     b.Property<string>("RoomNumber")
                         .IsRequired()
@@ -442,6 +443,8 @@ namespace InnHotel.Infrastructure.Data.Migrations
                         {
                             t.HasCheckConstraint("CK_rooms_floor", "floor >= 0");
 
+                            t.HasCheckConstraint("CK_rooms_manual_price", "manual_price > 0");
+
                             t.HasCheckConstraint("CK_rooms_status", "status IN ('Available','Occupied','UnderMaintenance')");
                         });
                 });
@@ -470,10 +473,6 @@ namespace InnHotel.Infrastructure.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("BasePrice")
-                        .HasColumnType("numeric(10,2)")
-                        .HasColumnName("base_price");
-
                     b.Property<int>("BranchId")
                         .HasColumnType("integer")
                         .HasColumnName("branch_id");
@@ -499,8 +498,6 @@ namespace InnHotel.Infrastructure.Data.Migrations
 
                     b.ToTable("RoomTypes", t =>
                         {
-                            t.HasCheckConstraint("CK_room_types_base_price", "base_price > 0");
-
                             t.HasCheckConstraint("CK_room_types_capacity", "capacity > 0");
                         });
                 });

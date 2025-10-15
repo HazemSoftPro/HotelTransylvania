@@ -6,9 +6,8 @@ public record RoomRecord(
     string BranchName,
     int RoomTypeId,
     string RoomTypeName,
-    decimal BasePrice,
     int Capacity,
     string RoomNumber,
     RoomStatus Status,
     int Floor,
-    decimal? PriceOverride);
+    decimal ManualPrice);

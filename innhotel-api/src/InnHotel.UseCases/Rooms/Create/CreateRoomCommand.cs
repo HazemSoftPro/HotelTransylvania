@@ -5,4 +5,5 @@ public record CreateRoomCommand(
     int RoomTypeId,
     string RoomNumber,
     RoomStatus Status,
-    int Floor) : ICommand<Result<RoomDTO>>;
+    int Floor,
+    decimal ManualPrice) : ICommand<Result<RoomDTO>>;

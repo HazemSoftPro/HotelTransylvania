@@ -10,7 +10,6 @@ namespace InnHotel.Infrastructure.Data.Config;
       {
           rt.ToTable(t =>
           {
-              t.HasCheckConstraint("CK_room_types_base_price", "base_price > 0");
               t.HasCheckConstraint("CK_room_types_capacity", "capacity > 0");
           });
 
@@ -28,10 +27,7 @@ namespace InnHotel.Infrastructure.Data.Config;
           rt.Property(x => x.Description)
             .HasColumnName("description");
 
-          rt.Property(x => x.BasePrice)
-            .HasColumnName("base_price")
-            .HasColumnType("numeric(10,2)")
-            .IsRequired();
+
 
           rt.Property(x => x.Capacity)
             .HasColumnName("capacity")

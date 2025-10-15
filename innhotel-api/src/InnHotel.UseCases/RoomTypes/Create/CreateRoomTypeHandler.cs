@@ -19,7 +19,6 @@ public class CreateRoomTypeHandler(IRepository<RoomType> _roomTypeRepository, IR
         var roomType = new RoomType(
             request.BranchId,
             request.Name,
-            request.BasePrice,
             request.Capacity,
             request.Description);
 
@@ -31,7 +30,6 @@ public class CreateRoomTypeHandler(IRepository<RoomType> _roomTypeRepository, IR
             createdRoomType.BranchId,
             branch.Name,
             createdRoomType.Name,
-            createdRoomType.BasePrice,
             createdRoomType.Capacity,
             createdRoomType.Description);
 

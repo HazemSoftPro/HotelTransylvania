@@ -8,25 +8,22 @@ using Ardalis.SharedKernel;
 
 namespace InnHotel.Core.RoomAggregate;
 
-public class RoomType(int branchId, string name, decimal basePrice, int capacity, string? description = null) : EntityBase, IAggregateRoot
+public class RoomType(int branchId, string name, int capacity, string? description = null) : EntityBase, IAggregateRoot
 {
     public int BranchId { get; private set; } = Guard.Against.NegativeOrZero(branchId, nameof(branchId));
     public Branch Branch { get; private set; } = null!;
     public string Name { get; private set; } = Guard.Against.NullOrEmpty(name, nameof(name));
-    public decimal BasePrice { get; private set; } = Guard.Against.NegativeOrZero(basePrice, nameof(basePrice));
     public int Capacity { get; private set; } = Guard.Against.NegativeOrZero(capacity, nameof(capacity));
     public string? Description { get; private set; } = description;
 
     public void UpdateDetails(
         int branchId,
         string name,
-        decimal basePrice,
         int capacity,
         string? description)
     {
         BranchId = Guard.Against.NegativeOrZero(branchId, nameof(branchId));
         Name = Guard.Against.NullOrEmpty(name, nameof(name));
-        BasePrice = Guard.Against.NegativeOrZero(basePrice, nameof(basePrice));
         Capacity = Guard.Against.NegativeOrZero(capacity, nameof(capacity));
         Description = description;
     }

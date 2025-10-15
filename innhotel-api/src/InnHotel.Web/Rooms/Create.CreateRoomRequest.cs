@@ -26,4 +26,8 @@ public class CreateRoomRequest
     [Required]
     [Range(0, 100)]
     public int Floor { get; set; }
+
+    [Required]
+    [Range(0.01, double.MaxValue, ErrorMessage = "Manual price must be greater than 0")]
+    public decimal ManualPrice { get; set; }
 }

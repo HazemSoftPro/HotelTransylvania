@@ -44,12 +44,11 @@ public class GetById(IMediator _mediator)
                 room.BranchName,
                 room.RoomTypeId,
                 room.RoomTypeName,
-                room.BasePrice,
                 room.Capacity,
                 room.RoomNumber,
                 room.Status,
                 room.Floor,
-                room.PriceOverride);
+                room.ManualPrice);
             await SendOkAsync(Response, cancellationToken);
             return;
         }

@@ -51,7 +51,6 @@ public class GetById(IMediator _mediator)
                 result.Value.BranchId,
                 result.Value.BranchName,
                 result.Value.Name,
-                result.Value.BasePrice,
                 result.Value.Capacity,
                 result.Value.Description);
 

@@ -24,7 +24,6 @@ public class Update(IMediator _mediator)
                 Id = 1,
                 BranchId = 1,
                 Name = "Deluxe Room",
-                BasePrice = 150.00m,
                 Capacity = 3,
                 Description = "A luxurious deluxe room with premium amenities"
             };
@@ -39,7 +38,6 @@ public class Update(IMediator _mediator)
             request.Id,
             request.BranchId,
             request.Name!,
-            request.BasePrice,
             request.Capacity,
             request.Description);
 
@@ -70,7 +68,6 @@ public class Update(IMediator _mediator)
                 result.Value.BranchId,
                 result.Value.BranchName,
                 result.Value.Name,
-                result.Value.BasePrice,
                 result.Value.Capacity,
                 result.Value.Description);
 

@@ -37,12 +37,11 @@ public class List(IMediator _mediator)
                     room.BranchName,
                     room.RoomTypeId,
                     room.RoomTypeName,
-                    room.BasePrice,
                     room.Capacity,
                     room.RoomNumber,
                     room.Status,
                     room.Floor,
-                    room.PriceOverride)).ToList();
+                    room.ManualPrice)).ToList();
 
             var response = new PagedResponse<RoomRecord>(
                 roomRecords, 

@@ -19,9 +19,7 @@ public class UpdateRoomTypeRequest
     [MaxLength(100)]
     public string? Name { get; set; }
 
-    [Required]
-    [Range(0.01, double.MaxValue, ErrorMessage = "Base price must be greater than 0")]
-    public decimal BasePrice { get; set; }
+
 
     [Required]
     [Range(1, 20, ErrorMessage = "Capacity must be between 1 and 20")]
