@@ -72,9 +72,33 @@ const Services = () => {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto py-6">
-        <div className="flex items-center justify-center h-64">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="container mx-auto py-6 space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold">Services Management</h1>
+            <p className="text-muted-foreground">
+              Manage your hotel services and amenities.
+            </p>
+          </div>
+          <Button disabled className="gap-2">
+            <Plus className="h-4 w-4" />
+            Add Service
+          </Button>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="animate-pulse">
+              <div className="bg-card rounded-lg border p-6 space-y-4">
+                <div className="h-6 bg-muted rounded w-3/4"></div>
+                <div className="h-4 bg-muted rounded w-1/2"></div>
+                <div className="h-4 bg-muted rounded w-full"></div>
+                <div className="flex justify-end gap-2">
+                  <div className="h-9 bg-muted rounded w-20"></div>
+                  <div className="h-9 bg-muted rounded w-20"></div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     );

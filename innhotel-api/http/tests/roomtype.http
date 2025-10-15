@@ -1,0 +1,102 @@
+@baseUrl = http://localhost:5000/api
+@token = YOUR_JWT_TOKEN_HERE
+
+### Login to get token
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@innhotel.com",
+  "password": "Admin@123"
+}
+
+### List all RoomTypes
+GET {{baseUrl}}/roomtypes
+Authorization: Bearer {{token}}
+
+### Get RoomType by ID
+GET {{baseUrl}}/roomtypes/1
+Authorization: Bearer {{token}}
+
+### Create a new RoomType
+POST {{baseUrl}}/roomtypes
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "branchId": 1,
+  "name": "Deluxe Suite",
+  "capacity": 4,
+  "description": "Spacious deluxe suite with premium amenities, king-size bed, and city view"
+}
+
+### Create another RoomType
+POST {{baseUrl}}/roomtypes
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "branchId": 1,
+  "name": "Standard Room",
+  "capacity": 2,
+  "description": "Comfortable standard room with basic amenities"
+}
+
+### Update RoomType
+PUT {{baseUrl}}/roomtypes/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "branchId": 1,
+  "name": "Premium Deluxe Suite",
+  "capacity": 4,
+  "description": "Updated description: Luxurious suite with enhanced amenities"
+}
+
+### Delete RoomType
+DELETE {{baseUrl}}/roomtypes/1
+Authorization: Bearer {{token}}
+
+### Error Cases
+
+### Create RoomType with invalid data (missing required fields)
+POST {{baseUrl}}/roomtypes
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "branchId": 1
+}
+
+### Create RoomType with invalid capacity
+POST {{baseUrl}}/roomtypes
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "branchId": 1,
+  "name": "Invalid Room",
+  "capacity": 0,
+  "description": "This should fail"
+}
+
+### Get non-existent RoomType
+GET {{baseUrl}}/roomtypes/99999
+Authorization: Bearer {{token}}
+
+### Update non-existent RoomType
+PUT {{baseUrl}}/roomtypes/99999
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "branchId": 1,
+  "name": "Non-existent",
+  "capacity": 2,
+  "description": "This should fail"
+}
+
+### Delete non-existent RoomType
+DELETE {{baseUrl}}/roomtypes/99999
+Authorization: Bearer {{token}}
