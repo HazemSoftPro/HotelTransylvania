@@ -1,0 +1,23 @@
+### Search Employees - All Parameters
+GET {{baseUrl}}/api/employees/search?SearchTerm=John&BranchId=1&Position=Manager&HireDateFrom=2024-01-01&HireDateTo=2025-12-31&PageNumber=1&PageSize=10
+Authorization: Bearer {{token}}
+
+### Search Employees - By Name
+GET {{baseUrl}}/api/employees/search?SearchTerm=Smith&PageNumber=1&PageSize=10
+Authorization: Bearer {{token}}
+
+### Search Employees - By Position
+GET {{baseUrl}}/api/employees/search?Position=Receptionist&PageNumber=1&PageSize=10
+Authorization: Bearer {{token}}
+
+### Search Employees - By Branch
+GET {{baseUrl}}/api/employees/search?BranchId=1&PageNumber=1&PageSize=10
+Authorization: Bearer {{token}}
+
+### Search Employees - By Hire Date Range
+GET {{baseUrl}}/api/employees/search?HireDateFrom=2024-01-01&HireDateTo=2024-12-31&PageNumber=1&PageSize=10
+Authorization: Bearer {{token}}
+
+### Search Employees - Pagination Test
+GET {{baseUrl}}/api/employees/search?PageNumber=2&PageSize=5
+Authorization: Bearer {{token}}

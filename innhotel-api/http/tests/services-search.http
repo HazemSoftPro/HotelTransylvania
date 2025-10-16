@@ -1,0 +1,23 @@
+### Search Services - All Parameters
+GET {{baseUrl}}/api/services/search?SearchTerm=Spa&BranchId=1&MinPrice=10.00&MaxPrice=100.00&PageNumber=1&PageSize=10
+Authorization: Bearer {{token}}
+
+### Search Services - By Name
+GET {{baseUrl}}/api/services/search?SearchTerm=Laundry&PageNumber=1&PageSize=10
+Authorization: Bearer {{token}}
+
+### Search Services - By Price Range
+GET {{baseUrl}}/api/services/search?MinPrice=20.00&MaxPrice=50.00&PageNumber=1&PageSize=10
+Authorization: Bearer {{token}}
+
+### Search Services - By Branch
+GET {{baseUrl}}/api/services/search?BranchId=1&PageNumber=1&PageSize=10
+Authorization: Bearer {{token}}
+
+### Search Services - By Minimum Price
+GET {{baseUrl}}/api/services/search?MinPrice=50.00&PageNumber=1&PageSize=10
+Authorization: Bearer {{token}}
+
+### Search Services - Pagination Test
+GET {{baseUrl}}/api/services/search?PageNumber=2&PageSize=5
+Authorization: Bearer {{token}}

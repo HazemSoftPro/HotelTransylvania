@@ -1,0 +1,23 @@
+### Search Room Types - All Parameters
+GET {{baseUrl}}/api/roomtypes/search?SearchTerm=Deluxe&BranchId=1&MinCapacity=2&MaxCapacity=4&PageNumber=1&PageSize=10
+Authorization: Bearer {{token}}
+
+### Search Room Types - By Name
+GET {{baseUrl}}/api/roomtypes/search?SearchTerm=Suite&PageNumber=1&PageSize=10
+Authorization: Bearer {{token}}
+
+### Search Room Types - By Capacity Range
+GET {{baseUrl}}/api/roomtypes/search?MinCapacity=2&MaxCapacity=6&PageNumber=1&PageSize=10
+Authorization: Bearer {{token}}
+
+### Search Room Types - By Branch
+GET {{baseUrl}}/api/roomtypes/search?BranchId=1&PageNumber=1&PageSize=10
+Authorization: Bearer {{token}}
+
+### Search Room Types - By Minimum Capacity
+GET {{baseUrl}}/api/roomtypes/search?MinCapacity=4&PageNumber=1&PageSize=10
+Authorization: Bearer {{token}}
+
+### Search Room Types - Pagination Test
+GET {{baseUrl}}/api/roomtypes/search?PageNumber=2&PageSize=5
+Authorization: Bearer {{token}}
