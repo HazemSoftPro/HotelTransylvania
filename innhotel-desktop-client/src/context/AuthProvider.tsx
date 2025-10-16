@@ -1,5 +1,3 @@
-'use client';
-
 import { useAuthStore } from "@/store/auth.store";
 import { useRoomsStore } from "@/store/rooms.store";
 import type { AuthContextType } from "@/types/api/auth";
