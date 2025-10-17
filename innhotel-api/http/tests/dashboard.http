@@ -1,0 +1,15 @@
+### Get Dashboard Metrics - All Data
+GET {{baseUrl}}/api/dashboard/metrics
+Authorization: Bearer {{token}}
+
+### Get Dashboard Metrics - Specific Branch
+GET {{baseUrl}}/api/dashboard/metrics?BranchId=1
+Authorization: Bearer {{token}}
+
+### Get Dashboard Metrics - Date Range
+GET {{baseUrl}}/api/dashboard/metrics?StartDate=2025-01-01&EndDate=2025-12-31
+Authorization: Bearer {{token}}
+
+### Get Dashboard Metrics - Branch and Date Range
+GET {{baseUrl}}/api/dashboard/metrics?BranchId=1&StartDate=2025-10-01&EndDate=2025-10-31
+Authorization: Bearer {{token}}
