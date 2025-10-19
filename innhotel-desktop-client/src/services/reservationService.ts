@@ -103,5 +103,50 @@ export const reservationService = {
       }
       throw error;
     }
+  },
+
+  updateStatus: async (id: number, newStatus: string): Promise<void> => {
+    try {
+      logger().info('Updating reservation status', { id, newStatus });
+      await axiosInstance.put(`/reservations/${id}/status`, { newStatus });
+      logger().info('Successfully updated reservation status', { id, newStatus });
+    } catch (error) {
+      if (isAxiosError(error)) {
+        logger().error('Failed to update reservation status', {
+          id,
+          newStatus,
+          status: error.response?.status,
+          message: error.response?.data?.message
+        });
+        throw new Error(error.response?.data?.message || 'Failed to update reservation status');
+      }
+      throw error;
+    }
+  },
+
+  checkAvailability: async (
+    roomId: number,
+    checkInDate: string,
+    checkOutDate: string,
+    excludeReservationId?: number
+  ): Promise<boolean> => {
+    try {
+      logger().info('Checking room availability', { roomId, checkInDate, checkOutDate });
+      const response = await axiosInstance.get('/reservations/check-availability', {
+        params: { roomId, checkInDate, checkOutDate, excludeReservationId }
+      });
+      logger().info('Successfully checked room availability', { isAvailable: response.data.isAvailable });
+      return response.data.isAvailable;
+    } catch (error) {
+      if (isAxiosError(error)) {
+        logger().error('Failed to check room availability', {
+          roomId,
+          status: error.response?.status,
+          message: error.response?.data?.message
+        });
+        throw new Error(error.response?.data?.message || 'Failed to check room availability');
+      }
+      throw error;
+    }
   }
 };

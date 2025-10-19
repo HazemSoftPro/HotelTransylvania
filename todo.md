@@ -1,277 +1,256 @@
-# Phase 2: Search, Filter & User Experience - Implementation Plan
+# Phase 3: Advanced Features - Implementation Plan
 
 ## Overview
-This document tracks the implementation of Phase 2 from the Skeleton Project Development Plan, focusing on search functionality, filtering capabilities, guest analytics, and UI/UX enhancements.
+This document tracks the implementation of Phase 3 from the Skeleton Project Development Plan, focusing on reservation workflow enhancement, room availability system, and employee role management.
 
-## Phase 2 Objectives
-- Implement comprehensive search and filter functionality across all entities
-- Add guest history and analytics features
-- Create a dashboard with key metrics
-- Enhance UI/UX with breadcrumbs, keyboard shortcuts, and responsive improvements
+## Phase 3 Objectives
+- Implement proper reservation status transitions with validation
+- Create check-in/check-out wizards
+- Build comprehensive room availability system
+- Expand employee role management with permissions
+- Create audit logging for sensitive actions
 
 ---
 
 ## Section 1: Project Setup & Analysis
 ### 1.1 Environment Setup
-- [x] Review current project structure and dependencies
-- [x] Verify API endpoints for search/filter capabilities
-- [x] Check existing UI components that can be reused
-- [x] Review state management patterns from Phase 1
+- [ ] Review current project structure and Phase 2 implementations
+- [ ] Verify existing reservation workflow logic
+- [ ] Check current role-based authentication system
+- [ ] Review database schema for required changes
 
 ### 1.2 Requirements Analysis
-- [x] Analyze search requirements for each entity (Rooms, Reservations, Guests, Employees, RoomTypes, Services)
-- [x] Define filter parameters for each entity
-- [x] Identify pagination and sorting requirements
-- [x] Document API response structures for search/filter
+- [ ] Analyze reservation status transition requirements
+- [ ] Define room availability check algorithm requirements
+- [ ] Document role-based permission requirements
+- [ ] Identify audit logging requirements
 
 ---
 
-## Section 2: Backend - Search & Filter API Implementation
-### 2.1 Search Specifications
-- [x] Implement search specification for Rooms (by room number, status, type, branch)
-- [x] Implement search specification for Reservations (by guest name, date range, status)
-- [x] Implement search specification for Guests (by name, email, phone)
-- [x] Implement search specification for Employees (by name, role, branch)
-- [x] Implement search specification for RoomTypes (by name, capacity range)
-- [x] Implement search specification for Services (by name, price range)
+## Section 2: Reservation Workflow Enhancement (3.1)
+### 2.1 Status Transition Logic
+- [ ] Implement ReservationStatusTransition validation service
+- [ ] Create status transition rules (Pending → Confirmed → CheckedIn → CheckedOut)
+- [ ] Add validation to prevent invalid status changes
+- [ ] Implement business rules for status transitions
+- [ ] Add unit tests for status transition logic
 
-### 2.2 Filter Parameters
-- [x] Add filter endpoints with pagination support
-- [x] Implement date range filtering for reservations
-- [x] Implement status filtering for rooms and reservations
-- [x] Implement branch filtering for multi-branch support
-- [x] Add sorting parameters (by date, name, price, etc.)
+### 2.2 Check-In Wizard
+- [ ] Create CheckInWizard component (multi-step form)
+- [ ] Implement guest verification step
+- [ ] Add room assignment confirmation step
+- [ ] Create payment verification step
+- [ ] Add special requests review step
+- [ ] Implement check-in completion logic
 
-### 2.3 Query Optimization
-- [x] Add database indexes on frequently searched fields
-- [x] Optimize queries with proper joins
-- [x] Implement query result caching strategy
-- [ ] Test query performance with large datasets
+### 2.3 Check-Out Wizard
+- [ ] Create CheckOutWizard component
+- [ ] Implement room inspection step
+- [ ] Add additional charges review step
+- [ ] Create final payment settlement step
+- [ ] Add feedback collection step
+- [ ] Implement check-out completion logic
 
-### 2.4 API Documentation
-- [x] Document search/filter endpoints in Swagger
-- [x] Create .http test files for search operations
-- [x] Add XML comments with examples
-- [x] Document pagination and sorting parameters
+### 2.4 Auto-Update Room Status
+- [ ] Create RoomStatusSync service
+- [ ] Implement auto-update on check-in (Room → Occupied)
+- [ ] Implement auto-update on check-out (Room → Available)
+- [ ] Add SignalR notifications for room status changes
+- [ ] Test room status synchronization
 
----
-
-## Section 3: Frontend - Search Component Implementation
-### 3.1 Reusable Search Component
-- [x] Create SearchInput component with debouncing
-- [x] Create FilterPanel component for advanced filters
-- [x] Create SearchResults component with highlighting
-- [x] Create Pagination component
-- [x] Create SortControls component
-
-### 3.2 Entity-Specific Search Integration
-- [ ] Integrate search in Rooms page
-- [ ] Integrate search in Reservations page
-- [ ] Integrate search in Guests page
-- [ ] Integrate search in Employees page
-- [ ] Integrate search in RoomTypes page
-- [ ] Integrate search in Services page
-
-### 3.3 State Management
-- [x] Create search store in Zustand for caching results
-- [x] Implement search history tracking
-- [x] Add filter state persistence
-- [x] Implement optimistic search updates
-
-### 3.4 Search Services
-- [x] Create searchService.ts with debounced API calls
-- [x] Implement search result caching
-- [x] Add search analytics tracking
-- [x] Handle search errors gracefully
+### 2.5 Reservation Modification
+- [ ] Create ModifyReservation endpoint
+- [ ] Implement conflict detection algorithm
+- [ ] Add date change validation
+- [ ] Implement room change with availability check
+- [ ] Create modification history tracking
+- [ ] Add unit tests for modification logic
 
 ---
 
-## Section 4: Guest History & Analytics
-### 4.1 Backend - Guest History API
-- [ ] Create GetGuestHistory endpoint
-- [ ] Create GetGuestStatistics endpoint
-- [ ] Implement reservation timeline query
-- [ ] Add guest spending analytics query
+## Section 3: Room Availability System (3.2)
+### 3.1 Availability Check Algorithm
+- [ ] Create RoomAvailabilityService
+- [ ] Implement date range availability check
+- [ ] Add room type availability query
+- [ ] Implement branch-specific availability
+- [ ] Create bulk availability check endpoint
+- [ ] Add performance optimization with caching
 
-### 4.2 Frontend - Guest History UI
-- [ ] Create GuestHistory component
-- [ ] Create GuestStatistics component
-- [ ] Create ReservationTimeline component
-- [ ] Create SpendingChart component
+### 3.2 Double-Booking Prevention
+- [ ] Implement database-level constraints
+- [ ] Add optimistic locking for reservations
+- [ ] Create reservation conflict detection
+- [ ] Implement transaction-based booking
+- [ ] Add unit tests for double-booking scenarios
 
-### 4.3 Data Visualization
-- [ ] Install chart library (Chart.js or Recharts)
-- [ ] Create reusable chart components
-- [ ] Implement guest spending visualization
-- [ ] Create reservation frequency charts
+### 3.3 Visual Calendar Component
+- [ ] Install calendar library (react-big-calendar or similar)
+- [ ] Create AvailabilityCalendar component
+- [ ] Implement month/week/day views
+- [ ] Add color coding for availability status
+- [ ] Implement drag-and-drop reservation creation
+- [ ] Add reservation details on calendar click
 
-### 4.4 Guest Profile Enhancement
-- [ ] Add history tab to guest details page
-- [ ] Display guest statistics on profile
-- [ ] Show reservation timeline
-- [ ] Add quick actions for repeat bookings
+### 3.4 Bulk Availability Queries
+- [ ] Create GetBulkAvailability endpoint
+- [ ] Implement multi-room availability check
+- [ ] Add date range batch queries
+- [ ] Optimize query performance
+- [ ] Create frontend integration for bulk queries
 
----
-
-## Section 5: Dashboard Implementation
-### 5.1 Dashboard Layout
-- [x] Create Dashboard page component
-- [x] Design responsive grid layout
-- [x] Create dashboard card components
-- [x] Implement dashboard navigation
-
-### 5.2 Key Metrics Display
-- [x] Create OccupancyRate widget
-- [x] Create RevenueMetrics widget
-- [x] Create ActiveReservations widget
-- [x] Create AvailableRooms widget
-- [x] Create RecentActivity widget
-
-### 5.3 Dashboard API
-- [x] Create GetDashboardMetrics endpoint
-- [x] Implement occupancy rate calculation
-- [x] Implement revenue analytics query
-- [ ] Add real-time updates via SignalR
-
-### 5.4 Dashboard State Management
-- [x] Create dashboard store in Zustand
-- [x] Implement auto-refresh for metrics
-- [ ] Add date range selector for metrics
-- [x] Cache dashboard data
+### 3.5 Waitlist Feature
+- [ ] Create Waitlist entity and table
+- [ ] Implement AddToWaitlist endpoint
+- [ ] Create waitlist notification system
+- [ ] Implement auto-notification on availability
+- [ ] Create WaitlistManagement UI component
+- [ ] Add waitlist priority logic
 
 ---
 
-## Section 6: UI/UX Enhancements
-### 6.1 Breadcrumb Navigation
-- [x] Create Breadcrumb component
-- [x] Integrate breadcrumbs in all pages
-- [x] Implement dynamic breadcrumb generation
-- [x] Add breadcrumb navigation logic
+## Section 4: Employee Role Management (3.3)
+### 4.1 Role System Expansion
+- [ ] Review current JWT role implementation
+- [ ] Create Permission entity and table
+- [ ] Create RolePermission mapping table
+- [ ] Define granular permissions (Create, Read, Update, Delete per entity)
+- [ ] Implement role hierarchy (Administrator > Manager > Staff)
 
-### 6.2 Keyboard Shortcuts
-- [ ] Create keyboard shortcut system
-- [ ] Implement global shortcuts (search, navigation)
-- [ ] Add page-specific shortcuts
-- [ ] Create keyboard shortcut help modal
-- [ ] Document all shortcuts
+### 4.2 Role Definitions
+- [ ] Define Administrator role permissions (full access)
+- [ ] Define Manager role permissions (branch-level management)
+- [ ] Define Receptionist role permissions (reservations, check-in/out)
+- [ ] Define Housekeeper role permissions (room status updates)
+- [ ] Define Accountant role permissions (financial reports only)
+- [ ] Create role seeding in database migrations
 
-### 6.3 Responsive Design Improvements
-- [ ] Audit mobile responsiveness
-- [ ] Improve table responsiveness
-- [ ] Enhance form layouts for mobile
-- [ ] Test on various screen sizes
-- [ ] Fix any responsive issues
+### 4.3 Permission Management API
+- [ ] Create GetRolePermissions endpoint
+- [ ] Create UpdateRolePermissions endpoint
+- [ ] Create AssignRoleToEmployee endpoint
+- [ ] Implement permission checking middleware
+- [ ] Add authorization attributes to endpoints
 
-### 6.4 Loading & Error States
-- [x] Create EmptyState component
-- [x] Create ErrorState component
-- [x] Improve loading indicators
-- [x] Add retry mechanisms for failed requests
+### 4.4 Role-Based UI
+- [ ] Create usePermissions hook
+- [ ] Implement ProtectedRoute component
+- [ ] Create PermissionGate component for conditional rendering
+- [ ] Hide/show features based on user role
+- [ ] Implement role-based navigation menu
+- [ ] Add role indicators in UI
 
-### 6.5 Accessibility Improvements
-- [ ] Add ARIA labels to interactive elements
-- [ ] Ensure keyboard navigation works
-- [ ] Test with screen readers
-- [ ] Improve color contrast
-- [ ] Add focus indicators
+### 4.5 Audit Logging
+- [ ] Create AuditLog entity and table
+- [ ] Implement AuditLogService
+- [ ] Add audit logging middleware
+- [ ] Log sensitive operations (deletions, status changes, payments)
+- [ ] Create AuditLogViewer component
+- [ ] Implement audit log filtering and search
+- [ ] Add audit log export functionality
 
 ---
 
-## Section 7: Testing & Quality Assurance
-### 7.1 API Testing
-- [ ] Test all search endpoints
-- [ ] Test filter combinations
-- [ ] Test pagination and sorting
-- [ ] Test guest history endpoints
-- [ ] Test dashboard metrics endpoints
+## Section 5: Testing & Quality Assurance
+### 5.1 API Testing
+- [ ] Test reservation status transition endpoints
+- [ ] Test check-in/check-out workflows
+- [ ] Test room availability endpoints
+- [ ] Test waitlist functionality
+- [ ] Test role permission endpoints
+- [ ] Test audit logging
 
-### 7.2 Frontend Testing
-- [ ] Test search functionality across all pages
-- [ ] Test filter interactions
-- [ ] Test guest history display
-- [ ] Test dashboard metrics display
-- [ ] Test keyboard shortcuts
+### 5.2 Frontend Testing
+- [ ] Test check-in wizard flow
+- [ ] Test check-out wizard flow
+- [ ] Test availability calendar interactions
+- [ ] Test role-based UI rendering
+- [ ] Test permission gates
+- [ ] Test audit log viewer
 
-### 7.3 Performance Testing
-- [ ] Test search performance with large datasets
-- [ ] Measure API response times
-- [ ] Test frontend rendering performance
+### 5.3 Integration Testing
+- [ ] Test end-to-end reservation workflow
+- [ ] Test room status synchronization
+- [ ] Test double-booking prevention
+- [ ] Test role-based access control
+- [ ] Test audit log creation
+
+### 5.4 Performance Testing
+- [ ] Test availability check performance
+- [ ] Test bulk availability queries
+- [ ] Test calendar rendering with large datasets
 - [ ] Optimize slow queries
-- [ ] Implement performance monitoring
-
-### 7.4 User Acceptance Testing
-- [ ] Create test scenarios for search
-- [ ] Create test scenarios for filters
-- [ ] Create test scenarios for dashboard
-- [ ] Gather user feedback
-- [ ] Address usability issues
+- [ ] Implement caching where needed
 
 ---
 
-## Section 8: Documentation & Deployment
-### 8.1 Code Documentation
-- [x] Add JSDoc comments to new components
-- [x] Document search/filter patterns
-- [x] Document dashboard architecture
-- [x] Update README with new features
+## Section 6: Documentation & Deployment
+### 6.1 Code Documentation
+- [ ] Add XML comments to all new endpoints
+- [ ] Document status transition rules
+- [ ] Document permission system architecture
+- [ ] Add JSDoc comments to new components
+- [ ] Update API documentation in Swagger
 
-### 8.2 User Documentation
-- [x] Create search feature guide
-- [x] Create filter usage guide
-- [x] Create dashboard guide
-- [ ] Create keyboard shortcuts reference (deferred to Phase 3)
+### 6.2 User Documentation
+- [ ] Create check-in/check-out wizard guide
+- [ ] Create availability calendar user guide
+- [ ] Create role management guide
+- [ ] Create audit log viewing guide
+- [ ] Update user manual with Phase 3 features
 
-### 8.3 Technical Documentation
-- [x] Document search API specifications
-- [x] Document filter parameters
-- [x] Document dashboard metrics calculations
-- [ ] Create architecture diagrams (deferred to Phase 3)
+### 6.3 Technical Documentation
+- [ ] Document reservation workflow architecture
+- [ ] Document availability algorithm
+- [ ] Document permission system design
+- [ ] Document audit logging implementation
+- [ ] Create architecture diagrams
 
-### 8.4 Deployment Preparation
-- [x] Create feature branch for Phase 2
-- [x] Commit changes with clear messages
-- [x] Create pull request with detailed description
-- [x] Review code quality and standards
-- [x] Prepare deployment checklist
+### 6.4 Deployment Preparation
+- [ ] Create database migration scripts
+- [ ] Create feature branch for Phase 3
+- [ ] Commit changes with clear messages
+- [ ] Create pull request with detailed description
+- [ ] Prepare deployment checklist
+- [ ] Create rollback plan
 
 ---
 
-## Section 9: Final Review & Completion
-### 9.1 Code Review
-- [x] Review all new code for quality
-- [x] Ensure TypeScript strict mode compliance
-- [x] Check for code duplication
-- [x] Verify error handling coverage
-- [x] Ensure consistent code style
+## Section 7: Final Review & Completion
+### 7.1 Code Review
+- [ ] Review all new code for quality
+- [ ] Ensure TypeScript strict mode compliance
+- [ ] Check for security vulnerabilities
+- [ ] Verify error handling coverage
+- [ ] Ensure consistent code style
 
-### 9.2 Feature Verification
-- [x] Verify all search features work correctly
-- [x] Verify all filter features work correctly
-- [x] Verify guest history displays correctly
-- [x] Verify dashboard metrics are accurate
-- [x] Verify UI/UX enhancements are complete
+### 7.2 Feature Verification
+- [ ] Verify reservation workflow works correctly
+- [ ] Verify room availability system works correctly
+- [ ] Verify role-based access control works correctly
+- [ ] Verify audit logging captures all events
+- [ ] Verify all business rules are enforced
 
-### 9.3 Documentation Review
-- [x] Review all documentation for completeness
-- [x] Ensure examples are accurate
-- [x] Verify links and references
-- [x] Check for typos and clarity
+### 7.3 Documentation Review
+- [ ] Review all documentation for completeness
+- [ ] Ensure examples are accurate
+- [ ] Verify links and references
+- [ ] Check for typos and clarity
 
-### 9.4 Stakeholder Report
-- [x] Create Phase 2 implementation report
-- [x] Document completed features
-- [x] Include code metrics and statistics
-- [x] Provide deployment instructions
-- [x] Create Phase 2 summary document
+### 7.4 Stakeholder Report
+- [ ] Create Phase 3 implementation report
+- [ ] Document completed features
+- [ ] Include code metrics and statistics
+- [ ] Provide deployment instructions
+- [ ] Create Phase 3 summary document
 
 ---
 
 ## Success Criteria
-- [ ] All search functionality implemented and working
-- [ ] All filter functionality implemented and working
-- [ ] Guest history and analytics complete
-- [ ] Dashboard with key metrics operational
-- [ ] UI/UX enhancements complete
+- [ ] All reservation workflow enhancements complete and working
+- [ ] Room availability system fully functional
+- [ ] Role-based access control implemented
+- [ ] Audit logging operational
 - [ ] All tests passing
 - [ ] Documentation complete
 - [ ] Code reviewed and approved
@@ -280,8 +259,9 @@ This document tracks the implementation of Phase 2 from the Skeleton Project Dev
 ---
 
 ## Notes
-- Follow existing code patterns from Phase 1
+- Follow existing code patterns from Phase 1 and Phase 2
 - Maintain TypeScript strict mode compliance
 - Use existing UI components where possible
 - Ensure responsive design for all new features
 - Test thoroughly before marking tasks complete
+- Consider backward compatibility with existing data
