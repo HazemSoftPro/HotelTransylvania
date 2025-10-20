@@ -943,7 +943,7 @@ For commercial support, custom development, or enterprise features, please conta
 
 ## 🙏 Acknowledgments
 
-- **Khaled Alshibani** - Original project author and lead developer
+- **Hazem Mohammed** - Original project author and lead developer
 - **NinjaTech AI Team** - Development support and documentation
 - **Contributors** - All contributors who have helped improve this project
 - **Open Source Community** - For the amazing tools and libraries used in this project
