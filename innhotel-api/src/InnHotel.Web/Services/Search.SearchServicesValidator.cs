@@ -1,3 +1,5 @@
+using FluentValidation;
+
 namespace InnHotel.Web.Services;
 
 public class SearchServicesValidator : Validator<SearchServicesRequest>

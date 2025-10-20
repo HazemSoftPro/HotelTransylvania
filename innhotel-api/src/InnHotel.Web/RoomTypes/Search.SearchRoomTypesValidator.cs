@@ -1,3 +1,5 @@
+using FluentValidation;
+
 namespace InnHotel.Web.RoomTypes;
 
 public class SearchRoomTypesValidator : Validator<SearchRoomTypesRequest>

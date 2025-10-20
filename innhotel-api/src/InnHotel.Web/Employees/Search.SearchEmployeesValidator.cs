@@ -1,3 +1,5 @@
+using FluentValidation;
+
 namespace InnHotel.Web.Employees;
 
 public class SearchEmployeesValidator : Validator<SearchEmployeesRequest>

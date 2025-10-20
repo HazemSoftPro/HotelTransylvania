@@ -3,6 +3,15 @@ using InnHotel.Core.EmployeeAggregate.Specifications;
 
 namespace InnHotel.UseCases.Employees.Search;
 
+public record EmployeeDTO(
+    int Id,
+    int BranchId,
+    string FirstName,
+    string LastName,
+    DateOnly HireDate,
+    string Position,
+    string? UserId);
+
 public class SearchEmployeesHandler(IReadRepository<Employee> _repository)
     : IQueryHandler<SearchEmployeesQuery, Result<IEnumerable<EmployeeDTO>>>
 {

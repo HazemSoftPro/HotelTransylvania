@@ -60,13 +60,12 @@ public class Search(IMediator _mediator)
         {
             var employeeRecords = result.Value.Select(e => new EmployeeRecord(
                 e.Id,
+                e.BranchId,
                 e.FirstName,
                 e.LastName,
-                e.Email,
-                e.Phone,
-                e.Position,
                 e.HireDate,
-                e.BranchId)).ToList();
+                e.Position,
+                e.UserId)).ToList();
 
             await SendAsync(
                 new { 
