@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { RoomType, roomTypeService } from '@/services/roomTypeService';
+import { type RoomType, roomTypeService } from '@/services/roomTypeService';
 
 interface RoomTypeState {
   roomTypes: RoomType[];

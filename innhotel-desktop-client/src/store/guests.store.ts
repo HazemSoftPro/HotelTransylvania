@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import type { Guest } from '@/types/api/guest';
+import type { GuestResponse } from '@/types/api/guest';
 
 interface GuestsState {
-  guests: Guest[];
-  selectedGuest: Guest | null;
+  guests: GuestResponse[];
+  selectedGuest: GuestResponse | null;
   isLoading: boolean;
   error: string | null;
   searchTerm: string;
@@ -21,11 +21,11 @@ interface GuestsState {
 
 interface GuestsActions {
   // Guest management
-  setGuests: (guests: Guest[]) => void;
-  addGuest: (guest: Guest) => void;
-  updateGuest: (guest: Guest) => void;
+  setGuests: (guests: GuestResponse[]) => void;
+  addGuest: (guest: GuestResponse) => void;
+  updateGuest: (guest: GuestResponse) => void;
   removeGuest: (guestId: number) => void;
-  setSelectedGuest: (guest: Guest | null) => void;
+  setSelectedGuest: (guest: GuestResponse | null) => void;
   
   // Loading and error states
   setLoading: (loading: boolean) => void;

@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import type { Reservation } from '@/types/api/reservation';
+import type { ReservationResponse } from '@/types/api/reservation';
 
 interface ReservationsState {
-  reservations: Reservation[];
-  selectedReservation: Reservation | null;
+  reservations: ReservationResponse[];
+  selectedReservation: ReservationResponse | null;
   isLoading: boolean;
   error: string | null;
   searchTerm: string;
@@ -26,11 +26,11 @@ interface ReservationsState {
 
 interface ReservationsActions {
   // Reservation management
-  setReservations: (reservations: Reservation[]) => void;
-  addReservation: (reservation: Reservation) => void;
-  updateReservation: (reservation: Reservation) => void;
+  setReservations: (reservations: ReservationResponse[]) => void;
+  addReservation: (reservation: ReservationResponse) => void;
+  updateReservation: (reservation: ReservationResponse) => void;
   removeReservation: (reservationId: number) => void;
-  setSelectedReservation: (reservation: Reservation | null) => void;
+  setSelectedReservation: (reservation: ReservationResponse | null) => void;
   
   // Loading and error states
   setLoading: (loading: boolean) => void;

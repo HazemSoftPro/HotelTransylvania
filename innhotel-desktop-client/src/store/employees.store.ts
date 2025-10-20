@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import type { Employee } from '@/types/api/employee';
+import type { EmployeeResponse } from '@/types/api/employee';
 
 interface EmployeesState {
-  employees: Employee[];
-  selectedEmployee: Employee | null;
+  employees: EmployeeResponse[];
+  selectedEmployee: EmployeeResponse | null;
   isLoading: boolean;
   error: string | null;
   searchTerm: string;
@@ -23,11 +23,11 @@ interface EmployeesState {
 
 interface EmployeesActions {
   // Employee management
-  setEmployees: (employees: Employee[]) => void;
-  addEmployee: (employee: Employee) => void;
-  updateEmployee: (employee: Employee) => void;
+  setEmployees: (employees: EmployeeResponse[]) => void;
+  addEmployee: (employee: EmployeeResponse) => void;
+  updateEmployee: (employee: EmployeeResponse) => void;
   removeEmployee: (employeeId: number) => void;
-  setSelectedEmployee: (employee: Employee | null) => void;
+  setSelectedEmployee: (employee: EmployeeResponse | null) => void;
   
   // Loading and error states
   setLoading: (loading: boolean) => void;
