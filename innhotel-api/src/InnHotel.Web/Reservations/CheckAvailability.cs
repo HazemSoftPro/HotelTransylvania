@@ -23,10 +23,15 @@ public class CheckAvailability(IMediator mediator) : Endpoint<CheckAvailabilityR
 
     public override async Task<CheckAvailabilityResponse> ExecuteAsync(CheckAvailabilityRequest req, CancellationToken ct)
     {
-        if (!DateOnly.TryParse(req.CheckInDate, out var checkInDate) ||
-            !DateOnly.TryParse(req.CheckOutDate, out var checkOutDate))
+        if (!DateOnly.TryParse(req.CheckInDate, out var checkInDate))
         {
-            ThrowError("Invalid date format. Use YYYY-MM-DD format.");
+            ThrowError("Invalid check-in date format. Use YYYY-MM-DD format.");
+            return null!; // This line will never be reached due to ThrowError, but satisfies compiler
+        }
+        
+        if (!DateOnly.TryParse(req.CheckOutDate, out var checkOutDate))
+        {
+            ThrowError("Invalid check-out date format. Use YYYY-MM-DD format.");
             return null!; // This line will never be reached due to ThrowError, but satisfies compiler
         }
 
