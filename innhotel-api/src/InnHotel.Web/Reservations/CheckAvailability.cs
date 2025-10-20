@@ -27,6 +27,8 @@ public class CheckAvailability(IMediator mediator) : Endpoint<CheckAvailabilityR
             !DateOnly.TryParse(req.CheckOutDate, out var checkOutDate))
         {
             ThrowError("Invalid date format. Use YYYY-MM-DD format.");
+            // This line will never be reached due to ThrowError, but satisfies compiler
+            return new CheckAvailabilityResponse();
         }
 
         var query = new CheckRoomAvailabilityQuery(

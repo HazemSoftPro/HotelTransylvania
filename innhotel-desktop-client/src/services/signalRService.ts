@@ -47,7 +47,7 @@ export class SignalRService {
   private onSystemNotificationHandlers: ((notification: SystemNotification) => void)[] = [];
   private onConnectionStateChangedHandlers: ((state: signalR.HubConnectionState) => void)[] = [];
 
-  constructor(private apiBaseUrl: string, private getAuthToken: () => string | null) {}
+  constructor(private readonly apiBaseUrl: string, private readonly getAuthToken: () => string | null) {}
 
   async connect(): Promise<void> {
     if (this.isConnecting || this.connection?.state === signalR.HubConnectionState.Connected) {

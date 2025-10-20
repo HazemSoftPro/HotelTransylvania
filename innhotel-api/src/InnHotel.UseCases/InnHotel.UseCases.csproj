@@ -4,6 +4,8 @@
     <PackageReference Include="Ardalis.Result" />
     <PackageReference Include="DotNetEnv" />
     <PackageReference Include="MediatR" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
   </ItemGroup>
 
   <ItemGroup>

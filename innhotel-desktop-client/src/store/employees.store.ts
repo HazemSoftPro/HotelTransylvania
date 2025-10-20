@@ -63,7 +63,7 @@ const initialState: EmployeesState = {
 
 export const useEmployeesStore = create<EmployeesStore>()(
   devtools(
-    (set, get) => ({
+    (set, _get) => ({
       ...initialState,
       
       // Employee management

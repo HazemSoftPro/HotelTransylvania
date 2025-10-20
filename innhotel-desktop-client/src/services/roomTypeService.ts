@@ -8,6 +8,7 @@ export interface RoomType {
   branchName: string;
   name: string;
   capacity: number;
+  basePrice: number;
   description: string | null;
 }
 
@@ -27,7 +28,8 @@ export interface CreateRoomTypeRequest {
   branchId: number;
   name: string;
   capacity: number;
-  description?: string;
+  basePrice: number;
+  description?: string | null | undefined;
 }
 
 export interface UpdateRoomTypeRequest {
@@ -35,7 +37,8 @@ export interface UpdateRoomTypeRequest {
   branchId: number;
   name: string;
   capacity: number;
-  description?: string;
+  basePrice: number;
+  description?: string | null | undefined;
 }
 
 export const roomTypeService = {

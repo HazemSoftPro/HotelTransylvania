@@ -27,7 +27,7 @@ export interface CreateServiceRequest {
   branchId: number;
   name: string;
   price: number;
-  description?: string;
+  description?: string | null | undefined;
 }
 
 export interface UpdateServiceRequest {
@@ -35,7 +35,7 @@ export interface UpdateServiceRequest {
   branchId: number;
   name: string;
   price: number;
-  description?: string;
+  description?: string | null | undefined;
 }
 
 export const serviceService = {

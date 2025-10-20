@@ -22,6 +22,12 @@ export const roomTypeSchema = z.object({
     .positive('Capacity must be at least 1')
     .max(20, 'Capacity cannot exceed 20 people'),
   
+  basePrice: z.number({
+    required_error: 'Base price is required',
+    invalid_type_error: 'Base price must be a number'
+  })
+    .positive('Base price must be greater than 0'),
+  
   description: z.string()
     .max(500, 'Description must not exceed 500 characters')
     .trim()

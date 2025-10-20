@@ -66,7 +66,7 @@ const initialState: ReservationsState = {
 
 export const useReservationsStore = create<ReservationsStore>()(
   devtools(
-    (set, get) => ({
+    (set, _get) => ({
       ...initialState,
       
       // Reservation management

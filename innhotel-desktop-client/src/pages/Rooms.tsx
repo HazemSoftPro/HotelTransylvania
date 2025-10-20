@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { RoomResponse } from "@/types/api/room";
+import type { RoomResponse, Room } from "@/types/api/room";
 import { RoomsListing } from "@/components/rooms/RoomsListing";
 import { roomService } from "@/services/roomService";
 import { Button } from "@/components/ui/button";
@@ -35,8 +35,8 @@ const Rooms = () => {
         setHasNextPage(response.hasNextPage);
 
         // Join branch groups for real-time updates
-        const branchIds = [...new Set(response.items.map(room => room.branchId))];
-        branchIds.forEach(branchId => joinBranchGroup(branchId));
+        const branchIds = [...new Set(response.items.map((room: Room) => room.branchId))];
+        branchIds.forEach((branchId: number) => joinBranchGroup(branchId));
       } catch (error) {
         console.error('Failed to fetch rooms:', error);
       } finally {

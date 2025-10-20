@@ -1,5 +1,6 @@
 import type { 
-  Employee, 
+  Employee,
+  CreateEmployeeRequest,
   EmployeeResponse, 
   EmployeesResponse, 
   UpdateEmployeeResponse 
@@ -49,7 +50,7 @@ export const employeeService = {
     }
   },
 
-  create: async (employee: Employee): Promise<EmployeeResponse> => {
+  create: async (employee: CreateEmployeeRequest): Promise<EmployeeResponse> => {
     try {
       logger().info('Creating new employee');
       const response = await axiosInstance.post('/employees', employee);

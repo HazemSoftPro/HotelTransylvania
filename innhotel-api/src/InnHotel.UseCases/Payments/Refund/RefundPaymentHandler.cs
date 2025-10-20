@@ -1,5 +1,6 @@
 using InnHotel.Core.PaymentAggregate;
 using InnHotel.Core.PaymentAggregate.Specifications;
+using Microsoft.Extensions.Logging;
 
 namespace InnHotel.UseCases.Payments.Refund;
 

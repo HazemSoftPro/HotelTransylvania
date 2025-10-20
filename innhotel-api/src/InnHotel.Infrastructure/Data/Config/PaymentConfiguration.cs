@@ -1,12 +1,12 @@
-using InnHotel.Core.PaymentAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using PaymentEntity = InnHotel.Core.PaymentAggregate.Payment;
 
 namespace InnHotel.Infrastructure.Data.Config;
 
-public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
+public class PaymentConfiguration : IEntityTypeConfiguration<PaymentEntity>
 {
-    public void Configure(EntityTypeBuilder<Payment> builder)
+    public void Configure(EntityTypeBuilder<PaymentEntity> builder)
     {
         builder.ToTable("Payments");
 

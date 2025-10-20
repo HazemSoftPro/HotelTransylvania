@@ -13,6 +13,7 @@ export interface BranchResponse extends Branch {
 
 // res of successful get all branches
 export interface BranchesResponse extends Pagination {
+  data: BranchResponse[];
   items: BranchResponse[];
 }
 

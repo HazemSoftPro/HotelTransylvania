@@ -1,11 +1,11 @@
 using InnHotel.Core.PaymentAggregate;
 using InnHotel.Core.PaymentAggregate.Specifications;
+using Microsoft.Extensions.Logging;
 
 namespace InnHotel.UseCases.Payments.List;
 
 public class ListPaymentsHandler(
-    IRepository<Core.PaymentAggregate.Payment> repository,
-    ILogger<ListPaymentsHandler> logger)
+    IRepository<Core.PaymentAggregate.Payment> repository)
     : IQueryHandler<ListPaymentsQuery, Result<IEnumerable<PaymentDTO>>>
 {
     public async Task<Result<IEnumerable<PaymentDTO>>> Handle(

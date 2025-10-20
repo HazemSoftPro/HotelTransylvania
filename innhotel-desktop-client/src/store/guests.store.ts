@@ -61,7 +61,7 @@ const initialState: GuestsState = {
 
 export const useGuestsStore = create<GuestsStore>()(
   devtools(
-    (set, get) => ({
+    (set, _get) => ({
       ...initialState,
       
       // Guest management

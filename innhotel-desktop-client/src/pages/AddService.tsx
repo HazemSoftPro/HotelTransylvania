@@ -40,7 +40,11 @@ const AddService = () => {
 
   const handleSubmit = async (data: ServiceFormData) => {
     try {
-      await createService(data);
+      const serviceData = {
+        ...data,
+        description: data.description || null
+      };
+      await createService(serviceData);
       toast.success('Service created successfully', {
         description: `${data.name} has been added to the system.`,
       });

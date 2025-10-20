@@ -1,7 +1,18 @@
 import type { Pagination, UpdateResponse } from './global';
 
 // Employee interface for creation
+export interface CreateEmployeeRequest {
+  firstName: string;
+  lastName: string;
+  branchId: number;
+  hireDate: string; // DateOnly format: YYYY-MM-DD
+  position: string;
+  userId: string | null;
+}
+
+// Employee interface with id
 export interface Employee {
+  id: number;
   firstName: string;
   lastName: string;
   branchId: number;

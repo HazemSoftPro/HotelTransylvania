@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { HotelService, serviceService } from '@/services/serviceService';
+import type { HotelService } from '@/services/serviceService';
+import { serviceService } from '@/services/serviceService';
 
 interface ServiceState {
   services: HotelService[];
