@@ -3,7 +3,7 @@ namespace InnHotel.Core.NotificationAggregate;
 /// <summary>
 /// User preferences for notifications
 /// </summary>
-public class NotificationPreference : EntityBase
+public class NotificationPreference : EntityBase, IAggregateRoot
 {
     public int UserId { get; set; }
     public NotificationType NotificationType { get; set; }

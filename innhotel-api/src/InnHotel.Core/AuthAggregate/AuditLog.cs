@@ -3,7 +3,7 @@ namespace InnHotel.Core.AuthAggregate;
 /// <summary>
 /// Represents an audit log entry for tracking sensitive operations.
 /// </summary>
-public class AuditLog : EntityBase
+public class AuditLog : EntityBase, IAggregateRoot
 {
     public string UserId { get; set; } = string.Empty;
     public string UserName { get; set; } = string.Empty;
