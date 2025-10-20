@@ -1,6 +1,8 @@
 using InnHotel.Core.RoomAggregate;
 using InnHotel.Core.ReservationAggregate;
 using InnHotel.Core.GuestAggregate;
+using Ardalis.SharedKernel;
+using Ardalis.Result;
 
 namespace InnHotel.UseCases.Dashboard;
 
@@ -27,14 +29,15 @@ public class GetDashboardMetricsHandler(
             var totalRooms = allRooms.Count;
             var availableRooms = allRooms.Count(r => r.Status == RoomStatus.Available);
             var occupiedRooms = allRooms.Count(r => r.Status == RoomStatus.Occupied);
-            var maintenanceRooms = allRooms.Count(r => r.Status == RoomStatus.Maintenance);
+            var maintenanceRooms = allRooms.Count(r => r.Status == RoomStatus.UnderMaintenance);
             var occupancyRate = totalRooms > 0 ? (decimal)occupiedRooms / totalRooms * 100 : 0;
 
             // Get reservation statistics
             var allReservations = await _reservationRepository.ListAsync(cancellationToken);
             if (request.BranchId.HasValue)
             {
-                allReservations = allReservations.Where(r => r.BranchId == request.BranchId.Value).ToList();
+                allReservations = allReservations.Where(r => 
+                    r.Rooms.Any(room => room.Room.BranchId == request.BranchId.Value)).ToList();
             }
 
             var totalReservations = allReservations.Count;
@@ -50,14 +53,14 @@ public class GetDashboardMetricsHandler(
             var totalRevenue = completedReservations.Sum(r => r.TotalCost);
             
             var monthlyReservations = completedReservations.Where(r => 
-                r.CheckOutDate >= DateTime.UtcNow.AddMonths(-1));
+                r.CheckOutDate >= DateOnly.FromDateTime(DateTime.UtcNow.AddMonths(-1)));
             var monthlyRevenue = monthlyReservations.Sum(r => r.TotalCost);
 
             // Get guest statistics
             var allGuests = await _guestRepository.ListAsync(cancellationToken);
             var totalGuests = allGuests.Count;
-            var newGuestsThisMonth = allGuests.Count(g => 
-                g.CreatedDate >= DateTime.UtcNow.AddMonths(-1));
+            // Note: Guest entity doesn't have CreatedDate, so we can't calculate new guests this month
+            var newGuestsThisMonth = 0;
 
             // Get recent activities (last 10)
             var recentReservations = allReservations
