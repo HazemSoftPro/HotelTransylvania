@@ -14,6 +14,7 @@ export interface BranchResponse extends Branch {
 // res of successful get all branches
 export interface BranchesResponse extends Pagination {
   items: BranchResponse[];
+  data: BranchResponse[];
 }
 
 // res of successful branch update

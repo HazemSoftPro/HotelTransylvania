@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { DashboardMetrics } from '@/services/dashboardService';
+import { type DashboardMetrics } from '@/services/dashboardService';
 
 interface DashboardState {
   metrics: DashboardMetrics | null;

@@ -1,5 +1,6 @@
 using InnHotel.Core.PaymentAggregate;
 using InnHotel.Core.PaymentAggregate.Specifications;
+using Microsoft.Extensions.Logging;
 
 namespace InnHotel.UseCases.Payments.List;
 
@@ -12,6 +13,9 @@ public class ListPaymentsHandler(
         ListPaymentsQuery request,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Listing payments with filters - Status: {Status}, StartDate: {StartDate}, EndDate: {EndDate}", 
+            request.Status, request.StartDate, request.EndDate);
+            
         PaymentStatus? status = null;
         if (request.Status.HasValue)
         {

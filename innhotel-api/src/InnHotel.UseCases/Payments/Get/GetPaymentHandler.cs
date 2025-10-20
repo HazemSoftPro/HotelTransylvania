@@ -1,4 +1,5 @@
 using InnHotel.Core.PaymentAggregate.Specifications;
+using Microsoft.Extensions.Logging;
 
 namespace InnHotel.UseCases.Payments.Get;
 
@@ -11,11 +12,14 @@ public class GetPaymentHandler(
         GetPaymentQuery request,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Retrieving payment with ID {PaymentId}", request.PaymentId);
+        
         var spec = new PaymentByIdSpec(request.PaymentId);
         var payment = await repository.FirstOrDefaultAsync(spec, cancellationToken);
 
         if (payment == null)
         {
+            logger.LogWarning("Payment with ID {PaymentId} not found", request.PaymentId);
             return Result<PaymentDTO>.NotFound($"Payment with ID {request.PaymentId} not found");
         }
 
