@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { branchService } from '@/services/branchService';
-import { roomTypeService } from '@/services/roomTypeService';
+import { roomTypeService, type RoomType } from '@/services/roomTypeService';
 import { roomSchema } from '@/schemas/roomSchema';
 import { roomStatusOptions } from '@/types/room';
 import type { RoomStatus } from '@/types/api/room';

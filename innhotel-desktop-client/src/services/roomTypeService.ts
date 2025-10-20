@@ -27,7 +27,7 @@ export interface CreateRoomTypeRequest {
   branchId: number;
   name: string;
   capacity: number;
-  description?: string;
+  description?: string | null;
 }
 
 export interface UpdateRoomTypeRequest {
@@ -35,7 +35,7 @@ export interface UpdateRoomTypeRequest {
   branchId: number;
   name: string;
   capacity: number;
-  description?: string;
+  description?: string | null;
 }
 
 export const roomTypeService = {

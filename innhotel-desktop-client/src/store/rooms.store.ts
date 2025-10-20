@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import type { Room } from '@/types/api/room';
+import * as signalR from '@microsoft/signalr';
+import type { Room, RoomStatus } from '@/types/api/room';
 import { getSignalRService, type RoomStatusUpdate, type RoomUpdate } from '@/services/signalRService';
 import { toast } from 'sonner';
 
@@ -148,7 +149,7 @@ export const useRoomsStore = create<RoomsStore>()(
             const { updateRoom } = get();
             const room = get().rooms.find(r => r.id === update.roomId);
             if (room) {
-              updateRoom({ ...room, status: update.newStatus });
+              updateRoom({ ...room, status: update.newStatus as RoomStatus });
               toast.success(`Room ${room.roomNumber} status updated to ${update.newStatus}`);
             }
           });
@@ -193,7 +194,7 @@ export const useRoomsStore = create<RoomsStore>()(
           });
 
           signalRService.onConnectionStateChanged((state) => {
-            const isConnected = state === 1; // Connected state
+            const isConnected = state === signalR.HubConnectionState.Connected;
             set({ isConnected, connectionError: null }, false, 'connectionStateChanged');
           });
 
