@@ -3,7 +3,7 @@
 
 ### Version 1.0
 ### Date: October 2025
-### Author: NinjaTech AI Team
+### Author: HazemSoftPro Team
 ### Project: HotelTransylvania
 
 ---
