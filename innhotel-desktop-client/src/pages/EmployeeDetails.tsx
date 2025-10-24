@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { EmployeeForm } from "@/components/employees/EmployeeForm";
-import type { Employee, EmployeeResponse } from "@/types/api/employee";
+import type { CreateEmployeeRequest, EmployeeResponse } from "@/types/api/employee";
 import { employeeService } from "@/services/employeeService";
 import { ROUTES } from "@/constants/routes";
 import { Button } from "@/components/ui/button";
@@ -47,7 +47,7 @@ const EmployeeDetails = () => {
   const handleUpdate = async (formData: EmployeeFormData) => {
     if (!id || !employee) return;
 
-    const employeeData: Employee = {
+    const employeeData: CreateEmployeeRequest = {
       firstName: formData.first_name,
       lastName: formData.last_name,
       branchId: formData.branch_id,
