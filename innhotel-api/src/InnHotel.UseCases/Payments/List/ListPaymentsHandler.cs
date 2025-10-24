@@ -4,9 +4,7 @@ using InnHotel.Core.PaymentAggregate.Specifications;
 namespace InnHotel.UseCases.Payments.List;
 
 public class ListPaymentsHandler(
-    IRepository<Core.PaymentAggregate.Payment> repository,
-    ILogger<ListPaymentsHandler> logger)
-    : IQueryHandler<ListPaymentsQuery, Result<IEnumerable<PaymentDTO>>>
+    IRepository<Core.PaymentAggregate.Payment> repository)
 {
     public async Task<Result<IEnumerable<PaymentDTO>>> Handle(
         ListPaymentsQuery request,

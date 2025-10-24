@@ -1,4 +1,4 @@
-﻿using InnHotel.Core.EmployeeAggregate;
+using InnHotel.Core.EmployeeAggregate;
 
 namespace InnHotel.UseCases.Employees.List;
 
@@ -19,6 +19,8 @@ public class ListEmployeeHandler(IReadRepository<Employee> _repository)
             entity.BranchId,
             entity.FirstName,
             entity.LastName,
+            entity.Email,
+            entity.Phone,
             entity.HireDate,
             entity.Position,
             entity.UserId

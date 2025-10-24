@@ -60,18 +60,19 @@ public class Search(IMediator _mediator)
         {
             var employeeRecords = result.Value.Select(e => new EmployeeRecord(
                 e.Id,
+                e.BranchId,
                 e.FirstName,
                 e.LastName,
                 e.Email,
                 e.Phone,
-                e.Position,
                 e.HireDate,
-                e.BranchId)).ToList();
+                e.Position,
+                e.UserId)).ToList();
 
             await SendAsync(
                 new { 
                     status = 200, 
-                    message = "Employees search completed successfully", 
+                    message = "Employees search completed successfully",
                     data = employeeRecords,
                     pagination = new {
                         pageNumber = request.PageNumber,

@@ -24,6 +24,8 @@ public class SearchEmployeesHandler(IReadRepository<Employee> _repository)
             e.BranchId,
             e.FirstName,
             e.LastName,
+            e.Email,
+            e.Phone,
             e.HireDate,
             e.Position,
             e.UserId)).ToList();

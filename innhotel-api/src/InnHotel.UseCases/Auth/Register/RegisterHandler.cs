@@ -1,4 +1,4 @@
-﻿using InnHotel.Core.AuthAggregate;
+using InnHotel.Core.AuthAggregate;
 using InnHotel.Core.EmployeeAggregate;
 using Microsoft.AspNetCore.Identity;
 
@@ -37,6 +37,8 @@ public class RegisterHandler(
           request.BranchId!.Value,
           request.FirstName!,
           request.LastName!,
+          request.Email,
+          null, // phone
           request.HireDate!.Value,
           request.Position!,
           user.Id

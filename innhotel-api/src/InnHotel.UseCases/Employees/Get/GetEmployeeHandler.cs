@@ -1,4 +1,4 @@
-﻿using InnHotel.Core.EmployeeAggregate;
+using InnHotel.Core.EmployeeAggregate;
 using InnHotel.Core.EmployeeAggregate.Specifications;
 
 namespace InnHotel.UseCases.Employees.Get;
@@ -19,6 +19,8 @@ public class GetEmployeeHandler(IReadRepository<Employee> _repository)
             employee.BranchId,
             employee.FirstName,
             employee.LastName,
+            employee.Email,
+            employee.Phone,
             employee.HireDate,
             employee.Position,
             employee.UserId);

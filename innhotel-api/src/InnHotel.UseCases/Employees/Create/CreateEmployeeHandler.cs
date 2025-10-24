@@ -1,4 +1,4 @@
-﻿using InnHotel.Core.AuthAggregate;
+using InnHotel.Core.AuthAggregate;
 using InnHotel.Core.BranchAggregate;
 using InnHotel.Core.BranchAggregate.Specifications;
 using InnHotel.Core.EmployeeAggregate;
@@ -29,6 +29,8 @@ public class CreateEmployeeHandler(IRepository<Employee> _repository, IRepositor
             branchId: request.BranchId,
             firstName: request.FirstName,
             lastName: request.LastName,
+            email: request.Email,
+            phone: request.Phone,
             hireDate: request.HireDate,
             position: request.Position,
             userId: request.UserId
@@ -41,6 +43,8 @@ public class CreateEmployeeHandler(IRepository<Employee> _repository, IRepositor
             employee.BranchId,
             employee.FirstName,
             employee.LastName,
+            employee.Email,
+            employee.Phone,
             employee.HireDate,
             employee.Position,
             employee.UserId

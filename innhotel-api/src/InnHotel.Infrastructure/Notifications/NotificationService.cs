@@ -11,18 +11,17 @@ public class NotificationService : INotificationService
 {
     private readonly IEmailSender _emailSender;
     private readonly ILogger<NotificationService> _logger;
-    private readonly IRepository<NotificationPreference> _preferenceRepository;
+    private readonly IReadRepository<NotificationPreference> _preferenceRepository;
 
     public NotificationService(
         IEmailSender emailSender,
         ILogger<NotificationService> logger,
-        IRepository<NotificationPreference> preferenceRepository)
+        IReadRepository<NotificationPreference> preferenceRepository)
     {
         _emailSender = emailSender;
         _logger = logger;
         _preferenceRepository = preferenceRepository;
     }
-
     public async Task<NotificationResult> SendNotificationAsync(
         Notification notification,
         CancellationToken cancellationToken = default)

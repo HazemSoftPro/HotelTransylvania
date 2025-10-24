@@ -1,4 +1,4 @@
-﻿using InnHotel.Core.AuthAggregate;
+using InnHotel.Core.AuthAggregate;
 using InnHotel.Core.EmployeeAggregate;
 using InnHotel.Core.EmployeeAggregate.Specifications;
 using Microsoft.AspNetCore.Identity;
@@ -21,6 +21,8 @@ public class UpdateEmployeeHandler(IRepository<Employee> _repository, UserManage
             request.BranchId,
             request.FirstName,
             request.LastName,
+            request.Email,
+            request.Phone,
             request.HireDate,
             request.Position);
 
@@ -58,7 +60,9 @@ public class UpdateEmployeeHandler(IRepository<Employee> _repository, UserManage
             employee.Id, 
             employee.BranchId, 
             employee.FirstName,
-            employee.LastName, 
+            employee.LastName,
+            employee.Email,
+            employee.Phone,
             employee.HireDate, 
             employee.Position,
             employee.UserId);

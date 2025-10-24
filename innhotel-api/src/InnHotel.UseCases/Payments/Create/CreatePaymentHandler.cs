@@ -1,5 +1,7 @@
 using InnHotel.Core.PaymentAggregate;
 using InnHotel.Core.ReservationAggregate.Specifications;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace InnHotel.UseCases.Payments.Create;
 

@@ -23,8 +23,11 @@ public class CheckAvailability(IMediator mediator) : Endpoint<CheckAvailabilityR
 
     public override async Task<CheckAvailabilityResponse> ExecuteAsync(CheckAvailabilityRequest req, CancellationToken ct)
     {
-        if (!DateOnly.TryParse(req.CheckInDate, out var checkInDate) ||
-            !DateOnly.TryParse(req.CheckOutDate, out var checkOutDate))
+        DateOnly checkInDate = default;
+        DateOnly checkOutDate = default;
+
+        if (!DateOnly.TryParse(req.CheckInDate, out checkInDate) ||
+            !DateOnly.TryParse(req.CheckOutDate, out checkOutDate))
         {
             ThrowError("Invalid date format. Use YYYY-MM-DD format.");
         }

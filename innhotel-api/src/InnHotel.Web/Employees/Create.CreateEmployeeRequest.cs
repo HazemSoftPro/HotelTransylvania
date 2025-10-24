@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace InnHotel.Web.Employees;
 
@@ -14,6 +14,12 @@ public class CreateEmployeeRequest
 
     [Required, MaxLength(50)]
     public string? LastName { get; set; }
+
+    [EmailAddress, MaxLength(100)]
+    public string? Email { get; set; }
+
+    [Phone, MaxLength(20)]
+    public string? Phone { get; set; }
 
     [Required]
     public DateOnly? HireDate { get; set; }

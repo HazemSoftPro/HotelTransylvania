@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using InnHotel.UseCases.Employees.Create;
 using InnHotel.Web.Common;
 using AuthRoles = InnHotel.Core.AuthAggregate.Roles;
@@ -42,6 +42,8 @@ public class Create(IMediator _mediator)
             request.BranchId,
             request.FirstName!,
             request.LastName!,
+            request.Email,
+            request.Phone,
             request.HireDate!.Value,
             request.Position!,
             request.UserId
@@ -65,6 +67,8 @@ public class Create(IMediator _mediator)
                 result.Value.BranchId,
                 result.Value.FirstName,
                 result.Value.LastName,
+                result.Value.Email,
+                result.Value.Phone,
                 result.Value.HireDate,
                 result.Value.Position,
                 result.Value.UserId

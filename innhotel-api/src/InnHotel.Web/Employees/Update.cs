@@ -1,4 +1,4 @@
-﻿using InnHotel.Core.BranchAggregate;
+using InnHotel.Core.BranchAggregate;
 using InnHotel.UseCases.Employees.Update;
 using InnHotel.Web.Common;
 using Sprache;
@@ -28,6 +28,8 @@ public class Update(IMediator _mediator)
             request.BranchId,
             request.FirstName!,
             request.LastName!,
+            request.Email,
+            request.Phone,
             request.HireDate!.Value,
             request.Position!,
             request.UserId
@@ -60,7 +62,9 @@ public class Update(IMediator _mediator)
                 result.Value.Id, 
                 result.Value.BranchId, 
                 result.Value.FirstName,
-                result.Value.LastName, 
+                result.Value.LastName,
+                result.Value.Email,
+                result.Value.Phone,
                 result.Value.HireDate, 
                 result.Value.Position,
                 result.Value.UserId

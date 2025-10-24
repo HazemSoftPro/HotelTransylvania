@@ -1,4 +1,4 @@
-﻿using InnHotel.UseCases.Employees.List;
+using InnHotel.UseCases.Employees.List;
 using InnHotel.Web.Common;
 using AuthRoles = InnHotel.Core.AuthAggregate.Roles;
 namespace InnHotel.Web.Employees;
@@ -37,6 +37,8 @@ public class List(IMediator _mediator)
                     BranchId: e.BranchId,
                     FirstName: e.FirstName,
                     LastName: e.LastName,
+                    Email: e.Email,
+                    Phone: e.Phone,
                     HireDate: e.HireDate,
                     Position: e.Position,
                     UserId: e.UserId

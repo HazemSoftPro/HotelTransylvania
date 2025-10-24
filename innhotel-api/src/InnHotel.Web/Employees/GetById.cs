@@ -1,4 +1,4 @@
-﻿using FastEndpoints;
+using FastEndpoints;
 using InnHotel.UseCases.Employees.Get;
 using InnHotel.Web.Common;
 using AuthRoles = InnHotel.Core.AuthAggregate.Roles;
@@ -44,7 +44,9 @@ public class GetById(IMediator _mediator)
                   employee.Id,
                   employee.BranchId, 
                   employee.FirstName, 
-                  employee.LastName, 
+                  employee.LastName,
+                  employee.Email,
+                  employee.Phone,
                   employee.HireDate, 
                   employee.Position, 
                   employee.UserId);

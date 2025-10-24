@@ -3,8 +3,7 @@ using InnHotel.Core.PaymentAggregate.Specifications;
 namespace InnHotel.UseCases.Payments.Get;
 
 public class GetPaymentHandler(
-    IRepository<Core.PaymentAggregate.Payment> repository,
-    ILogger<GetPaymentHandler> logger)
+    IRepository<Core.PaymentAggregate.Payment> repository)
     : IQueryHandler<GetPaymentQuery, Result<PaymentDTO>>
 {
     public async Task<Result<PaymentDTO>> Handle(
