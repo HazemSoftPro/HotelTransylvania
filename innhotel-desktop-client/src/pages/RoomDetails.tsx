@@ -75,7 +75,7 @@ const RoomDetails = () => {
         floor: data.floor,
         priceOverride: data.priceOverride
       });
-      setRoom(response.data);
+      setRoom(response);
       toast.success('Room updated successfully');
     } catch (error) {
       console.error('Failed to update room:', error);
