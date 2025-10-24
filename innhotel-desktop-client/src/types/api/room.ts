@@ -47,6 +47,8 @@ export interface RoomsResponse {
   pageSize: number;
   totalCount: number;
   totalPages: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
 }
 
 // Room type definition (same as RoomResponse for store compatibility)
