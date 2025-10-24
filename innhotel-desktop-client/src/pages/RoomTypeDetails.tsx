@@ -9,7 +9,7 @@ import { ArrowLeft, Loader2, Edit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import type { UpdateRoomTypeFormData } from '@/schemas/roomTypeSchema';
+import type { RoomTypeFormData } from '@/schemas/roomTypeSchema';
 
 interface Branch {
   id: number;
@@ -56,7 +56,7 @@ const RoomTypeDetails = () => {
     }
   };
 
-  const handleSubmit = async (data: UpdateRoomTypeFormData) => {
+  const handleSubmit = async (data: RoomTypeFormData) => {
     if (!selectedRoomType) return;
 
     try {
