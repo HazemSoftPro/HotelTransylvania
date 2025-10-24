@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const reservationSchema = z.object({
+const baseReservationSchema = z.object({
   guestId: z.number({
     required_error: 'Guest is required',
     invalid_type_error: 'Guest must be selected'
@@ -32,7 +32,9 @@ export const reservationSchema = z.object({
   roomIds: z.array(z.number()).min(1, 'At least one room must be selected'),
   
   serviceIds: z.array(z.number()).optional().default([]),
-}).refine((data) => {
+});
+
+export const reservationSchema = baseReservationSchema.refine((data) => {
   const checkIn = new Date(data.checkInDate);
   const checkOut = new Date(data.checkOutDate);
   return checkOut > checkIn;
@@ -50,11 +52,27 @@ export const reservationSchema = z.object({
   path: ['checkOutDate']
 });
 
-export const updateReservationSchema = reservationSchema.extend({
+export const updateReservationSchema = baseReservationSchema.extend({
   id: z.number({
     required_error: 'Reservation ID is required',
     invalid_type_error: 'Reservation ID must be a number'
   }).positive('Reservation ID must be positive')
+}).refine((data) => {
+  const checkIn = new Date(data.checkInDate);
+  const checkOut = new Date(data.checkOutDate);
+  return checkOut > checkIn;
+}, {
+  message: 'Check-out date must be after check-in date',
+  path: ['checkOutDate']
+}).refine((data) => {
+  const checkIn = new Date(data.checkInDate);
+  const checkOut = new Date(data.checkOutDate);
+  const diffTime = Math.abs(checkOut.getTime() - checkIn.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays <= 365;
+}, {
+  message: 'Reservation cannot exceed 365 days',
+  path: ['checkOutDate']
 });
 
 export type ReservationFormData = z.infer<typeof reservationSchema>;
