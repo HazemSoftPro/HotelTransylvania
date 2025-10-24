@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using InnHotel.Core.AuthAggregate;
 using InnHotel.Infrastructure.Data;
 using InnHotel.Web.Common;

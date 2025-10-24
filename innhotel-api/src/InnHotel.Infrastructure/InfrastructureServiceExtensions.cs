@@ -1,7 +1,10 @@
-﻿using InnHotel.Core.Interfaces;
+using InnHotel.Core.Interfaces;
 using InnHotel.Core.Services;
+using InnHotel.Core.ReservationAggregate;
+using InnHotel.Core.PaymentAggregate;
 using InnHotel.Infrastructure.Data;
 using InnHotel.Infrastructure.Data.Queries;
+using InnHotel.Infrastructure.Payment;
 using InnHotel.UseCases.Contributors.List;
 
 
@@ -28,7 +31,11 @@ public static class InfrastructureServiceExtensions
             .AddScoped<IDeleteGuestService, DeleteGuestService>()
             .AddScoped<IDeleteBranchService, DeleteBranchService>()
             .AddScoped<IDeleteRoomService, DeleteRoomService>()
-            .AddScoped<IDeleteEmployeeService, DeleteEmployeeService>();
+            .AddScoped<IDeleteEmployeeService, DeleteEmployeeService>()
+            .AddScoped<ReservationStatusTransitionService>()
+            .AddScoped<RoomAvailabilityService>()
+            .AddScoped<RoomStatusSyncService>()
+            .AddScoped<IPaymentService, StripePaymentService>();
 
     logger.LogInformation("{Project} services registered", "Infrastructure");
 
