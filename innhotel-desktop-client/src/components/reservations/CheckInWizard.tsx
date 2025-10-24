@@ -19,7 +19,6 @@ type WizardStep = "verification" | "room-assignment" | "payment" | "special-requ
 
 export function CheckInWizard({ reservation, onComplete, onCancel }: CheckInWizardProps) {
   const [currentStep, setCurrentStep] = useState<WizardStep>("verification");
-  const [guestVerified, setGuestVerified] = useState(false);
   const [idNumber, setIdNumber] = useState("");
   const [specialRequests, setSpecialRequests] = useState("");
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
@@ -53,7 +52,6 @@ export function CheckInWizard({ reservation, onComplete, onCancel }: CheckInWiza
       toast.error("Please enter guest ID number");
       return;
     }
-    setGuestVerified(true);
     toast.success("Guest verified successfully");
     handleNext();
   };

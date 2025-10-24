@@ -5,6 +5,7 @@ export type IdProofType = 0 | 1 | 2; // 0: Passport, 1: DriverLicense, 2: Nation
 
 // Guest interface for creation req and update
 export interface Guest {
+  id: number;
   firstName: string;
   lastName: string;
   gender: Gender;

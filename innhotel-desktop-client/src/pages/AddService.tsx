@@ -28,7 +28,7 @@ const AddService = () => {
     try {
       setLoadingBranches(true);
       const response = await branchService.getAll();
-      setBranches(response.data.map(b => ({ id: b.id, name: b.name })));
+      setBranches(response.items.map((b: { id: number; name: string }) => ({ id: b.id, name: b.name })));
     } catch (error) {
       toast.error('Failed to load branches', {
         description: error instanceof Error ? error.message : 'An unexpected error occurred',
@@ -40,7 +40,10 @@ const AddService = () => {
 
   const handleSubmit = async (data: ServiceFormData) => {
     try {
-      await createService(data);
+      await createService({
+        ...data,
+        description: data.description || null
+      });
       toast.success('Service created successfully', {
         description: `${data.name} has been added to the system.`,
       });

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { HotelService, serviceService } from '@/services/serviceService';
+import type { HotelService } from '@/services/serviceService';
+import { serviceService } from '@/services/serviceService';
 
 interface ServiceState {
   services: HotelService[];
@@ -54,7 +55,13 @@ export const useServiceStore = create<ServiceState>((set, get) => ({
   createService: async (data) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await serviceService.create(data);
+      const createData = {
+        branchId: data.branchId,
+        name: data.name,
+        price: data.price,
+        description: data.description ?? undefined
+      };
+      const response = await serviceService.create(createData);
       const newService = response.data;
       
       // Optimistic update
@@ -87,7 +94,14 @@ export const useServiceStore = create<ServiceState>((set, get) => ({
     }));
     
     try {
-      const response = await serviceService.update(data);
+      const updateData = {
+        id: data.id,
+        branchId: data.branchId,
+        name: data.name,
+        price: data.price,
+        description: data.description ?? undefined
+      };
+      const response = await serviceService.update(updateData);
       const updatedService = response.data;
       
       set(state => ({ 

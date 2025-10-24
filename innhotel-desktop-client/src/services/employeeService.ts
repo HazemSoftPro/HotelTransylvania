@@ -1,8 +1,9 @@
-import type { 
-  Employee, 
-  EmployeeResponse, 
-  EmployeesResponse, 
-  UpdateEmployeeResponse 
+import type {
+  CreateEmployeeRequest,
+  Employee,
+  EmployeeResponse,
+  EmployeesResponse,
+  UpdateEmployeeResponse
 } from '@/types/api/employee';
 import type { DeleteResponse } from '@/types/api/global';
 import axiosInstance from '../lib/axios';
@@ -49,7 +50,7 @@ export const employeeService = {
     }
   },
 
-  create: async (employee: Employee): Promise<EmployeeResponse> => {
+  create: async (employee: CreateEmployeeRequest): Promise<EmployeeResponse> => {
     try {
       logger().info('Creating new employee');
       const response = await axiosInstance.post('/employees', employee);

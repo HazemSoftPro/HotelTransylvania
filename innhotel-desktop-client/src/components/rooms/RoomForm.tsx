@@ -26,15 +26,7 @@ import {
 } from '@/components/ui/select';
 import type { BranchResponse } from '@/types/api/branch';
 
-interface RoomType {
-  id: number;
-  branchId: number;
-  branchName: string;
-  name: string;
-  basePrice: number;
-  capacity: number;
-  description: string | null;
-}
+import type { RoomType } from '@/services/roomTypeService';
 
 interface CreateRoomRequest {
   branchId: number;

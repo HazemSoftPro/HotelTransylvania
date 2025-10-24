@@ -193,7 +193,8 @@ export const useRoomsStore = create<RoomsStore>()(
           });
 
           signalRService.onConnectionStateChanged((state) => {
-            const isConnected = state === 1; // Connected state
+            // HubConnectionState.Connected is 1
+            const isConnected = (state as number) === 1;
             set({ isConnected, connectionError: null }, false, 'connectionStateChanged');
           });
 

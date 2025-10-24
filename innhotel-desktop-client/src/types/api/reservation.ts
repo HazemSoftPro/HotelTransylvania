@@ -32,6 +32,7 @@ export interface ReservationServiceResponse {
 
 // Reservation interface for creation
 export interface Reservation {
+  id: number;
   guestId: number;
   checkInDate: string; // DateOnly format: YYYY-MM-DD
   checkOutDate: string; // DateOnly format: YYYY-MM-DD

@@ -6,6 +6,17 @@ export const RoomStatus = {
 
 export type RoomStatus = typeof RoomStatus[keyof typeof RoomStatus];
 
+// Request type for creating a new room
+export interface CreateRoomRequest {
+  branchId: number;
+  roomTypeId: number;
+  roomNumber: string;
+  status: RoomStatus;
+  floor: number;
+  priceOverride?: number;
+}
+
+// Request type for updating a room
 export interface UpdateRoomRequest {
   roomTypeId: number;
   roomNumber: string;
@@ -14,6 +25,7 @@ export interface UpdateRoomRequest {
   priceOverride?: number;
 }
 
+// Single room response
 export interface RoomResponse {
   id: number;
   branchId: number;
@@ -27,3 +39,21 @@ export interface RoomResponse {
   floor: number;
   priceOverride?: number;
 }
+
+// List of rooms response
+export interface RoomsResponse {
+  items: RoomResponse[];
+  pageNumber: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+}
+
+// Room type definition (same as RoomResponse for store compatibility)
+export type Room = RoomResponse;
+
+// Create room response
+export type CreateRoomResponse = RoomResponse;
+
+// Update room response
+export type UpdateRoomResponse = RoomResponse;

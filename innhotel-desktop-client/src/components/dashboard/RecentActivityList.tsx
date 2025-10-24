@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { RecentActivity } from '@/services/dashboardService';
+import type { RecentActivity } from '@/services/dashboardService';
 import { formatDistanceToNow } from 'date-fns';
 import { Activity } from 'lucide-react';
 

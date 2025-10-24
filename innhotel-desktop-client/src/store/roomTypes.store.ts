@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { RoomType, roomTypeService } from '@/services/roomTypeService';
+import type { RoomType } from '@/services/roomTypeService';
+import { roomTypeService } from '@/services/roomTypeService';
 
 interface RoomTypeState {
   roomTypes: RoomType[];
@@ -54,7 +55,13 @@ export const useRoomTypeStore = create<RoomTypeState>((set, get) => ({
   createRoomType: async (data) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await roomTypeService.create(data);
+      const createData = {
+        branchId: data.branchId,
+        name: data.name,
+        capacity: data.capacity,
+        description: data.description ?? undefined
+      };
+      const response = await roomTypeService.create(createData);
       const newRoomType = response.data;
       
       // Optimistic update
@@ -87,7 +94,14 @@ export const useRoomTypeStore = create<RoomTypeState>((set, get) => ({
     }));
     
     try {
-      const response = await roomTypeService.update(data);
+      const updateData = {
+        id: data.id,
+        branchId: data.branchId,
+        name: data.name,
+        capacity: data.capacity,
+        description: data.description ?? undefined
+      };
+      const response = await roomTypeService.update(updateData);
       const updatedRoomType = response.data;
       
       set(state => ({ 
