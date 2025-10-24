@@ -9,7 +9,7 @@ import { ArrowLeft, Loader2, Edit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import type { UpdateServiceFormData } from '@/schemas/serviceSchema';
+import type { ServiceFormData } from '@/schemas/serviceSchema';
 
 interface Branch {
   id: number;
@@ -56,7 +56,7 @@ const ServiceDetails = () => {
     }
   };
 
-  const handleSubmit = async (data: UpdateServiceFormData) => {
+  const handleSubmit = async (data: ServiceFormData) => {
     if (!selectedService) return;
 
     try {
