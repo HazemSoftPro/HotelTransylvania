@@ -17,11 +17,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import type { Guest, GuestReq } from "@/types/api/guest";
+import type { GuestReq } from "@/types/api/guest";
 import { guestSchema, type GuestFormValues } from "@/schemas/guestSchema";
 
 interface GuestFormProps {
-  onSubmit: (data: Guest) => void;
+  onSubmit: (data: GuestReq) => void;
   defaultValues?: Partial<GuestFormValues>;
   isLoading?: boolean;
   mode?: 'create' | 'update';
@@ -83,7 +83,7 @@ export const GuestForm = ({
         address: data.address || ""
       };
 
-      await onSubmit(guestData as any);
+      await onSubmit(guestData);
       if (mode === 'create') {
         form.reset();
       }

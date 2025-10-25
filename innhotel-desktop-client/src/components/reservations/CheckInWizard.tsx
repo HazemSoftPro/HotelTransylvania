@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { CheckCircle, User, Home, CreditCard, FileText } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { toast } from "sonner";
 import type { ReservationResponse } from "@/types/api/reservation";
 import { reservationService } from "@/services/reservationService";
@@ -23,7 +24,7 @@ export function CheckInWizard({ reservation, onComplete, onCancel }: CheckInWiza
   const [specialRequests, setSpecialRequests] = useState("");
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
 
-  const steps: { id: WizardStep; title: string; icon: any }[] = [
+  const steps: { id: WizardStep; title: string; icon: LucideIcon }[] = [
     { id: "verification", title: "Guest Verification", icon: User },
     { id: "room-assignment", title: "Room Assignment", icon: Home },
     { id: "payment", title: "Payment Verification", icon: CreditCard },

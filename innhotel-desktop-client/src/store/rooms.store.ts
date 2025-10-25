@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import type { Room, RoomStatus } from '@/types/api/room';
-import { getSignalRService, type RoomStatusUpdate, type RoomUpdate } from '@/services/signalRService';
+import { getSignalRService, type RoomStatusUpdate, type RoomUpdate, type RoomCreatedData } from '@/services/signalRService';
 import * as signalR from '@microsoft/signalr';
 import { toast } from 'sonner';
 
@@ -57,7 +57,7 @@ interface RoomsActions {
   reset: () => void;
 }
 
-type RoomsStore = RoomsState & RoomsActions;
+export type RoomsStore = RoomsState & RoomsActions;
 
 const initialState: RoomsState = {
   rooms: [],
@@ -162,7 +162,7 @@ export const useRoomsStore = create<RoomsStore>()(
             }
           });
 
-          signalRService.onRoomCreated((data: any) => {
+          signalRService.onRoomCreated((data: RoomCreatedData) => {
             const { addRoom } = get();
             if (data.data) {
               addRoom(data.data);

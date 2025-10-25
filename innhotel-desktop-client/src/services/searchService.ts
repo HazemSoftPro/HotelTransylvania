@@ -1,4 +1,10 @@
 import api from '@/lib/axios';
+import type { RoomResponse } from '@/types/api/room';
+import type { ReservationResponse } from '@/types/api/reservation';
+import type { GuestResponse } from '@/types/api/guest';
+import type { EmployeeResponse } from '@/types/api/employee';
+import type { RoomType } from '@/services/roomTypeService';
+import type { HotelService } from '@/services/serviceService';
 
 /**
  * Search Service
@@ -10,7 +16,7 @@ export interface SearchParams {
   searchTerm?: string;
   pageNumber?: number;
   pageSize?: number;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface SearchResponse<T> {
@@ -32,7 +38,7 @@ export const searchRooms = async (params: SearchParams & {
   roomTypeId?: number;
   status?: string;
   floor?: number;
-}): Promise<SearchResponse<any>> => {
+}): Promise<SearchResponse<RoomResponse>> => {
   const response = await api.get('/rooms/search', { params });
   return response.data;
 };
@@ -47,7 +53,7 @@ export const searchReservations = async (params: SearchParams & {
   checkInDateTo?: string;
   checkOutDateFrom?: string;
   checkOutDateTo?: string;
-}): Promise<SearchResponse<any>> => {
+}): Promise<SearchResponse<ReservationResponse>> => {
   const response = await api.get('/reservations/search', { params });
   return response.data;
 };
@@ -55,7 +61,7 @@ export const searchReservations = async (params: SearchParams & {
 /**
  * Search guests with filters
  */
-export const searchGuests = async (params: SearchParams): Promise<SearchResponse<any>> => {
+export const searchGuests = async (params: SearchParams): Promise<SearchResponse<GuestResponse>> => {
   const response = await api.get('/guests/search', { params });
   return response.data;
 };
@@ -68,7 +74,7 @@ export const searchEmployees = async (params: SearchParams & {
   position?: string;
   hireDateFrom?: string;
   hireDateTo?: string;
-}): Promise<SearchResponse<any>> => {
+}): Promise<SearchResponse<EmployeeResponse>> => {
   const response = await api.get('/employees/search', { params });
   return response.data;
 };
@@ -80,7 +86,7 @@ export const searchRoomTypes = async (params: SearchParams & {
   branchId?: number;
   minCapacity?: number;
   maxCapacity?: number;
-}): Promise<SearchResponse<any>> => {
+}): Promise<SearchResponse<RoomType>> => {
   const response = await api.get('/roomtypes/search', { params });
   return response.data;
 };
@@ -92,7 +98,7 @@ export const searchServices = async (params: SearchParams & {
   branchId?: number;
   minPrice?: number;
   maxPrice?: number;
-}): Promise<SearchResponse<any>> => {
+}): Promise<SearchResponse<HotelService>> => {
   const response = await api.get('/services/search', { params });
   return response.data;
 };
@@ -100,7 +106,7 @@ export const searchServices = async (params: SearchParams & {
 /**
  * Generic search function
  */
-export const search = async <T = any>(
+export const search = async <T>(
   endpoint: string,
   params: SearchParams
 ): Promise<SearchResponse<T>> => {

@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { CheckCircle, ClipboardCheck, DollarSign, MessageSquare, Star } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { toast } from "sonner";
 import type { ReservationResponse } from "@/types/api/reservation";
 import { reservationService } from "@/services/reservationService";
@@ -27,7 +28,7 @@ export function CheckOutWizard({ reservation, onComplete, onCancel }: CheckOutWi
   const [feedback, setFeedback] = useState("");
   const [rating, setRating] = useState(0);
 
-  const steps: { id: WizardStep; title: string; icon: any }[] = [
+  const steps: { id: WizardStep; title: string; icon: LucideIcon }[] = [
     { id: "inspection", title: "Room Inspection", icon: ClipboardCheck },
     { id: "charges", title: "Additional Charges", icon: DollarSign },
     { id: "payment", title: "Payment Settlement", icon: DollarSign },

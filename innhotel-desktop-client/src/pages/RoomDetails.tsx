@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import type { RoomResponse, RoomStatus } from "@/types/api/room";
+import type { RoomResponse } from "@/types/api/room";
 import { roomService } from "@/services/roomService";
 import { ROUTES } from "@/constants/routes";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,7 @@ import { Trash } from "lucide-react";
 import { toast } from "sonner";
 import { DeleteConfirmationDialog } from "@/components/Dialog/DeleteConfirmationDialog";
 import SingleItemLayout from "@/layouts/SingleItemLayout";
-import { RoomForm } from "@/components/rooms/RoomForm";
+import { RoomForm, type UpdateRoomRequest } from "@/components/rooms/RoomForm";
 import { CardTitle, CardDescription } from "@/components/ui/card";
 import { BedDouble, Building2, DollarSign } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -61,7 +61,7 @@ const RoomDetails = () => {
     fetchRoom();
   }, [id, navigate]);
 
-  const handleUpdate = async (data: any) => {
+  const handleUpdate = async (data: UpdateRoomRequest) => {
     if (!id || !room) return;
 
     console.log('Update data:', data); // Debug log
@@ -69,9 +69,9 @@ const RoomDetails = () => {
     try {
       setIsUpdating(true);
       const response = await roomService.update(parseInt(id), {
-        roomTypeId: parseInt(data.roomTypeId),
+        roomTypeId: data.roomTypeId,
         roomNumber: data.roomNumber,
-        status: parseInt(data.status) as RoomStatus,
+        status: data.status,
         floor: data.floor,
         priceOverride: data.priceOverride
       });

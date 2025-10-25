@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import type { GuestResponse, Guest, UpdateGuestResponse } from "@/types/api/guest";
+import type { GuestResponse, Guest, GuestReq, UpdateGuestResponse } from "@/types/api/guest";
 import { guestService } from "@/services/guestService";
 import { ROUTES } from "@/constants/routes";
 import { Button } from "@/components/ui/button";
@@ -35,11 +35,18 @@ const GuestDetails = () => {
     })();
   }, [id, navigate]);
 
-  const handleUpdate = async (values: Guest) => {
+  const handleUpdate = async (values: GuestReq) => {
     if (!guest) return;
     setIsUpdating(true);
     try {
-      const response: UpdateGuestResponse = await guestService.update(guest.id, values);
+      // Convert GuestReq to Guest for service call
+      const guestData = {
+        id: guest.id,
+        ...values,
+        gender: values.gender === 'Male' ? 0 : 1,
+        idProofType: values.idProofType === 'Passport' ? 0 : values.idProofType === 'DriverLicense' ? 1 : 2,
+      } as const;
+      const response: UpdateGuestResponse = await guestService.update(guest.id, guestData as Guest);
       setGuest(response.data);
       toast.success("Guest updated successfully");
     } catch {

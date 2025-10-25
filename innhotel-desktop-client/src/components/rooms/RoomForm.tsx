@@ -36,7 +36,7 @@ interface CreateRoomRequest {
   floor: number;
 }
 
-interface UpdateRoomRequest {
+export interface UpdateRoomRequest {
   roomTypeId: number;
   roomNumber: string;
   status: RoomStatus;

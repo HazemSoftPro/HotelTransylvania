@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { BedDouble, Users, Building2, CalendarDays, UserSquare2, LayoutGrid, Sparkles } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { ROUTES } from "@/constants/routes";
 import { cn } from "@/lib/utils";
 
@@ -23,7 +24,7 @@ const managementItems = [
 export const SidebarNav = ({ isCollapsed }: SidebarNavProps) => {
   const location = useLocation();
 
-  const NavLink = ({ to, label, icon: Icon }: { to: string; label: string; icon: any }) => (
+  const NavLink = ({ to, label, icon: Icon }: { to: string; label: string; icon: LucideIcon }) => (
     <Link
       key={to}
       to={to}

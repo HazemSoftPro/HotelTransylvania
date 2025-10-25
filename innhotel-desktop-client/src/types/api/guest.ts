@@ -16,6 +16,9 @@ export interface Guest {
   address?: string;
 }
 
+// Guest creation data (without id)
+export type GuestCreateData = Omit<Guest, 'id'>;
+
 // res of successful Guest creation and getById
 export interface GuestResponse {
   id: number;

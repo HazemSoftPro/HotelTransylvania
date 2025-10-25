@@ -1,25 +1,37 @@
 import * as signalR from '@microsoft/signalr';
 import { logger } from '@/utils/logger';
+import type { RoomResponse } from '@/types/api/room';
 
 export interface RoomStatusUpdate {
   roomId: number;
   branchId: number;
   newStatus: number;
   timestamp: string;
-  data: any;
+  data: Record<string, unknown>;
 }
 
 export interface RoomUpdate {
   roomId: number;
   branchId: number;
   timestamp: string;
-  data: any;
+  data: RoomResponse;
 }
 
 export interface BulkRoomsUpdate {
   branchId: number;
   timestamp: string;
-  data: any;
+  data: Record<string, unknown>;
+}
+
+export interface RoomCreatedData {
+  data: RoomResponse;
+}
+
+export interface MaintenanceScheduleChangedData {
+  branchId: number;
+  roomId?: number;
+  scheduledDate: string;
+  description: string;
 }
 
 export interface SystemNotification {
@@ -42,10 +54,10 @@ export class SignalRService {
   // Event handlers
   private onRoomStatusChangedHandlers: ((update: RoomStatusUpdate) => void)[] = [];
   private onRoomUpdatedHandlers: ((update: RoomUpdate) => void)[] = [];
-  private onRoomCreatedHandlers: ((data: any) => void)[] = [];
+  private onRoomCreatedHandlers: ((data: RoomCreatedData) => void)[] = [];
   private onRoomDeletedHandlers: ((roomId: number) => void)[] = [];
   private onBulkRoomsUpdatedHandlers: ((update: BulkRoomsUpdate) => void)[] = [];
-  private onMaintenanceScheduleChangedHandlers: ((data: any) => void)[] = [];
+  private onMaintenanceScheduleChangedHandlers: ((data: MaintenanceScheduleChangedData) => void)[] = [];
   private onSystemNotificationHandlers: ((notification: SystemNotification) => void)[] = [];
   private onConnectionStateChangedHandlers: ((state: signalR.HubConnectionState) => void)[] = [];
 
@@ -120,8 +132,8 @@ export class SignalRService {
     });
 
     // Room created
-    this.connection.on('RoomCreated', (data: any) => {
-      logger().info('Room created received', { branchId: data.branchId });
+    this.connection.on('RoomCreated', (data: RoomCreatedData) => {
+      logger().info('Room created received', { branchId: data.data.branchId });
       this.onRoomCreatedHandlers.forEach(handler => handler(data));
     });
 
@@ -138,7 +150,7 @@ export class SignalRService {
     });
 
     // Maintenance schedule changed
-    this.connection.on('MaintenanceScheduleChanged', (data: any) => {
+    this.connection.on('MaintenanceScheduleChanged', (data: MaintenanceScheduleChangedData) => {
       logger().info('Maintenance schedule changed received', { branchId: data.branchId });
       this.onMaintenanceScheduleChangedHandlers.forEach(handler => handler(data));
     });
@@ -268,7 +280,7 @@ export class SignalRService {
     };
   }
 
-  onRoomCreated(handler: (data: any) => void): () => void {
+  onRoomCreated(handler: (data: RoomCreatedData) => void): () => void {
     this.onRoomCreatedHandlers.push(handler);
     return () => {
       const index = this.onRoomCreatedHandlers.indexOf(handler);
@@ -298,7 +310,7 @@ export class SignalRService {
     };
   }
 
-  onMaintenanceScheduleChanged(handler: (data: any) => void): () => void {
+  onMaintenanceScheduleChanged(handler: (data: MaintenanceScheduleChangedData) => void): () => void {
     this.onMaintenanceScheduleChangedHandlers.push(handler);
     return () => {
       const index = this.onMaintenanceScheduleChangedHandlers.indexOf(handler);

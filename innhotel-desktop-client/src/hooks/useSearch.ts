@@ -2,10 +2,26 @@ import { useState, useCallback, useEffect } from 'react';
 import { useSearchStore } from '@/store/search.store';
 import { toast } from 'sonner';
 
+interface SearchParams {
+  pageNumber?: number;
+  pageSize?: number;
+  searchTerm?: string;
+  [key: string]: unknown;
+}
+
+interface SearchResponse<T> {
+  data: T[];
+  pagination: {
+    pageNumber: number;
+    pageSize: number;
+    totalResults: number;
+  };
+}
+
 interface UseSearchOptions<T> {
-  searchFn: (params: any) => Promise<any>;
+  searchFn: (params: SearchParams) => Promise<SearchResponse<T>>;
   entity: string;
-  initialParams?: any;
+  initialParams?: SearchParams;
   onSuccess?: (data: T[]) => void;
   onError?: (error: Error) => void;
   cacheResults?: boolean;
@@ -21,7 +37,7 @@ interface UseSearchReturn<T> {
     totalResults: number;
     totalPages: number;
   };
-  search: (params: any) => Promise<void>;
+  search: (params: SearchParams) => Promise<void>;
   reset: () => void;
   setPage: (page: number) => void;
   setPageSize: (size: number) => void;
@@ -35,7 +51,7 @@ interface UseSearchReturn<T> {
  * @param options - Configuration options
  * @returns Search state and control functions
  */
-export function useSearch<T = any>(options: UseSearchOptions<T>): UseSearchReturn<T> {
+export function useSearch<T>(options: UseSearchOptions<T>): UseSearchReturn<T> {
   const {
     searchFn,
     entity,
@@ -58,7 +74,7 @@ export function useSearch<T = any>(options: UseSearchOptions<T>): UseSearchRetur
 
   const { cacheSearchResults, getCachedResults, addToSearchHistory } = useSearchStore();
 
-  const search = useCallback(async (params: any) => {
+  const search = useCallback(async (params: SearchParams) => {
     setIsLoading(true);
     setError(null);
 

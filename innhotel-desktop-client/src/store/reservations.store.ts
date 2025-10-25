@@ -48,7 +48,7 @@ interface ReservationsActions {
   reset: () => void;
 }
 
-type ReservationsStore = ReservationsState & ReservationsActions;
+export type ReservationsStore = ReservationsState & ReservationsActions;
 
 const initialState: ReservationsState = {
   reservations: [],
@@ -66,7 +66,7 @@ const initialState: ReservationsState = {
 
 export const useReservationsStore = create<ReservationsStore>()(
   devtools(
-    (set, get) => ({
+    (set) => ({
       ...initialState,
       
       // Reservation management

@@ -45,7 +45,7 @@ interface EmployeesActions {
   reset: () => void;
 }
 
-type EmployeesStore = EmployeesState & EmployeesActions;
+export type EmployeesStore = EmployeesState & EmployeesActions;
 
 const initialState: EmployeesState = {
   employees: [],
@@ -63,7 +63,7 @@ const initialState: EmployeesState = {
 
 export const useEmployeesStore = create<EmployeesStore>()(
   devtools(
-    (set, get) => ({
+    (set) => ({
       ...initialState,
       
       // Employee management

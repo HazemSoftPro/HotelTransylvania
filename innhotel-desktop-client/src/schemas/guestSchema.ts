@@ -25,7 +25,7 @@ export const guestSchema = z.object({
 
   phone: z.string()
     .max(20, "Phone number cannot exceed 20 characters")
-    .regex(/^[\d\-\+\s]+$/, "Phone number can only contain numbers, spaces, + and -")
+    .regex(/^[\d\-+\s]+$/, "Phone number can only contain numbers, spaces, + and -")
     .optional()
     .or(z.literal("")),
 

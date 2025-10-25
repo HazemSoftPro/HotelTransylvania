@@ -13,7 +13,7 @@ interface AuthActions {
   setLoading: (loading: boolean) => void;
 }
 
-type AuthStore = AuthState & AuthActions;
+export type AuthStore = AuthState & AuthActions;
 
 const initialState: AuthState = {
   accessToken: '',

@@ -39,7 +39,7 @@ export const EmployeesTable = ({ employees, onEmployeeClick }: EmployeesTablePro
     };
 
     fetchBranches();
-  }, [employees]);
+  }, [employees, branches]);
 
   return (
     <div className="rounded-md border">

@@ -1,26 +1,35 @@
 import { create } from 'zustand';
 
+interface CachedSearchResult {
+  data: unknown;
+  timestamp: number;
+}
+
+interface SearchFilters {
+  [key: string]: unknown;
+}
+
 interface SearchState {
   // Search history
   searchHistory: Record<string, string[]>;
   
   // Cached search results
-  searchCache: Record<string, any>;
+  searchCache: Record<string, CachedSearchResult>;
   
   // Active filters
-  activeFilters: Record<string, any>;
+  activeFilters: Record<string, SearchFilters>;
   
   // Actions
   addToSearchHistory: (entity: string, term: string) => void;
   getSearchHistory: (entity: string) => string[];
   clearSearchHistory: (entity: string) => void;
   
-  cacheSearchResults: (key: string, results: any) => void;
-  getCachedResults: (key: string) => any;
+  cacheSearchResults: (key: string, results: unknown) => void;
+  getCachedResults: (key: string) => unknown;
   clearSearchCache: () => void;
   
-  setActiveFilters: (entity: string, filters: any) => void;
-  getActiveFilters: (entity: string) => any;
+  setActiveFilters: (entity: string, filters: SearchFilters) => void;
+  getActiveFilters: (entity: string) => SearchFilters;
   clearActiveFilters: (entity: string) => void;
 }
 
@@ -59,12 +68,13 @@ export const useSearchStore = create<SearchState>((set, get) => ({
 
   clearSearchHistory: (entity: string) => {
     set((state) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { [entity]: _, ...rest } = state.searchHistory;
       return { searchHistory: rest };
     });
   },
 
-  cacheSearchResults: (key: string, results: any) => {
+  cacheSearchResults: (key: string, results: unknown) => {
     set((state) => ({
       searchCache: {
         ...state.searchCache,
@@ -84,6 +94,7 @@ export const useSearchStore = create<SearchState>((set, get) => ({
     const isExpired = Date.now() - cached.timestamp > 5 * 60 * 1000;
     if (isExpired) {
       set((state) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { [key]: _, ...rest } = state.searchCache;
         return { searchCache: rest };
       });
@@ -97,7 +108,7 @@ export const useSearchStore = create<SearchState>((set, get) => ({
     set({ searchCache: {} });
   },
 
-  setActiveFilters: (entity: string, filters: any) => {
+  setActiveFilters: (entity: string, filters: SearchFilters) => {
     set((state) => ({
       activeFilters: {
         ...state.activeFilters,
@@ -112,6 +123,7 @@ export const useSearchStore = create<SearchState>((set, get) => ({
 
   clearActiveFilters: (entity: string) => {
     set((state) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { [entity]: _, ...rest } = state.activeFilters;
       return { activeFilters: rest };
     });

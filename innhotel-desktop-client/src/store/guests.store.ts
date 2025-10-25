@@ -43,7 +43,7 @@ interface GuestsActions {
   reset: () => void;
 }
 
-type GuestsStore = GuestsState & GuestsActions;
+export type GuestsStore = GuestsState & GuestsActions;
 
 const initialState: GuestsState = {
   guests: [],
@@ -61,7 +61,7 @@ const initialState: GuestsState = {
 
 export const useGuestsStore = create<GuestsStore>()(
   devtools(
-    (set, get) => ({
+    (set) => ({
       ...initialState,
       
       // Guest management

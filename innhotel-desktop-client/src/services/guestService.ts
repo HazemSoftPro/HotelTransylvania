@@ -1,4 +1,4 @@
-import type { Guest, GuestResponse, GuestsResponse, UpdateGuestResponse } from '@/types/api/guest';
+import type { Guest, GuestResponse, GuestsResponse, UpdateGuestResponse, GuestCreateData } from '@/types/api/guest';
 import type { DeleteResponse } from '@/types/api/global';
 import axiosInstance from '../lib/axios';
 import { isAxiosError } from 'axios';
@@ -46,7 +46,7 @@ export const guestService = {
     }
   },
 
-  create: async (guest: Guest): Promise<GuestResponse> => {
+  create: async (guest: GuestCreateData): Promise<GuestResponse> => {
     try {
       logger().info('Creating new guest');
       const response = await axiosInstance.post('/guests', guest);
