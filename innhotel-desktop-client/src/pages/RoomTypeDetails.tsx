@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { RoomTypeForm } from '@/components/roomTypes/RoomTypeForm';
 import { useRoomTypeStore } from '@/store/roomTypes.store';
@@ -24,14 +24,7 @@ const RoomTypeDetails = () => {
   const [loadingBranches, setLoadingBranches] = useState(true);
   const [isEditMode, setIsEditMode] = useState(false);
 
-  useEffect(() => {
-    if (id) {
-      loadRoomType(parseInt(id));
-      loadBranches();
-    }
-  }, [id]);
-
-  const loadRoomType = async (roomTypeId: number) => {
+  const loadRoomType = useCallback(async (roomTypeId: number) => {
     try {
       await fetchRoomTypeById(roomTypeId);
     } catch (error) {
@@ -40,9 +33,9 @@ const RoomTypeDetails = () => {
       });
       navigate(ROUTES.ROOM_TYPES);
     }
-  };
+  }, [fetchRoomTypeById, navigate]);
 
-  const loadBranches = async () => {
+  const loadBranches = useCallback(async () => {
     try {
       setLoadingBranches(true);
       const response = await branchService.getAll();
@@ -54,7 +47,14 @@ const RoomTypeDetails = () => {
     } finally {
       setLoadingBranches(false);
     }
-  };
+  }, [setLoadingBranches, setBranches]);
+
+  useEffect(() => {
+    if (id) {
+      loadRoomType(parseInt(id));
+      loadBranches();
+    }
+  }, [id, loadRoomType, loadBranches]);
 
   const handleSubmit = async (data: RoomTypeFormData) => {
     if (!selectedRoomType) return;

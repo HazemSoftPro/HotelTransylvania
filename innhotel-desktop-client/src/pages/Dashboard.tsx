@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { 
   Home, 
   DoorOpen, 
@@ -32,7 +32,7 @@ const Dashboard = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Fetch dashboard metrics
-  const fetchMetrics = async () => {
+  const fetchMetrics = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -47,11 +47,10 @@ const Dashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [setMetrics, setLoading, setError]);
 
   // Manual refresh
   const handleRefresh = async () => {
-    setIsRefreshing(true);
     await fetchMetrics();
     setIsRefreshing(false);
     toast.success('Dashboard refreshed');
@@ -60,7 +59,7 @@ const Dashboard = () => {
   // Initial load
   useEffect(() => {
     fetchMetrics();
-  }, []);
+  }, [fetchMetrics]);
 
   // Auto-refresh
   useEffect(() => {
@@ -71,7 +70,7 @@ const Dashboard = () => {
     }, refreshInterval * 1000);
 
     return () => clearInterval(interval);
-  }, [autoRefreshEnabled, refreshInterval]);
+  }, [autoRefreshEnabled, refreshInterval, fetchMetrics]);
 
   // Format currency
   const formatCurrency = (amount: number) => {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ServiceForm } from '@/components/services/ServiceForm';
 import { useServiceStore } from '@/store/services.store';
@@ -24,14 +24,7 @@ const ServiceDetails = () => {
   const [loadingBranches, setLoadingBranches] = useState(true);
   const [isEditMode, setIsEditMode] = useState(false);
 
-  useEffect(() => {
-    if (id) {
-      loadService(parseInt(id));
-      loadBranches();
-    }
-  }, [id]);
-
-  const loadService = async (serviceId: number) => {
+  const loadService = useCallback(async (serviceId: number) => {
     try {
       await fetchServiceById(serviceId);
     } catch (error) {
@@ -40,7 +33,7 @@ const ServiceDetails = () => {
       });
       navigate(ROUTES.SERVICES);
     }
-  };
+  }, [fetchServiceById, navigate]);
 
   const loadBranches = async () => {
     try {
@@ -55,6 +48,13 @@ const ServiceDetails = () => {
       setLoadingBranches(false);
     }
   };
+
+  useEffect(() => {
+    if (id) {
+      loadService(parseInt(id));
+      loadBranches();
+    }
+  }, [id, loadService]);
 
   const handleSubmit = async (data: ServiceFormData) => {
     if (!selectedService) return;

@@ -45,7 +45,7 @@ const Rooms = () => {
     };
 
     fetchRooms();
-  }, [currentPage, pageSize]);
+  }, [currentPage, pageSize, joinBranchGroup]);
 
   const handleRoomClick = (room: RoomResponse) => {
     navigate(`${ROUTES.ROOMS}/${room.id}`);

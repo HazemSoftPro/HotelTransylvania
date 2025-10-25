@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RoomTypesListing } from '@/components/roomTypes/RoomTypesListing';
 import { useRoomTypeStore } from '@/store/roomTypes.store';
@@ -25,11 +25,7 @@ const RoomTypes = () => {
   const [roomTypeToDelete, setRoomTypeToDelete] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  useEffect(() => {
-    loadRoomTypes();
-  }, []);
-
-  const loadRoomTypes = async () => {
+  const loadRoomTypes = useCallback(async () => {
     try {
       await fetchRoomTypes();
     } catch (error) {
@@ -37,7 +33,11 @@ const RoomTypes = () => {
         description: error instanceof Error ? error.message : 'An unexpected error occurred',
       });
     }
-  };
+  }, [fetchRoomTypes]);
+
+  useEffect(() => {
+    loadRoomTypes();
+  }, [loadRoomTypes]);
 
   const handleRoomTypeClick = (roomType: RoomType) => {
     navigate(`${ROUTES.ROOM_TYPES}/${roomType.id}`);

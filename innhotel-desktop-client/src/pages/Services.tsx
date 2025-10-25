@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ServicesListing } from '@/components/services/ServicesListing';
 import { useServiceStore } from '@/store/services.store';
@@ -25,11 +25,7 @@ const Services = () => {
   const [serviceToDelete, setServiceToDelete] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  useEffect(() => {
-    loadServices();
-  }, []);
-
-  const loadServices = async () => {
+  const loadServices = useCallback(async () => {
     try {
       await fetchServices();
     } catch (error) {
@@ -37,7 +33,11 @@ const Services = () => {
         description: error instanceof Error ? error.message : 'An unexpected error occurred',
       });
     }
-  };
+  }, [fetchServices]);
+
+  useEffect(() => {
+    loadServices();
+  }, [loadServices]);
 
   const handleServiceClick = (service: HotelService) => {
     navigate(`${ROUTES.SERVICES}/${service.id}`);

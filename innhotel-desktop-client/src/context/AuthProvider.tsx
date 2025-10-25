@@ -1,13 +1,11 @@
 import { useAuthStore } from "@/store/auth.store";
 import { useRoomsStore } from "@/store/rooms.store";
-import type { AuthContextType } from "@/types/api/auth";
-import { useMemo, useEffect, createContext, useRef } from "react";
+import { useMemo, useEffect, useRef } from "react";
 import LoadingSpinner from "../components/Loader/LoadingSpinner";
 import { logger } from '@/utils/logger';
 import { authService } from "@/services/authService";
 import { isAxiosError } from "axios";
-
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+import { AuthContext } from "./auth-context";
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const { setAuth, isLoading, setLoading, accessToken } = useAuthStore();
@@ -57,7 +55,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     };
     initializeAuth();
-  }, []);
+  }, [log, setAuth, setLoading]);
 
   // Initialize real-time connection when authenticated
   useEffect(() => {
@@ -70,12 +68,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       
       log.info('Real-time connection initialized');
     }
-  }, [accessToken, initializeRealTimeConnection]);
+  }, [accessToken, initializeRealTimeConnection, log]);
 
   const contextValue = useMemo(() => {
     log.debug('Auth context value updated:', { isLoading });
     return { isLoading, setAuth };
-  }, [isLoading]);
+  }, [isLoading, log, setAuth]);
 
   if (isLoading) {
     log.info('Rendering loading state');
