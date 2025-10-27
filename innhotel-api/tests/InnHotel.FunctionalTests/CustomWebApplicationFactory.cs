@@ -1,4 +1,5 @@
 ﻿using InnHotel.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace InnHotel.FunctionalTests;
 
