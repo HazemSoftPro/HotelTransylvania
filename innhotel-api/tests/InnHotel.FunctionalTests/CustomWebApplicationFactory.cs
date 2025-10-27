@@ -63,12 +63,14 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
         {
           // Configure test dependencies here
 
-          // Remove the app's ApplicationDbContext registration.
-          var descriptor = services.SingleOrDefault(
-          d => d.ServiceType ==
-              typeof(DbContextOptions<AppDbContext>));
+          // Remove all existing DbContext registrations to avoid conflicts
+          var descriptorsToRemove = services.Where(d => 
+              d.ServiceType == typeof(DbContextOptions<AppDbContext>) ||
+              d.ServiceType == typeof(DbContextOptions) ||
+              d.ServiceType.IsGenericType && d.ServiceType.GetGenericTypeDefinition() == typeof(DbContextOptions<>))
+              .ToList();
 
-          if (descriptor != null)
+          foreach (var descriptor in descriptorsToRemove)
           {
             services.Remove(descriptor);
           }
