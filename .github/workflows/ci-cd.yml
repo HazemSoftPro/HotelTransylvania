@@ -54,6 +54,8 @@ jobs:
       run: dotnet build ${{ env.SOLUTION_PATH }} --no-restore --configuration Release
 
     - name: Run Unit Tests
+      env:
+        ALLOWED_ORIGINS: "http://localhost:3000,http://localhost:5173,http://localhost:57679"
       run: |
         dotnet test innhotel-api/tests/InnHotel.UnitTests/InnHotel.UnitTests.csproj \
           --no-build \
@@ -66,6 +68,7 @@ jobs:
       env:
         ConnectionStrings__PostgreSQLConnection: "Host=localhost;Port=5432;Database=innhotel_test;Username=postgres;Password=postgres"
         ASPNETCORE_ENVIRONMENT: "Production"
+        ALLOWED_ORIGINS: "http://localhost:3000,http://localhost:5173,http://localhost:57679"
       run: |
         dotnet test innhotel-api/tests/InnHotel.IntegrationTests/InnHotel.IntegrationTests.csproj \
           --no-build \
@@ -129,6 +132,7 @@ jobs:
       env:
         ConnectionStrings__PostgreSQLConnection: "Host=localhost;Port=5432;Database=innhotel_migration_test;Username=postgres;Password=postgres"
         ASPNETCORE_ENVIRONMENT: "Production"
+        ALLOWED_ORIGINS: "http://localhost:3000,http://localhost:5173,http://localhost:57679"
       run: |
         cd innhotel-api/src/InnHotel.Web
         
@@ -146,6 +150,7 @@ jobs:
       env:
         ConnectionStrings__PostgreSQLConnection: "Host=localhost;Port=5432;Database=innhotel_migration_test;Username=postgres;Password=postgres"
         ASPNETCORE_ENVIRONMENT: "Production"
+        ALLOWED_ORIGINS: "http://localhost:3000,http://localhost:5173,http://localhost:57679"
       run: |
         # Run a simple query to verify the schema changes
         PGPASSWORD=postgres psql -h localhost -U postgres -d innhotel_migration_test -c "

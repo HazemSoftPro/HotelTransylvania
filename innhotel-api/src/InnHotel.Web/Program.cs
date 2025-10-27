@@ -18,7 +18,14 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 var envPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", ".env");
-DotNetEnv.Env.Load(envPath);
+if (File.Exists(envPath))
+{
+    DotNetEnv.Env.Load(envPath);
+}
+else
+{
+    Log.Information("No .env file found at {EnvPath}, using environment variables", envPath);
+}
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -111,8 +118,10 @@ builder.Services.AddSignalR(options =>
 });
 
 // CORS configuration
-var allowedOriginsEnv = DotNetEnv.Env.GetString("ALLOWED_ORIGINS")
-    ?? throw new InvalidOperationException("ALLOWED_ORIGINS environment variable is required");
+var allowedOriginsEnv = DotNetEnv.Env.GetString("ALLOWED_ORIGINS") 
+    ?? Environment.GetEnvironmentVariable("ALLOWED_ORIGINS")
+    ?? builder.Configuration["ALLOWED_ORIGINS"]
+    ?? throw new InvalidOperationException("ALLOWED_ORIGINS environment variable or configuration is required");
 var allowedOrigins = allowedOriginsEnv.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToHashSet();
 
 builder.Services.AddCors(options =>
