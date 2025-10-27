@@ -1,5 +1,43 @@
 # 🏨 HotelTransylvania - Complete Hotel Management System
 
+## 🚀 Quick Start
+
+### One-Command Setup
+```bash
+./start-project.sh
+```
+
+### Manual Setup
+1. **Install Prerequisites:**
+   - Node.js 18+
+   - .NET SDK 8.0
+   - pnpm (will be installed automatically)
+
+2. **Start the Application:**
+   ```bash
+   # Terminal 1: Start API
+   cd innhotel-api/src/InnHotel.Web
+   dotnet run --urls="http://localhost:57679"
+   
+   # Terminal 2: Start Client
+   cd innhotel-desktop-client
+   pnpm install
+   pnpm run dev:react
+   ```
+
+3. **Access the Application:**
+   - **Client**: http://localhost:5173
+   - **API**: http://localhost:57679
+
+### 🔑 Default Login Credentials
+- **Super Admin**: `super@innhotel.com` / `Sup3rP@ssword!`
+- **Admin**: `admin@innhotel.com` / `Adm1nP@ssword!`
+
+## 🛠️ Runtime Issues?
+
+Having problems? Check our comprehensive troubleshooting guide:
+📖 **[RUNTIME_TROUBLESHOOTING.md](./RUNTIME_TROUBLESHOOTING.md)**
+
 ## 📋 Table of Contents
 - [Introduction](#introduction)
 - [Features](#features)

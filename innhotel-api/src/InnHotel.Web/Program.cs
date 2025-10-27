@@ -24,15 +24,28 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog();
 
-// Database connection validation
-var connectionString = builder.Configuration.GetConnectionString("PostgreSQLConnection");
-ValidateDatabaseConnection(connectionString);
+// Database connection validation - Use SQLite for development
+var usePostgreSQL = builder.Environment.IsProduction();
+var connectionString = usePostgreSQL 
+    ? builder.Configuration.GetConnectionString("PostgreSQLConnection")
+    : builder.Configuration.GetConnectionString("SqliteConnection");
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString, npgsql =>
-        npgsql.EnableRetryOnFailure()
-    )
-);
+if (usePostgreSQL)
+{
+    ValidateDatabaseConnection(connectionString);
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseNpgsql(connectionString, npgsql =>
+            npgsql.EnableRetryOnFailure()
+        )
+    );
+}
+else
+{
+    Log.Information("Using SQLite database for development: {ConnectionString}", connectionString);
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlite(connectionString)
+    );
+}
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()

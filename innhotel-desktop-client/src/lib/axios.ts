@@ -48,6 +48,21 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config;
     const isAuthenticated = useAuthStore.getState().isAuthenticated;
 
+    // Handle network errors (API not available)
+    if (!error.response) {
+      log.error(`🔌 Network Error: Cannot connect to API at ${originalRequest?.url}`, {
+        error: error.message,
+        code: error.code
+      });
+      
+      // Show user-friendly error message
+      if (error.code === 'ECONNREFUSED' || error.code === 'ERR_NETWORK') {
+        const customError = new Error('API server is not available. Please make sure the server is running on http://localhost:57679');
+        customError.name = 'NetworkError';
+        return Promise.reject(customError);
+      }
+    }
+
     log.error(`❌ Response Error: ${originalRequest?.method?.toUpperCase()} ${originalRequest?.url}`, {
       status: error.response?.status,
       data: error.response?.data,
