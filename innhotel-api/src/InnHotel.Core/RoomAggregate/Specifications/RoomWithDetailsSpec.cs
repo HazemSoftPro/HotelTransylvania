@@ -9,6 +9,7 @@ public sealed class RoomWithDetailsSpec : Specification<Room>
         Query
             .Include(r => r.Branch)
             .Include(r => r.RoomType)
+            .OrderBy(r => r.Id)
             .Skip(skip)
             .Take(take);
     }
