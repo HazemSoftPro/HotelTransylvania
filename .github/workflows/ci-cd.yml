@@ -64,7 +64,7 @@ jobs:
 
     - name: Run Integration Tests
       env:
-        ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=innhotel_test;Username=postgres;Password=postgres"
+        ConnectionStrings__PostgreSQLConnection: "Host=localhost;Port=5432;Database=innhotel_test;Username=postgres;Password=postgres"
       run: |
         dotnet test innhotel-api/tests/InnHotel.IntegrationTests/InnHotel.IntegrationTests.csproj \
           --no-build \
@@ -126,7 +126,7 @@ jobs:
 
     - name: Test Database Migration
       env:
-        ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=innhotel_migration_test;Username=postgres;Password=postgres"
+        ConnectionStrings__PostgreSQLConnection: "Host=localhost;Port=5432;Database=innhotel_migration_test;Username=postgres;Password=postgres"
       run: |
         cd innhotel-api/src/InnHotel.Web
         
@@ -142,7 +142,7 @@ jobs:
 
     - name: Verify Data Integrity After Migration
       env:
-        ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=innhotel_migration_test;Username=postgres;Password=postgres"
+        ConnectionStrings__PostgreSQLConnection: "Host=localhost;Port=5432;Database=innhotel_migration_test;Username=postgres;Password=postgres"
       run: |
         # Run a simple query to verify the schema changes
         PGPASSWORD=postgres psql -h localhost -U postgres -d innhotel_migration_test -c "
