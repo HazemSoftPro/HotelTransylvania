@@ -94,7 +94,7 @@ export const ReservationForm = ({ onSubmit, isLoading }: ReservationFormProps) =
       setSelectedRooms([...selectedRooms, room]);
       form.setValue('rooms', [
         ...form.getValues('rooms'),
-        { roomId: parseInt(roomId), pricePerNight: room.basePrice }
+        { roomId: parseInt(roomId), pricePerNight: room.manualPrice }
       ]);
     }
   };
@@ -283,7 +283,7 @@ export const ReservationForm = ({ onSubmit, isLoading }: ReservationFormProps) =
                 .filter(room => !selectedRooms.find(r => r.id === room.id))
                 .map((room) => (
                   <SelectItem key={room.id} value={room.id.toString()}>
-                    Room {room.roomNumber} - {room.roomTypeName} (${room.basePrice}/night)
+                    Room {room.roomNumber} - {room.roomTypeName} (${room.manualPrice}/night)
                   </SelectItem>
                 ))}
             </SelectContent>
@@ -296,7 +296,7 @@ export const ReservationForm = ({ onSubmit, isLoading }: ReservationFormProps) =
               <div className="flex items-center gap-2">
                 <span>Room {room.roomNumber} - {room.roomTypeName}</span>
                 <span className="text-sm text-muted-foreground">
-                  ${room.basePrice}/night
+                  ${room.manualPrice}/night
                 </span>
               </div>
               <Button

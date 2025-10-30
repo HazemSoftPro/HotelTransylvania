@@ -13,7 +13,7 @@ export interface CreateRoomRequest {
   roomNumber: string;
   status: RoomStatus;
   floor: number;
-  priceOverride?: number;
+  manualPrice: number;
 }
 
 // Request type for updating a room
@@ -22,7 +22,7 @@ export interface UpdateRoomRequest {
   roomNumber: string;
   status: RoomStatus;
   floor: number;
-  priceOverride?: number;
+  manualPrice: number;
 }
 
 // Single room response
@@ -32,12 +32,11 @@ export interface RoomResponse {
   branchName: string;
   roomTypeId: number;
   roomTypeName: string;
-  basePrice: number;
+  manualPrice: number;
   capacity: number;
   roomNumber: string;
   status: RoomStatus;
   floor: number;
-  priceOverride?: number;
 }
 
 // List of rooms response

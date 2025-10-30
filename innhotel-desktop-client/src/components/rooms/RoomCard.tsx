@@ -29,7 +29,7 @@ const getStatusText = (status: RoomStatus): string => {
 };
 
 export const RoomCard = ({ room, onClick }: RoomCardProps) => {
-  const { roomNumber, status, roomTypeName, floor, branchName, basePrice } = room;
+  const { roomNumber, status, roomTypeName, floor, branchName, manualPrice } = room;
   const statusStyle = statusStyles[status];
 
   return (
@@ -57,7 +57,7 @@ export const RoomCard = ({ room, onClick }: RoomCardProps) => {
             </div>
             <div className="flex items-center gap-1">
               <DollarSign className="h-4 w-4" />
-              <span>{basePrice}</span>
+              <span>${manualPrice}</span>
             </div>
           </div>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">

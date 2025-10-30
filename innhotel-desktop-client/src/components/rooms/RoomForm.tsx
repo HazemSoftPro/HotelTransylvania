@@ -34,6 +34,7 @@ interface CreateRoomRequest {
   roomNumber: string;
   status: RoomStatus;
   floor: number;
+  manualPrice: number;
 }
 
 export interface UpdateRoomRequest {
@@ -41,7 +42,7 @@ export interface UpdateRoomRequest {
   roomNumber: string;
   status: RoomStatus;
   floor: number;
-  priceOverride?: number;
+  manualPrice: number;
 }
 
 interface BaseRoomFormProps {
@@ -102,7 +103,7 @@ export const RoomForm = ({ mode, onSubmit, defaultValues, isLoading }: RoomFormP
       room_number: '',
       status: '',
       floor: 0,
-      price_override: undefined,
+      manual_price: 0,
       ...defaultValues,
     },
   });
@@ -121,6 +122,7 @@ export const RoomForm = ({ mode, onSubmit, defaultValues, isLoading }: RoomFormP
           roomNumber: data.room_number,
           status: parseInt(data.status) as RoomStatus,
           floor: data.floor,
+          manualPrice: data.manual_price,
         };
         await onSubmit(request);
         form.reset();
@@ -130,7 +132,7 @@ export const RoomForm = ({ mode, onSubmit, defaultValues, isLoading }: RoomFormP
           roomNumber: data.room_number,
           status: parseInt(data.status) as RoomStatus,
           floor: data.floor,
-          priceOverride: data.price_override,
+          manualPrice: data.manual_price,
         };
         await onSubmit(request);
       }
@@ -269,17 +271,17 @@ export const RoomForm = ({ mode, onSubmit, defaultValues, isLoading }: RoomFormP
 
         <FormField
           control={form.control}
-          name="price_override"
+          name="manual_price"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Price Override (optional)</FormLabel>
+              <FormLabel>Manual Price *</FormLabel>
               <FormControl>
                 <Input
                   type="number"
                   step="0.01"
-                  placeholder="Enter price override"
+                  placeholder="Enter manual price"
                   {...field}
-                  onChange={(e) => field.onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) => field.onChange(e.target.value ? parseFloat(e.target.value) : 0)}
                 />
               </FormControl>
               <FormMessage />

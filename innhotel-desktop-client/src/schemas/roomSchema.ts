@@ -25,7 +25,9 @@ const roomSchema = z.object({
   floor: z.number()
     .min(0, "Floor number cannot be negative")
     .max(100, "Floor number cannot exceed 100"),
-  price_override: z.number().min(0).optional()
+  manual_price: z.number()
+    .min(0.01, "Manual price must be greater than 0")
+    .max(10000, "Manual price cannot exceed 10,000")
 });
 
 export type RoomFormValues = z.infer<typeof roomSchema>;

@@ -4,7 +4,7 @@ export interface RoomFormValues {
   roomNumber: string;
   status: string;
   floor: number;
-  priceOverride?: number;
+  manualPrice: number;
 }
 
 export const roomStatusOptions = [
