@@ -50,6 +50,8 @@ const EmployeeDetails = () => {
     const employeeData: CreateEmployeeRequest = {
       firstName: formData.firstName,
       lastName: formData.lastName,
+      email: formData.email || null,
+      phone: formData.phone || null,
       branchId: formData.branchId,
       hireDate: formData.hireDate,
       position: formData.position,
@@ -133,6 +135,8 @@ const EmployeeDetails = () => {
           defaultValues={{
             firstName: employee.firstName,
             lastName: employee.lastName,
+            email: employee.email || "",
+            phone: employee.phone || "",
             branchId: employee.branchId,
             hireDate: employee.hireDate,
             position: employee.position

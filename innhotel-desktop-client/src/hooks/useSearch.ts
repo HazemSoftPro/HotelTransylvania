@@ -90,7 +90,7 @@ export function useSearch<T>(options: UseSearchOptions<T>): UseSearchReturn<T> {
 
     // Check cache first
     if (cacheResults) {
-      const cached = getCachedResults(cacheKey);
+      const cached = getCachedResults(cacheKey) as SearchResponse<T> | null;
       if (cached) {
         setData(cached.data);
         setPagination({

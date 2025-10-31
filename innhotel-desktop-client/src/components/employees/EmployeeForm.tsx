@@ -63,6 +63,8 @@ export const EmployeeForm = ({
     defaultValues: {
       firstName: "",
       lastName: "",
+      email: "",
+      phone: "",
       hireDate: new Date().toISOString().split('T')[0],
       position: Position.Receptionist,
       branchId: 1,
@@ -98,6 +100,36 @@ export const EmployeeForm = ({
                 <FormLabel>Last Name <span className="text-destructive">*</span></FormLabel>
                 <FormControl>
                   <Input placeholder="Enter last name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input type="email" placeholder="Enter email address" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Phone</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter phone number" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -18,6 +18,8 @@ const RegisterEmployee = () => {
       const employeeData = {
         firstName: data.firstName,
         lastName: data.lastName,
+        email: data.email || null,
+        phone: data.phone || null,
         branchId: data.branchId,
         hireDate: data.hireDate,
         position: data.position,

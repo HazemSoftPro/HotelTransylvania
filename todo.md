@@ -1,46 +1,42 @@
-# Parameter and Data Type Alignment Task
+# Parameter Alignment Task - Client Side to API/Database
 
-## 1. Discovery Phase
-- [x] Examine database schema to identify all tables and columns with their data types
-- [x] Examine API models and DTOs to identify parameter names and types
-- [x] Examine client-side types and interfaces to identify parameter names and types
-- [x] Document all mismatches found (PARAMETER_MISMATCH_ANALYSIS.md created)
+## 1. Analysis Phase
+- [x] Examine database schema to identify all tables and their column names/types
+- [x] Analyze API endpoints and their DTOs (Data Transfer Objects)
+- [x] Review client-side TypeScript types and interfaces
+- [x] Identify all parameter mismatches between client, API, and database
 
-## 2. Room Entity Fixes
-- [x] Update roomSchema.ts to use camelCase instead of snake_case
-- [x] Update room schema to use number types for IDs instead of strings
-- [x] Update RoomForm.tsx to remove manual field name transformations
-- [x] Update types/room.ts to align with API types
-- [x] Update RoomDetails.tsx to use new camelCase field names
-- [ ] Test room creation and update operations
+## 2. Key Findings - Parameter Mismatches
 
-## 3. Guest Entity Fixes
-- [x] Update guestSchema.ts to use camelCase instead of snake_case
-- [x] Align guest enum types with API expectations
-- [x] Update GuestForm.tsx to use camelCase field names
-- [x] Keep enum value conversions (required by API)
-- [ ] Test guest creation and update operations
+### Employee Entity
+- ✅ API expects: `email` and `phone` (optional nullable fields)
+- ✅ Client sends: Missing `email` and `phone` in CreateEmployeeRequest type
+- ✅ Schema: Missing validation for `email` and `phone`
 
-## 4. Employee Entity Fixes
-- [x] Update employeeSchema.ts to use camelCase instead of snake_case
-- [x] Update EmployeeForm.tsx to use camelCase field names
-- [x] Update RegisterEmployee.tsx to use camelCase field names
-- [x] Update EmployeeDetails.tsx to use camelCase field names
-- [ ] Test employee creation and update operations
+### Guest Entity
+- ❌ API expects: `gender` and `idProofType` as STRING ("Male"/"Female", "Passport"/"DriverLicense"/"NationalId")
+- ❌ Client sends: `gender` and `idProofType` as NUMBER (0/1, 0/1/2)
+- ❌ Major mismatch in data type representation
 
-## 5. Other Entity Verification
-- [x] Verify reservationSchema.ts already uses camelCase (correct)
-- [x] Verify branchSchema.ts already uses camelCase (correct)
-- [x] Verify serviceSchema.ts already uses camelCase (correct)
-- [x] Verify roomTypeSchema.ts already uses camelCase (correct)
+### Room Entity
+- ✅ API expects: `status` as RoomStatus enum (0/1/2)
+- ✅ Client sends: `status` as number - CORRECT
+- ✅ All other fields match correctly
 
-## 6. Verification Phase
-- [x] Verify all TypeScript compilation succeeds (no errors related to our changes)
-- [x] Check for any remaining type errors (only unrelated errors in useSearch.ts)
-- [ ] Test all CRUD operations for each entity (requires running application)
-- [ ] Verify forms work correctly with new schemas (requires running application)
+### Service Entity
+- ✅ API expects: `branchId`, `name`, `price`, `description`
+- ✅ Client sends: All fields match correctly
+- ✅ No mismatches found
 
-## 7. Completion
-- [x] Create summary document of all fixes applied (PARAMETER_ALIGNMENT_FIXES_SUMMARY.md)
-- [ ] Commit all changes with descriptive messages
-- [ ] Push changes to the branch
+## 3. Fix Implementation
+- [x] Fix Guest entity - Convert client to send string values for gender and idProofType
+- [x] Fix Employee entity - Add email and phone fields to client types
+- [x] Update Guest schemas to validate string values
+- [x] Update Guest service calls to transform data correctly
+- [x] Update Guest forms and components to handle string values
+- [x] Update Employee forms and components to include email and phone fields
+
+## 4. Verification
+- [x] Verify all changes compile without errors
+- [x] Create a final alignment report
+- [x] Document all changes made

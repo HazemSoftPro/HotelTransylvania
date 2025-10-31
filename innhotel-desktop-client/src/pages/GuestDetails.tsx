@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import type { GuestResponse, Guest, GuestReq, UpdateGuestResponse } from "@/types/api/guest";
+import type { GuestResponse, GuestReq, UpdateGuestResponse } from "@/types/api/guest";
 import { guestService } from "@/services/guestService";
 import { ROUTES } from "@/constants/routes";
 import { Button } from "@/components/ui/button";
@@ -39,14 +39,8 @@ const GuestDetails = () => {
     if (!guest) return;
     setIsUpdating(true);
     try {
-      // Convert GuestReq to Guest for service call
-      const guestData = {
-        id: guest.id,
-        ...values,
-        gender: values.gender === 'Male' ? 0 : 1,
-        idProofType: values.idProofType === 'Passport' ? 0 : values.idProofType === 'DriverLicense' ? 1 : 2,
-      } as const;
-      const response: UpdateGuestResponse = await guestService.update(guest.id, guestData as Guest);
+      // Send data directly - API expects string values for gender and idProofType
+      const response: UpdateGuestResponse = await guestService.update(guest.id, values);
       setGuest(response.data);
       toast.success("Guest updated successfully");
     } catch {

@@ -7,6 +7,16 @@ export const employeeSchema = z.object({
   lastName: z.string()
     .min(2, "Last name must be at least 2 characters")
     .max(50, "Last name must be less than 50 characters"),
+  email: z.string()
+    .email("Please enter a valid email address")
+    .max(100, "Email cannot exceed 100 characters")
+    .optional()
+    .or(z.literal("")),
+  phone: z.string()
+    .max(20, "Phone number cannot exceed 20 characters")
+    .regex(/^[\d\-+\s]*$/, "Phone number can only contain numbers, spaces, + and -")
+    .optional()
+    .or(z.literal("")),
   hireDate: z.string()
     .min(1, "Please select a hire date"),
   position: z.string()

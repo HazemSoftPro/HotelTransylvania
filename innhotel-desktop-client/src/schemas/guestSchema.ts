@@ -9,15 +9,15 @@ export const guestSchema = z.object({
     .min(1, "Last name is required")
     .max(50, "Last name cannot exceed 50 characters"),
 
-  gender: z.number({
+  gender: z.enum(["Male", "Female"], {
     required_error: "Gender is required",
-    invalid_type_error: "Gender must be a number"
-  }).min(0).max(1),
+    invalid_type_error: "Gender must be either 'Male' or 'Female'"
+  }),
 
-  idProofType: z.number({
+  idProofType: z.enum(["Passport", "DriverLicense", "NationalId"], {
     required_error: "ID proof type is required",
-    invalid_type_error: "ID proof type must be a number"
-  }).min(0).max(2),
+    invalid_type_error: "ID proof type must be 'Passport', 'DriverLicense', or 'NationalId'"
+  }),
 
   idProofNumber: z.string()
     .min(1, "ID proof number is required")
@@ -31,7 +31,7 @@ export const guestSchema = z.object({
 
   phone: z.string()
     .max(20, "Phone number cannot exceed 20 characters")
-    .regex(/^[\d\-+\s]+$/, "Phone number can only contain numbers, spaces, + and -")
+    .regex(/^[\d\-+\s]*$/, "Phone number can only contain numbers, spaces, + and -")
     .optional()
     .or(z.literal("")),
 

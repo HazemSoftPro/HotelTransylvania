@@ -18,12 +18,12 @@ interface GuestsTableProps {
   onGuestClick?: (guest: GuestResponse) => void;
 }
 
-const getGenderLabel = (gender: number) => gender === 0 ? 'Male' : 'Female';
-const getIdProofTypeLabel = (type: number) => {
+const getGenderLabel = (gender: string) => gender;
+const getIdProofTypeLabel = (type: string) => {
   switch (type) {
-    case 0: return 'Passport';
-    case 1: return "Driver's License";
-    case 2: return 'National ID';
+    case 'Passport': return 'Passport';
+    case 'DriverLicense': return "Driver's License";
+    case 'NationalId': return 'National ID';
     default: return 'Unknown';
   }
 };
@@ -80,12 +80,12 @@ export const GuestsTable = ({ guests, onGuestClick }: GuestsTableProps) => {
                   variant="outline" 
                   className={cn(
                     "flex items-center gap-1.5 w-fit",
-                    guest.gender === 0 
+                    guest.gender === 'Male' 
                       ? 'text-blue-600 border-blue-600/20' 
                       : 'text-pink-600 border-pink-600/20'
                   )}
                 >
-                  {guest.gender === 0 ? (
+                  {guest.gender === 'Male' ? (
                     <Mars className="h-3 w-3" />
                   ) : (
                     <Venus className="h-3 w-3" />

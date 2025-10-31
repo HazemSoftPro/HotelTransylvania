@@ -5,6 +5,8 @@ export interface CreateEmployeeRequest {
   firstName: string;
   lastName: string;
   branchId: number;
+  email?: string | null;
+  phone?: string | null;
   hireDate: string; // DateOnly format: YYYY-MM-DD
   position: string;
   userId: string | null;
@@ -16,6 +18,8 @@ export interface Employee {
   firstName: string;
   lastName: string;
   branchId: number;
+  email?: string | null;
+  phone?: string | null;
   hireDate: string; // DateOnly format: YYYY-MM-DD
   position: string;
   userId: string | null;
@@ -27,6 +31,8 @@ export interface EmployeeResponse {
   branchId: number;
   firstName: string;
   lastName: string;
+  email?: string | null;
+  phone?: string | null;
   hireDate: string;
   position: string;
   userId: string | null;
