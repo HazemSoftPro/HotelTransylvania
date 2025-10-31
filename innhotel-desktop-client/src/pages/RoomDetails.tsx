@@ -160,12 +160,12 @@ const RoomDetails = () => {
         <RoomForm
           onSubmit={handleUpdate}
           defaultValues={{
-            room_number: room.roomNumber,
-            room_type_id: room.roomTypeId.toString(),
-            status: room.status.toString(),
+            roomNumber: room.roomNumber,
+            roomTypeId: room.roomTypeId,
+            status: room.status,
             floor: room.floor,
-            branch_id: room.branchId.toString(),
-            manual_price: room.manualPrice
+            branchId: room.branchId,
+            manualPrice: room.manualPrice
           }}
           isLoading={isUpdating}
           mode="update"

@@ -1,17 +1,17 @@
 import { z } from "zod";
 
 const roomSchema = z.object({
-  branch_id: z.string()
-    .min(1, "Please select a branch")
-    .refine((val) => parseInt(val) > 0, {
-      message: "Invalid branch selection. Please choose a valid branch"
-    }),
-  room_type_id: z.string()
-    .min(1, "Please select a room type")
-    .refine((val) => parseInt(val) > 0, {
-      message: "Invalid room type selection. Please choose a valid room type"
-    }),
-  room_number: z.string()
+  branchId: z.number({
+    required_error: "Please select a branch",
+    invalid_type_error: "Branch must be a number"
+  }).positive("Invalid branch selection. Please choose a valid branch"),
+  
+  roomTypeId: z.number({
+    required_error: "Please select a room type",
+    invalid_type_error: "Room type must be a number"
+  }).positive("Invalid room type selection. Please choose a valid room type"),
+  
+  roomNumber: z.string()
     .min(1, "Room number is a required field")
     .max(20, "Room number must be less than 20 digits")
     .refine((val) => /^\d+$/.test(val), {
@@ -20,12 +20,23 @@ const roomSchema = z.object({
     .refine((val) => parseInt(val) > 0, {
       message: "Room number must be a positive number greater than zero"
     }),
-  status: z.string()
-    .min(1, "Please select a room status"),
-  floor: z.number()
+  
+  status: z.number({
+    required_error: "Please select a room status",
+    invalid_type_error: "Status must be a number"
+  }).min(0).max(2, "Invalid room status"),
+  
+  floor: z.number({
+    required_error: "Floor number is required",
+    invalid_type_error: "Floor must be a number"
+  })
     .min(0, "Floor number cannot be negative")
     .max(100, "Floor number cannot exceed 100"),
-  manual_price: z.number()
+  
+  manualPrice: z.number({
+    required_error: "Manual price is required",
+    invalid_type_error: "Price must be a number"
+  })
     .min(0.01, "Manual price must be greater than 0")
     .max(10000, "Manual price cannot exceed 10,000")
 });

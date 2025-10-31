@@ -1,19 +1,25 @@
 import { z } from "zod";
 
 export const guestSchema = z.object({
-  first_name: z.string()
+  firstName: z.string()
     .min(1, "First name is required")
     .max(50, "First name cannot exceed 50 characters"),
 
-  last_name: z.string()
+  lastName: z.string()
     .min(1, "Last name is required")
     .max(50, "Last name cannot exceed 50 characters"),
 
-  gender: z.number().min(0).max(1),
+  gender: z.number({
+    required_error: "Gender is required",
+    invalid_type_error: "Gender must be a number"
+  }).min(0).max(1),
 
-  id_proof_type: z.number().min(0).max(2),
+  idProofType: z.number({
+    required_error: "ID proof type is required",
+    invalid_type_error: "ID proof type must be a number"
+  }).min(0).max(2),
 
-  id_proof_number: z.string()
+  idProofNumber: z.string()
     .min(1, "ID proof number is required")
     .max(50, "ID proof number cannot exceed 50 characters"),
 

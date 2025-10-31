@@ -61,11 +61,11 @@ export const EmployeeForm = ({
   const form = useForm<EmployeeFormData>({
     resolver: zodResolver(employeeSchema),
     defaultValues: {
-      first_name: "",
-      last_name: "",
-      hire_date: new Date().toISOString().split('T')[0],
+      firstName: "",
+      lastName: "",
+      hireDate: new Date().toISOString().split('T')[0],
       position: Position.Receptionist,
-      branch_id: 1,
+      branchId: 1,
       ...defaultValues
     },
   });
@@ -78,7 +78,7 @@ export const EmployeeForm = ({
         <div className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}
-            name="first_name"
+            name="firstName"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>First Name <span className="text-destructive">*</span></FormLabel>
@@ -92,7 +92,7 @@ export const EmployeeForm = ({
 
           <FormField
             control={form.control}
-            name="last_name"
+            name="lastName"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Last Name <span className="text-destructive">*</span></FormLabel>
@@ -108,7 +108,7 @@ export const EmployeeForm = ({
         <div className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}
-            name="hire_date"
+            name="hireDate"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Hire Date <span className="text-destructive">*</span></FormLabel>
@@ -151,7 +151,7 @@ export const EmployeeForm = ({
 
         <FormField
           control={form.control}
-          name="branch_id"
+          name="branchId"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Branch <span className="text-destructive">*</span></FormLabel>

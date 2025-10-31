@@ -98,41 +98,36 @@ export const RoomForm = ({ mode, onSubmit, defaultValues, isLoading }: RoomFormP
   const form = useForm<RoomFormValues>({
     resolver: zodResolver(roomSchema),
     defaultValues: {
-      branch_id: '',
-      room_type_id: '',
-      room_number: '',
-      status: '',
+      branchId: 0,
+      roomTypeId: 0,
+      roomNumber: '',
+      status: 0,
       floor: 0,
-      manual_price: 0,
+      manualPrice: 0,
       ...defaultValues,
     },
   });
 
-  // Debug log for defaultValues
-  console.log('RoomForm defaultValues:', defaultValues);
-
   const handleSubmit = async (data: RoomFormValues) => {
-    console.log('Form submit data:', data); // Debug log
-
     try {
       if (mode === 'create') {
         const request: CreateRoomRequest = {
-          branchId: parseInt(data.branch_id),
-          roomTypeId: parseInt(data.room_type_id),
-          roomNumber: data.room_number,
-          status: parseInt(data.status) as RoomStatus,
+          branchId: data.branchId,
+          roomTypeId: data.roomTypeId,
+          roomNumber: data.roomNumber,
+          status: data.status as RoomStatus,
           floor: data.floor,
-          manualPrice: data.manual_price,
+          manualPrice: data.manualPrice,
         };
         await onSubmit(request);
         form.reset();
       } else {
         const request: UpdateRoomRequest = {
-          roomTypeId: parseInt(data.room_type_id),
-          roomNumber: data.room_number,
-          status: parseInt(data.status) as RoomStatus,
+          roomTypeId: data.roomTypeId,
+          roomNumber: data.roomNumber,
+          status: data.status as RoomStatus,
           floor: data.floor,
-          manualPrice: data.manual_price,
+          manualPrice: data.manualPrice,
         };
         await onSubmit(request);
       }
@@ -149,13 +144,13 @@ export const RoomForm = ({ mode, onSubmit, defaultValues, isLoading }: RoomFormP
         {mode === 'create' && (
           <FormField
             control={form.control}
-            name="branch_id"
+            name="branchId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Branch <span className="text-destructive">*</span></FormLabel>
                 <Select
-                  onValueChange={field.onChange}
-                  value={field.value}
+                  onValueChange={(value) => field.onChange(parseInt(value))}
+                  value={field.value ? String(field.value) : ''}
                   disabled={isLoadingBranches}
                 >
                   <FormControl>
@@ -179,13 +174,13 @@ export const RoomForm = ({ mode, onSubmit, defaultValues, isLoading }: RoomFormP
 
         <FormField
           control={form.control}
-          name="room_type_id"
+          name="roomTypeId"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Room Type <span className="text-destructive">*</span></FormLabel>
               <Select
-                onValueChange={field.onChange}
-                value={field.value}
+                onValueChange={(value) => field.onChange(parseInt(value))}
+                value={field.value ? String(field.value) : ''}
                 disabled={isLoadingRoomTypes}
               >
                 <FormControl>
@@ -209,7 +204,7 @@ export const RoomForm = ({ mode, onSubmit, defaultValues, isLoading }: RoomFormP
         <div className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}
-            name="room_number"
+            name="roomNumber"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Room Number <span className="text-destructive">*</span></FormLabel>
@@ -248,8 +243,8 @@ export const RoomForm = ({ mode, onSubmit, defaultValues, isLoading }: RoomFormP
             <FormItem>
               <FormLabel>Status <span className="text-destructive">*</span></FormLabel>
               <Select
-                onValueChange={field.onChange}
-                value={field.value}
+                onValueChange={(value) => field.onChange(parseInt(value))}
+                value={String(field.value)}
               >
                 <FormControl>
                   <SelectTrigger className="w-full">
@@ -258,7 +253,7 @@ export const RoomForm = ({ mode, onSubmit, defaultValues, isLoading }: RoomFormP
                 </FormControl>
                 <SelectContent>
                   {roomStatusOptions.map((status) => (
-                    <SelectItem key={status.id} value={status.id}>
+                    <SelectItem key={status.id} value={String(status.id)}>
                       {status.name}
                     </SelectItem>
                   ))}
@@ -271,10 +266,10 @@ export const RoomForm = ({ mode, onSubmit, defaultValues, isLoading }: RoomFormP
 
         <FormField
           control={form.control}
-          name="manual_price"
+          name="manualPrice"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Manual Price *</FormLabel>
+              <FormLabel>Manual Price <span className="text-destructive">*</span></FormLabel>
               <FormControl>
                 <Input
                   type="number"

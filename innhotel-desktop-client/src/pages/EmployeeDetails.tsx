@@ -48,10 +48,10 @@ const EmployeeDetails = () => {
     if (!id || !employee) return;
 
     const employeeData: CreateEmployeeRequest = {
-      firstName: formData.first_name,
-      lastName: formData.last_name,
-      branchId: formData.branch_id,
-      hireDate: formData.hire_date,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      branchId: formData.branchId,
+      hireDate: formData.hireDate,
       position: formData.position,
       userId: employee.userId // Keep the existing userId
     };
@@ -131,10 +131,10 @@ const EmployeeDetails = () => {
         <EmployeeForm
           onSubmit={handleUpdate}
           defaultValues={{
-            first_name: employee.firstName,
-            last_name: employee.lastName,
-            branch_id: employee.branchId,
-            hire_date: employee.hireDate,
+            firstName: employee.firstName,
+            lastName: employee.lastName,
+            branchId: employee.branchId,
+            hireDate: employee.hireDate,
             position: employee.position
           }}
           isLoading={isUpdating}
