@@ -13,13 +13,8 @@ const AddGuest = () => {
   const handleSubmit = async (data: GuestReq) => {
     try {
       setIsLoading(true);
-      // Convert GuestReq to Guest for service call
-      const guestData = {
-        ...data,
-        gender: data.gender === 'Male' ? 0 : 1,
-        idProofType: data.idProofType === 'Passport' ? 0 : data.idProofType === 'DriverLicense' ? 1 : 2,
-      } as const;
-      await guestService.create(guestData);
+      // Send data directly - API expects string values for gender and idProofType
+      await guestService.create(data);
       toast.success("Guest added successfully");
       navigate(-1);
     } catch (error) {

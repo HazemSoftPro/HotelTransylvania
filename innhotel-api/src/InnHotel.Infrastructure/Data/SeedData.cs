@@ -82,14 +82,20 @@ public static class SeedData
     context.Branches.AddRange(MainBranch, DowntownBranch);
     await context.SaveChangesAsync();
 
-    context.RoomTypes.AddRange(StandardRoom, Suite);
+    context.RoomTypes.AddRange(StandardRoom, Suite, DeluxeRoom, DeluxeSuite);
     await context.SaveChangesAsync();
 
     var rooms = new List<Room>
         {
+            // Main Branch rooms
             new(MainBranch.Id, StandardRoom.Id, "101", RoomStatus.Available, 1, 99.99m),
             new(MainBranch.Id, StandardRoom.Id, "102", RoomStatus.Available, 1, 89.99m),
-            new(MainBranch.Id, Suite.Id, "201", RoomStatus.Available, 2, 199.99m)
+            new(MainBranch.Id, Suite.Id, "201", RoomStatus.Available, 2, 199.99m),
+            
+            // Downtown Branch rooms
+            new(DowntownBranch.Id, DeluxeRoom.Id, "301", RoomStatus.Available, 1, 149.99m),
+            new(DowntownBranch.Id, DeluxeRoom.Id, "302", RoomStatus.Available, 1, 149.99m),
+            new(DowntownBranch.Id, DeluxeSuite.Id, "401", RoomStatus.Available, 2, 299.99m)
         };
     context.Rooms.AddRange(rooms);
 

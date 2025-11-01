@@ -73,7 +73,7 @@ const RoomDetails = () => {
         roomNumber: data.roomNumber,
         status: data.status,
         floor: data.floor,
-        priceOverride: data.priceOverride
+        manualPrice: data.manualPrice
       });
       setRoom(response);
       toast.success('Room updated successfully');
@@ -141,7 +141,7 @@ const RoomDetails = () => {
         </div>
         <div className="flex items-center gap-2">
           <DollarSign className="h-4 w-4" />
-          <span>${room.basePrice} per night</span>
+          <span>${room.manualPrice} per night</span>
         </div>
       </CardDescription>
     </>
@@ -160,12 +160,12 @@ const RoomDetails = () => {
         <RoomForm
           onSubmit={handleUpdate}
           defaultValues={{
-            room_number: room.roomNumber,
-            room_type_id: room.roomTypeId.toString(),
-            status: room.status.toString(),
+            roomNumber: room.roomNumber,
+            roomTypeId: room.roomTypeId,
+            status: room.status,
             floor: room.floor,
-            branch_id: room.branchId.toString(),
-            price_override: room.priceOverride
+            branchId: room.branchId,
+            manualPrice: room.manualPrice
           }}
           isLoading={isUpdating}
           mode="update"

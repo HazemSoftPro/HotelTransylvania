@@ -14,12 +14,14 @@ const RegisterEmployee = () => {
 
   const handleSubmit = async (data: EmployeeFormData) => {
     try {
-      // Transform form data to match API expectations
+      // Form data already matches API expectations with camelCase
       const employeeData = {
-        firstName: data.first_name,
-        lastName: data.last_name,
-        branchId: data.branch_id,
-        hireDate: data.hire_date,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email || null,
+        phone: data.phone || null,
+        branchId: data.branchId,
+        hireDate: data.hireDate,
         position: data.position,
         userId: null
       };

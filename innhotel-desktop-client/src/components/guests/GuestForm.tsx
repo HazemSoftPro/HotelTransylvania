@@ -28,14 +28,14 @@ interface GuestFormProps {
 }
 
 const ID_PROOF_TYPES = [
-  { value: 0, label: 'Passport' },
-  { value: 1, label: "Driver's License" },
-  { value: 2, label: 'National ID' }
+  { value: 'Passport', label: 'Passport' },
+  { value: 'DriverLicense', label: "Driver's License" },
+  { value: 'NationalId', label: 'National ID' }
 ] as const;
 
 const GENDER_OPTIONS = [
-  { value: 0, label: 'Male' },
-  { value: 1, label: 'Female' }
+  { value: 'Male', label: 'Male' },
+  { value: 'Female', label: 'Female' }
 ] as const;
 
 export const GuestForm = ({
@@ -47,11 +47,11 @@ export const GuestForm = ({
   const form = useForm<GuestFormValues>({
     resolver: zodResolver(guestSchema),
     defaultValues: {
-      first_name: "",
-      last_name: "",
-      gender: 0,
-      id_proof_type: 0,
-      id_proof_number: "",
+      firstName: "",
+      lastName: "",
+      gender: "Male",
+      idProofType: "Passport",
+      idProofNumber: "",
       email: "",
       phone: "",
       address: "",
@@ -61,23 +61,12 @@ export const GuestForm = ({
 
   const handleSubmit = async (data: GuestFormValues) => {
     try {
-      const genderMap = {
-        0: 'Male',
-        1: 'Female'
-      } as const;
-
-      const idProofTypeMap = {
-        0: 'Passport',
-        1: 'DriverLicense',
-        2: 'NationalId'
-      } as const;
-
       const guestData: GuestReq = {
-        firstName: data.first_name,
-        lastName: data.last_name,
-        gender: genderMap[data.gender as 0 | 1],
-        idProofType: idProofTypeMap[data.id_proof_type as 0 | 1 | 2],
-        idProofNumber: data.id_proof_number,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        gender: data.gender,
+        idProofType: data.idProofType,
+        idProofNumber: data.idProofNumber,
         email: data.email || "",
         phone: data.phone || "",
         address: data.address || ""
@@ -100,7 +89,7 @@ export const GuestForm = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}
-            name="first_name"
+            name="firstName"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>First Name <span className="text-destructive">*</span></FormLabel>
@@ -114,7 +103,7 @@ export const GuestForm = ({
 
           <FormField
             control={form.control}
-            name="last_name"
+            name="lastName"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Last Name <span className="text-destructive">*</span></FormLabel>
@@ -134,7 +123,7 @@ export const GuestForm = ({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Gender <span className="text-destructive">*</span></FormLabel>
-                <Select onValueChange={(value) => field.onChange(Number(value))} value={String(field.value)}>
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select gender" />
@@ -142,7 +131,7 @@ export const GuestForm = ({
                   </FormControl>
                   <SelectContent>
                     {GENDER_OPTIONS.map((option) => (
-                      <SelectItem key={option.value} value={String(option.value)}>
+                      <SelectItem key={option.value} value={option.value}>
                         {option.label}
                       </SelectItem>
                     ))}
@@ -155,54 +144,20 @@ export const GuestForm = ({
 
           <FormField
             control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    type="email"
-                    placeholder="Enter email address"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Phone</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter phone number" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="id_proof_type"
+            name="idProofType"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>ID Proof Type <span className="text-destructive">*</span></FormLabel>
-                <Select onValueChange={(value) => field.onChange(Number(value))} value={String(field.value)}>
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select ID proof type" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {ID_PROOF_TYPES.map((type) => (
-                      <SelectItem key={type.value} value={String(type.value)}>
-                        {type.label}
+                    {ID_PROOF_TYPES.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -213,35 +168,61 @@ export const GuestForm = ({
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormField
-            control={form.control}
-            name="id_proof_number"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>ID Proof Number <span className="text-destructive">*</span></FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter ID proof number" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <FormField
+          control={form.control}
+          name="idProofNumber"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>ID Proof Number <span className="text-destructive">*</span></FormLabel>
+              <FormControl>
+                <Input placeholder="Enter ID proof number" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          <FormField
-            control={form.control}
-            name="address"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Address</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter address" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input type="email" placeholder="Enter email address" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="phone"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Phone</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter phone number" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="address"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Address</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter address" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <Button
           type="submit"
@@ -249,12 +230,9 @@ export const GuestForm = ({
           disabled={isLoading}
         >
           {isLoading
-            ? isUpdate
-              ? "Saving Changes..."
-              : "Creating Guest..."
-            : isUpdate
-            ? "Save Changes"
-            : "Create Guest"}
+            ? (isUpdate ? "Updating Guest..." : "Creating Guest...")
+            : (isUpdate ? "Update Guest" : "Create Guest")
+          }
         </Button>
       </form>
     </Form>

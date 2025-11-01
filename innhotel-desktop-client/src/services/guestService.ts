@@ -1,4 +1,4 @@
-import type { Guest, GuestResponse, GuestsResponse, UpdateGuestResponse, GuestCreateData } from '@/types/api/guest';
+import type { GuestResponse, GuestsResponse, UpdateGuestResponse, GuestCreateData, GuestReq } from '@/types/api/guest';
 import type { DeleteResponse } from '@/types/api/global';
 import axiosInstance from '../lib/axios';
 import { isAxiosError } from 'axios';
@@ -64,7 +64,7 @@ export const guestService = {
     }
   },
 
-  update: async (id: number, guest: Guest): Promise<UpdateGuestResponse> => {
+  update: async (id: number, guest: GuestReq): Promise<UpdateGuestResponse> => {
     try {
       logger().info('Updating guest', { id });
       const response = await axiosInstance.put(`/guests/${id}`, guest);

@@ -1,7 +1,8 @@
 import type { Pagination, UpdateResponse } from './global';
 
-export type Gender = 0 | 1; // 0: Male, 1: Female
-export type IdProofType = 0 | 1 | 2; // 0: Passport, 1: DriverLicense, 2: NationalId
+// Gender and IdProofType as strings to match API expectations
+export type Gender = 'Male' | 'Female';
+export type IdProofType = 'Passport' | 'DriverLicense' | 'NationalId';
 
 // Guest interface for creation req and update
 export interface Guest {
@@ -40,11 +41,12 @@ export interface GuestsResponse extends Pagination {
 // res of successful guest update
 export type UpdateGuestResponse = UpdateResponse<GuestResponse>;
 
+// Request interface for creating/updating guests (same as Guest without id)
 export interface GuestReq {
   firstName: string;
   lastName: string;
-  gender: 'Male' | 'Female';
-  idProofType: 'Passport' | 'DriverLicense' | 'NationalId';
+  gender: Gender;
+  idProofType: IdProofType;
   idProofNumber: string;
   email?: string;
   phone?: string;

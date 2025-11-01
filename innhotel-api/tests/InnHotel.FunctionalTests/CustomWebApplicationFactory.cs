@@ -1,4 +1,5 @@
 ﻿using InnHotel.Infrastructure.Data;
+using Microsoft.Extensions.Configuration;
 
 namespace InnHotel.FunctionalTests;
 
@@ -58,28 +59,22 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
   protected override void ConfigureWebHost(IWebHostBuilder builder)
   {
     builder
+        .UseEnvironment("Test")
+        .ConfigureAppConfiguration((context, config) =>
+        {
+          // Override connection string with test database connection
+          var testConnectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgreSQLConnection") 
+                                    ?? "Host=localhost;Port=5432;Database=innhotel_test;Username=postgres;Password=postgres";
+          
+          config.AddInMemoryCollection(new[]
+          {
+            new KeyValuePair<string, string?>("ConnectionStrings:PostgreSQLConnection", testConnectionString)
+          });
+        })
         .ConfigureServices(services =>
         {
           // Configure test dependencies here
-
-          //// Remove the app's ApplicationDbContext registration.
-          //var descriptor = services.SingleOrDefault(
-          //d => d.ServiceType ==
-          //    typeof(DbContextOptions<AppDbContext>));
-
-          //if (descriptor != null)
-          //{
-          //  services.Remove(descriptor);
-          //}
-
-          //// This should be set for each individual test run
-          //string inMemoryCollectionName = Guid.NewGuid().ToString();
-
-          //// Add ApplicationDbContext using an in-memory database for testing.
-          //services.AddDbContext<AppDbContext>(options =>
-          //{
-          //  options.UseInMemoryDatabase(inMemoryCollectionName);
-          //});
+          // Using PostgreSQL for functional tests to match production environment
         });
   }
 }

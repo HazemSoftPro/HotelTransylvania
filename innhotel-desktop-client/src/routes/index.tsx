@@ -25,6 +25,7 @@ import AddService from '@/pages/AddService';
 import ServiceDetails from '@/pages/ServiceDetails';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import AddGuest from '@/pages/AddGuest';
+import Dashboard from '@/pages/Dashboard';
 
 const AppRoutes = () => {
   return (
@@ -49,6 +50,7 @@ const AppRoutes = () => {
           <AppLayout><Outlet /></AppLayout>
         </ProtectedRoute>
       }>
+        <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
         <Route path={ROUTES.ROOMS} element={<Rooms />} />
         <Route path={ROUTES.ADD_ROOM} element={<AddRoom />} />
         <Route path={ROUTES.ROOM_DETAILS} element={<RoomDetails />} />
