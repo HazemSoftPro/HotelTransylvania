@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (accessToken && !realTimeInitialized.current) {
       realTimeInitialized.current = true;
       
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:57679/api';
       
       initializeRealTimeConnection(apiBaseUrl, () => accessToken);
       

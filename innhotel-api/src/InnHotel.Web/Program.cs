@@ -18,21 +18,41 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 var envPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", ".env");
-DotNetEnv.Env.Load(envPath);
+if (File.Exists(envPath))
+{
+    DotNetEnv.Env.Load(envPath);
+}
+else
+{
+    Log.Information("No .env file found at {EnvPath}, using environment variables", envPath);
+}
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog();
 
-// Database connection validation
-var connectionString = builder.Configuration.GetConnectionString("PostgreSQLConnection");
-ValidateDatabaseConnection(connectionString);
+// Database connection validation - Use SQLite for development
+var usePostgreSQL = builder.Environment.IsProduction();
+var connectionString = usePostgreSQL 
+    ? builder.Configuration.GetConnectionString("PostgreSQLConnection")
+    : builder.Configuration.GetConnectionString("SqliteConnection");
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString, npgsql =>
-        npgsql.EnableRetryOnFailure()
-    )
-);
+if (usePostgreSQL)
+{
+    ValidateDatabaseConnection(connectionString);
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseNpgsql(connectionString, npgsql =>
+            npgsql.EnableRetryOnFailure()
+        )
+    );
+}
+else
+{
+    Log.Information("Using SQLite database for development: {ConnectionString}", connectionString);
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlite(connectionString)
+    );
+}
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
@@ -98,8 +118,10 @@ builder.Services.AddSignalR(options =>
 });
 
 // CORS configuration
-var allowedOriginsEnv = DotNetEnv.Env.GetString("ALLOWED_ORIGINS")
-    ?? throw new InvalidOperationException("ALLOWED_ORIGINS environment variable is required");
+var allowedOriginsEnv = DotNetEnv.Env.GetString("ALLOWED_ORIGINS") 
+    ?? Environment.GetEnvironmentVariable("ALLOWED_ORIGINS")
+    ?? builder.Configuration["ALLOWED_ORIGINS"]
+    ?? throw new InvalidOperationException("ALLOWED_ORIGINS environment variable or configuration is required");
 var allowedOrigins = allowedOriginsEnv.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToHashSet();
 
 builder.Services.AddCors(options =>
