@@ -2,7 +2,7 @@ namespace InnHotel.Web.Services;
 
 public class SearchServicesRequest
 {
-    public const string Route = "/api/services/search";
+    public const string Route = "/services/search";
     
     public string? SearchTerm { get; set; }
     public int? BranchId { get; set; }

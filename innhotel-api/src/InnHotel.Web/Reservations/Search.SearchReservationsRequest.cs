@@ -2,7 +2,7 @@ namespace InnHotel.Web.Reservations;
 
 public class SearchReservationsRequest
 {
-    public const string Route = "/api/reservations/search";
+    public const string Route = "/reservations/search";
     
     public string? SearchTerm { get; set; }
     public int? GuestId { get; set; }

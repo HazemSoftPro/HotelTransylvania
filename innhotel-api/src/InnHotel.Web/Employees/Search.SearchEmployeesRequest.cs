@@ -2,7 +2,7 @@ namespace InnHotel.Web.Employees;
 
 public class SearchEmployeesRequest
 {
-    public const string Route = "/api/employees/search";
+    public const string Route = "/employees/search";
     
     public string? SearchTerm { get; set; }
     public int? BranchId { get; set; }
