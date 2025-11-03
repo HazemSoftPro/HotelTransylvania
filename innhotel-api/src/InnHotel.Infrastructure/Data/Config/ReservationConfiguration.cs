@@ -1,4 +1,4 @@
-﻿using InnHotel.Core.ReservationAggregate;
+using InnHotel.Core.ReservationAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -42,15 +42,7 @@ public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
            .IsRequired()
            .HasConversion(
                v => v.ToString(), // Enum -> string for saving
-               v => v switch       // String -> Enum when reading
-               {
-                   "Pending" => ReservationStatus.Pending,
-                   "Confirmed" => ReservationStatus.Confirmed,
-                   "Checked In" => ReservationStatus.CheckedIn,
-                   "Checked Out" => ReservationStatus.CheckedOut,
-                   "Cancelled" => ReservationStatus.Cancelled,
-                   _ => throw new ArgumentOutOfRangeException(nameof(v), v, null)
-               }
+               v => ConvertToReservationStatus(v) // String -> Enum when reading
            )
            .HasMaxLength(20);
 
@@ -64,5 +56,18 @@ public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
            .WithMany()
            .HasForeignKey(x => x.GuestId)
            .OnDelete(DeleteBehavior.Cascade);
+    }
+
+    private static ReservationStatus ConvertToReservationStatus(string value)
+    {
+        return value switch
+        {
+            "Pending" => ReservationStatus.Pending,
+            "Confirmed" => ReservationStatus.Confirmed,
+            "Checked In" => ReservationStatus.CheckedIn,
+            "Checked Out" => ReservationStatus.CheckedOut,
+            "Cancelled" => ReservationStatus.Cancelled,
+            _ => throw new ArgumentOutOfRangeException(nameof(value), value, "Invalid reservation status")
+        };
     }
 }
