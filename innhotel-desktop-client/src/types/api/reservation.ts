@@ -51,7 +51,7 @@ export interface ReservationResponse {
   checkInDate: string;
   checkOutDate: string;
   reservationDate: string;
-  status: 'Pending' | 'Confirmed' | 'CheckedIn' | 'CheckedOut' | 'Cancelled';
+  status: 'Pending' | 'Confirmed' | 'CheckedIn' | 'CheckedOut' | 'Cancelled' | number;
   totalCost: number;
   rooms: ReservationRoomResponse[];
   services: ReservationServiceResponse[];
