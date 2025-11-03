@@ -16,6 +16,7 @@ import {
 import { reservationService } from "@/services/reservationService";
 import { toast } from "sonner";
 import type { ReservationStatus } from "@/types/reservation";
+import { statusToNumber } from "@/utils/reservationStatus";
 
 const Reservations = () => {
   const navigate = useNavigate();
@@ -46,7 +47,10 @@ const Reservations = () => {
       reservation.guestName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       reservation.rooms.some(room => room.roomNumber.includes(searchQuery));
 
-    const matchesStatus = statusFilter === "all" || reservation.status === statusFilter;
+    // Handle both string and numeric status values
+    const matchesStatus = statusFilter === "all" || 
+      reservation.status === statusFilter || 
+      reservation.status === statusToNumber[statusFilter];
 
     return matchesSearch && matchesStatus;
   });

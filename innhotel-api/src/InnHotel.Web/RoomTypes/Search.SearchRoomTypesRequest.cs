@@ -2,7 +2,7 @@ namespace InnHotel.Web.RoomTypes;
 
 public class SearchRoomTypesRequest
 {
-    public const string Route = "/api/roomtypes/search";
+    public const string Route = "/roomtypes/search";
     
     public string? SearchTerm { get; set; }
     public int? BranchId { get; set; }

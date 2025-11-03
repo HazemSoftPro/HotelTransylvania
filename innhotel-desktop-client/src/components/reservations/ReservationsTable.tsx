@@ -11,19 +11,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { getStatusStyle } from "@/utils/reservationStatus";
 
 interface ReservationsTableProps {
   reservations: ReservationResponse[];
   onReservationClick?: (reservation: ReservationResponse) => void;
 }
-
-const statusStyles: Record<string, { color: string; bg: string; label: string }> = {
-  'Pending': { color: 'text-yellow-600', bg: 'border-yellow-600/20', label: 'Pending' },
-  'Confirmed': { color: 'text-blue-600', bg: 'border-blue-600/20', label: 'Confirmed' },
-  'CheckedIn': { color: 'text-green-600', bg: 'border-green-600/20', label: 'Checked In' },
-  'CheckedOut': { color: 'text-gray-600', bg: 'border-gray-600/20', label: 'Checked Out' },
-  'Cancelled': { color: 'text-red-600', bg: 'border-red-600/20', label: 'Cancelled' },
-};
 
 export const ReservationsTable = ({ reservations, onReservationClick }: ReservationsTableProps) => {
   const formatDate = (dateString: string) => {
@@ -87,16 +80,21 @@ export const ReservationsTable = ({ reservations, onReservationClick }: Reservat
                 </div>
               </TableCell>
               <TableCell>
-                <Badge
-                  variant="outline"
-                  className={cn(
-                    "font-medium text-xs tracking-wide",
-                    statusStyles[reservation.status || 'Pending']?.color || 'text-gray-600',
-                    statusStyles[reservation.status || 'Pending']?.bg || 'border-gray-600/20'
-                  )}
-                >
-                  {statusStyles[reservation.status || 'Pending']?.label || reservation.status}
-                </Badge>
+                {(() => {
+                  const style = getStatusStyle(reservation.status);
+                  return (
+                    <Badge
+                      variant="outline"
+                      className={cn(
+                        "font-medium text-xs tracking-wide",
+                        style.color,
+                        style.bg
+                      )}
+                    >
+                      {style.label}
+                    </Badge>
+                  );
+                })()}
               </TableCell>
               <TableCell className="text-right font-medium">
                 ${reservation.totalCost.toFixed(2)}
