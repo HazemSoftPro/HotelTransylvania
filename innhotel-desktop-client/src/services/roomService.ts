@@ -61,16 +61,18 @@ export const roomService = {
 
   update: async (id: number, room: UpdateRoomRequest): Promise<UpdateRoomResponse> => {
     try {
-      logger().info('Updating room', { id });
+      logger().info('Updating room', { id, payload: room });
       const response = await axiosInstance.put(`/rooms/${id}`, room);
-      logger().info('Successfully updated room', { id });
-      return response.data;
+      logger().info('Successfully updated room', { id, response: response.data });
+      // Handle both direct response and wrapped response
+      return response.data.data || response.data;
     } catch (error) {
       if (isAxiosError(error)) {
         logger().error('Failed to update room', {
           id,
           status: error.response?.status,
-          message: error.response?.data?.message
+          message: error.response?.data?.message,
+          errors: error.response?.data?.errors
         });
       }
       throw error;

@@ -67,6 +67,7 @@ export const RoomForm = ({ mode, onSubmit, defaultValues, isLoading }: RoomFormP
   const [roomTypes, setRoomTypes] = useState<RoomType[]>([]);
   const [isLoadingBranches, setIsLoadingBranches] = useState(true);
   const [isLoadingRoomTypes, setIsLoadingRoomTypes] = useState(true);
+  const [selectedBranchId, setSelectedBranchId] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchBranches = async () => {
@@ -94,6 +95,18 @@ export const RoomForm = ({ mode, onSubmit, defaultValues, isLoading }: RoomFormP
     fetchBranches();
     fetchRoomTypes();
   }, []);
+
+  // Set initial selected branch from default values
+  useEffect(() => {
+    if (defaultValues?.branchId) {
+      setSelectedBranchId(defaultValues.branchId);
+    }
+  }, [defaultValues?.branchId]);
+
+  // Filter room types based on selected branch
+  const filteredRoomTypes = selectedBranchId
+    ? roomTypes.filter(rt => rt.branchId === selectedBranchId)
+    : roomTypes;
 
   const form = useForm<RoomFormValues>({
     resolver: zodResolver(roomSchema),
@@ -149,7 +162,13 @@ export const RoomForm = ({ mode, onSubmit, defaultValues, isLoading }: RoomFormP
               <FormItem>
                 <FormLabel>Branch <span className="text-destructive">*</span></FormLabel>
                 <Select
-                  onValueChange={(value) => field.onChange(parseInt(value))}
+                  onValueChange={(value) => {
+                    const branchId = parseInt(value);
+                    field.onChange(branchId);
+                    setSelectedBranchId(branchId);
+                    // Reset room type when branch changes
+                    form.setValue('roomTypeId', 0);
+                  }}
                   value={field.value ? String(field.value) : ''}
                   disabled={isLoadingBranches}
                 >
@@ -181,15 +200,25 @@ export const RoomForm = ({ mode, onSubmit, defaultValues, isLoading }: RoomFormP
               <Select
                 onValueChange={(value) => field.onChange(parseInt(value))}
                 value={field.value ? String(field.value) : ''}
-                disabled={isLoadingRoomTypes}
+                disabled={isLoadingRoomTypes || (mode === 'create' && !selectedBranchId)}
               >
                 <FormControl>
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder={isLoadingRoomTypes ? "Loading room types..." : "Select a room type"} />
+                    <SelectValue 
+                      placeholder={
+                        isLoadingRoomTypes 
+                          ? "Loading room types..." 
+                          : mode === 'create' && !selectedBranchId
+                          ? "Select a branch first"
+                          : filteredRoomTypes.length === 0
+                          ? "No room types available for this branch"
+                          : "Select a room type"
+                      } 
+                    />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {roomTypes.map((roomType) => (
+                  {filteredRoomTypes.map((roomType) => (
                     <SelectItem key={roomType.id} value={String(roomType.id)}>
                       {roomType.name} - Capacity: {roomType.capacity}
                     </SelectItem>

@@ -1,6 +1,7 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ServicesListing } from '@/components/services/ServicesListing';
+import { ServiceFilters, type ServiceFilterValues } from '@/components/services/ServiceFilters';
 import { useServiceStore } from '@/store/services.store';
 import { Button } from '@/components/ui/button';
 import { Plus, Loader2 } from 'lucide-react';
@@ -24,6 +25,12 @@ const Services = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [serviceToDelete, setServiceToDelete] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [filters, setFilters] = useState<ServiceFilterValues>({
+    search: "",
+    branchId: "",
+    minPrice: "",
+    maxPrice: "",
+  });
 
   const loadServices = useCallback(async () => {
     try {
@@ -69,6 +76,45 @@ const Services = () => {
       setIsDeleting(false);
     }
   };
+
+  const handleFilterChange = (newFilters: ServiceFilterValues) => {
+    setFilters(newFilters);
+  };
+
+  const handleResetFilters = () => {
+    setFilters({
+      search: "",
+      branchId: "",
+      minPrice: "",
+      maxPrice: "",
+    });
+  };
+
+  // Apply client-side filtering
+  const filteredServices = useMemo(() => {
+    return services.filter((service) => {
+      // Search filter
+      if (filters.search && !service.name.toLowerCase().includes(filters.search.toLowerCase())) {
+        return false;
+      }
+
+      // Branch filter
+      if (filters.branchId && service.branchId.toString() !== filters.branchId) {
+        return false;
+      }
+
+      // Price range filter
+      if (filters.minPrice && service.price < parseFloat(filters.minPrice)) {
+        return false;
+      }
+
+      if (filters.maxPrice && service.price > parseFloat(filters.maxPrice)) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [services, filters]);
 
   if (isLoading) {
     return (
@@ -119,12 +165,23 @@ const Services = () => {
         </Button>
       </div>
 
-      <ServicesListing
-        services={services}
-        onEdit={handleEdit}
-        onDelete={handleDeleteClick}
-        onView={handleServiceClick}
-      />
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="lg:col-span-1">
+          <ServiceFilters 
+            onFilterChange={handleFilterChange}
+            onReset={handleResetFilters}
+          />
+        </div>
+        
+        <div className="lg:col-span-3">
+          <ServicesListing
+            services={filteredServices}
+            onEdit={handleEdit}
+            onDelete={handleDeleteClick}
+            onView={handleServiceClick}
+          />
+        </div>
+      </div>
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>

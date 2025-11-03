@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import type { RoomResponse } from "@/types/api/room";
 import { RoomsListing } from "@/components/rooms/RoomsListing";
+import { RoomFilters, type RoomFilterValues } from "@/components/rooms/RoomFilters";
 import { roomService } from "@/services/roomService";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -22,6 +23,13 @@ const Rooms = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [hasPreviousPage, setHasPreviousPage] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(false);
+  const [filters, setFilters] = useState<RoomFilterValues>({
+    search: "",
+    status: "",
+    floor: "",
+    branchId: "",
+    roomTypeId: "",
+  });
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -60,6 +68,54 @@ const Rooms = () => {
     setCurrentPage(1);
   };
 
+  const handleFilterChange = (newFilters: RoomFilterValues) => {
+    setFilters(newFilters);
+    setCurrentPage(1);
+  };
+
+  const handleResetFilters = () => {
+    setFilters({
+      search: "",
+      status: "",
+      floor: "",
+      branchId: "",
+      roomTypeId: "",
+    });
+    setCurrentPage(1);
+  };
+
+  // Apply client-side filtering
+  const filteredRooms = useMemo(() => {
+    return rooms.filter((room) => {
+      // Search filter
+      if (filters.search && !room.roomNumber.toLowerCase().includes(filters.search.toLowerCase())) {
+        return false;
+      }
+
+      // Status filter
+      if (filters.status && room.status.toString() !== filters.status) {
+        return false;
+      }
+
+      // Floor filter
+      if (filters.floor && room.floor.toString() !== filters.floor) {
+        return false;
+      }
+
+      // Branch filter
+      if (filters.branchId && room.branchId.toString() !== filters.branchId) {
+        return false;
+      }
+
+      // Room Type filter
+      if (filters.roomTypeId && room.roomTypeId.toString() !== filters.roomTypeId) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [rooms, filters]);
+
   return (
     <div className="container mx-auto py-6 space-y-6">
       <div className="flex items-center justify-between">
@@ -79,26 +135,37 @@ const Rooms = () => {
         </div>
       </div>
 
-      <RoomsListing 
-        rooms={rooms} 
-        onRoomClick={handleRoomClick}
-        isLoading={isLoading}
-      />
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="lg:col-span-1">
+          <RoomFilters 
+            onFilterChange={handleFilterChange}
+            onReset={handleResetFilters}
+          />
+        </div>
+        
+        <div className="lg:col-span-3 space-y-6">
+          <RoomsListing 
+            rooms={filteredRooms} 
+            onRoomClick={handleRoomClick}
+            isLoading={isLoading}
+          />
 
-      {!isLoading && (
-        <Pagination
-          currentPage={currentPage}
-          pageSize={pageSize}
-          totalPages={totalPages}
-          totalCount={totalCount}
-          hasPreviousPage={hasPreviousPage}
-          hasNextPage={hasNextPage}
-          pageSizeOptions={PAGE_SIZE_OPTIONS}
-          onPageChange={handlePageChange}
-          onPageSizeChange={handlePageSizeChange}
-          itemName="rooms"
-        />
-      )}
+          {!isLoading && (
+            <Pagination
+              currentPage={currentPage}
+              pageSize={pageSize}
+              totalPages={totalPages}
+              totalCount={filteredRooms.length}
+              hasPreviousPage={hasPreviousPage}
+              hasNextPage={hasNextPage}
+              pageSizeOptions={PAGE_SIZE_OPTIONS}
+              onPageChange={handlePageChange}
+              onPageSizeChange={handlePageSizeChange}
+              itemName="rooms"
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 };

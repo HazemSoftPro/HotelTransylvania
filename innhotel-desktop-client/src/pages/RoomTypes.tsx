@@ -1,6 +1,7 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RoomTypesListing } from '@/components/roomTypes/RoomTypesListing';
+import { RoomTypeFilters, type RoomTypeFilterValues } from '@/components/roomTypes/RoomTypeFilters';
 import { useRoomTypeStore } from '@/store/roomTypes.store';
 import { Button } from '@/components/ui/button';
 import { Plus, Loader2 } from 'lucide-react';
@@ -24,6 +25,11 @@ const RoomTypes = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [roomTypeToDelete, setRoomTypeToDelete] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [filters, setFilters] = useState<RoomTypeFilterValues>({
+    search: "",
+    branchId: "",
+    capacity: "",
+  });
 
   const loadRoomTypes = useCallback(async () => {
     try {
@@ -69,6 +75,40 @@ const RoomTypes = () => {
       setIsDeleting(false);
     }
   };
+
+  const handleFilterChange = (newFilters: RoomTypeFilterValues) => {
+    setFilters(newFilters);
+  };
+
+  const handleResetFilters = () => {
+    setFilters({
+      search: "",
+      branchId: "",
+      capacity: "",
+    });
+  };
+
+  // Apply client-side filtering
+  const filteredRoomTypes = useMemo(() => {
+    return roomTypes.filter((roomType) => {
+      // Search filter
+      if (filters.search && !roomType.name.toLowerCase().includes(filters.search.toLowerCase())) {
+        return false;
+      }
+
+      // Branch filter
+      if (filters.branchId && roomType.branchId.toString() !== filters.branchId) {
+        return false;
+      }
+
+      // Capacity filter
+      if (filters.capacity && roomType.capacity.toString() !== filters.capacity) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [roomTypes, filters]);
 
   if (isLoading) {
     return (
@@ -119,12 +159,23 @@ const RoomTypes = () => {
         </Button>
       </div>
 
-      <RoomTypesListing
-        roomTypes={roomTypes}
-        onEdit={handleEdit}
-        onDelete={handleDeleteClick}
-        onView={handleRoomTypeClick}
-      />
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="lg:col-span-1">
+          <RoomTypeFilters 
+            onFilterChange={handleFilterChange}
+            onReset={handleResetFilters}
+          />
+        </div>
+        
+        <div className="lg:col-span-3">
+          <RoomTypesListing
+            roomTypes={filteredRoomTypes}
+            onEdit={handleEdit}
+            onDelete={handleDeleteClick}
+            onView={handleRoomTypeClick}
+          />
+        </div>
+      </div>
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>

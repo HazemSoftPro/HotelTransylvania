@@ -188,7 +188,7 @@ export const ReservationForm = ({ onSubmit, isLoading }: ReservationFormProps) =
                       )}
                     >
                       {field.value ? (
-                        format(new Date(field.value), "PPP")
+                        format(new Date(field.value + 'T00:00:00'), "PPP")
                       ) : (
                         <span>Pick a date</span>
                       )}
@@ -199,10 +199,17 @@ export const ReservationForm = ({ onSubmit, isLoading }: ReservationFormProps) =
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="single"
-                    selected={field.value ? new Date(field.value) : undefined}
-                    onSelect={(date) => field.onChange(date?.toISOString().split('T')[0])}
+                    selected={field.value ? new Date(field.value + 'T00:00:00') : undefined}
+                    onSelect={(date) => {
+                      if (date) {
+                        const year = date.getFullYear();
+                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                        const day = String(date.getDate()).padStart(2, '0');
+                        field.onChange(`${year}-${month}-${day}`);
+                      }
+                    }}
                     disabled={(date) =>
-                      date < new Date() || date > new Date(2025, 12, 31)
+                      date < new Date(new Date().setHours(0, 0, 0, 0)) || date > new Date(2025, 12, 31)
                     }
                     initialFocus
                   />
@@ -231,7 +238,7 @@ export const ReservationForm = ({ onSubmit, isLoading }: ReservationFormProps) =
                       )}
                     >
                       {field.value ? (
-                        format(new Date(field.value), "PPP")
+                        format(new Date(field.value + 'T00:00:00'), "PPP")
                       ) : (
                         <span>Pick a date</span>
                       )}
@@ -242,12 +249,20 @@ export const ReservationForm = ({ onSubmit, isLoading }: ReservationFormProps) =
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="single"
-                    selected={field.value ? new Date(field.value) : undefined}
-                    onSelect={(date) => field.onChange(date?.toISOString().split('T')[0])}
-                    disabled={(date) =>
-                      date < (form.getValues("checkInDate") ? new Date(form.getValues("checkInDate")) : new Date()) ||
-                      date > new Date(2025, 12, 31)
-                    }
+                    selected={field.value ? new Date(field.value + 'T00:00:00') : undefined}
+                    onSelect={(date) => {
+                      if (date) {
+                        const year = date.getFullYear();
+                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                        const day = String(date.getDate()).padStart(2, '0');
+                        field.onChange(`${year}-${month}-${day}`);
+                      }
+                    }}
+                    disabled={(date) => {
+                      const checkInDate = form.getValues("checkInDate");
+                      const minDate = checkInDate ? new Date(checkInDate + 'T00:00:00') : new Date(new Date().setHours(0, 0, 0, 0));
+                      return date < minDate || date > new Date(2025, 12, 31);
+                    }}
                     initialFocus
                   />
                 </PopoverContent>
