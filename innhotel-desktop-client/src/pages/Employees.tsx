@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
 import { EmployeesTable } from "@/components/employees/EmployeesTable";
+import { EmployeeFilters, type EmployeeFilterValues } from "@/components/employees/EmployeeFilters";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { UserPlus, Search } from "lucide-react";
+import { UserPlus } from "lucide-react";
 import type { EmployeeResponse } from "@/types/api/employee";
 import { employeeService } from "@/services/employeeService";
 import { RoleGuard } from "@/hooks/RoleGuard";
@@ -17,13 +17,19 @@ const Employees = () => {
   const navigate = useNavigate();
   const [employees, setEmployees] = useState<EmployeeResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [hasPreviousPage, setHasPreviousPage] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(false);
+  const [filters, setFilters] = useState<EmployeeFilterValues>({
+    name: "",
+    position: "",
+    branchId: "",
+    hireDateFrom: "",
+    hireDateTo: "",
+  });
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -45,16 +51,6 @@ const Employees = () => {
     fetchEmployees();
   }, [currentPage, pageSize]);
 
-  const filteredEmployees = employees.filter((employee) => {
-    const searchTerm = searchQuery.toLowerCase();
-    return (
-      employee.firstName.toLowerCase().includes(searchTerm) ||
-      employee.lastName.toLowerCase().includes(searchTerm) ||
-      employee.position.toLowerCase().includes(searchTerm) ||
-      String(employee.branchId).includes(searchTerm)
-    );
-  });
-
   const handleEmployeeClick = (employee: EmployeeResponse) => {
     navigate(`/employees/${employee.id}`);
   };
@@ -67,6 +63,56 @@ const Employees = () => {
     setPageSize(size);
     setCurrentPage(1);
   };
+
+  const handleFilterChange = (newFilters: EmployeeFilterValues) => {
+    setFilters(newFilters);
+    setCurrentPage(1);
+  };
+
+  const handleResetFilters = () => {
+    setFilters({
+      name: "",
+      position: "",
+      branchId: "",
+      hireDateFrom: "",
+      hireDateTo: "",
+    });
+    setCurrentPage(1);
+  };
+
+  // Apply client-side filtering
+  const filteredEmployees = useMemo(() => {
+    return employees.filter((employee) => {
+      // Name filter
+      if (filters.name) {
+        const fullName = `${employee.firstName} ${employee.lastName}`.toLowerCase();
+        if (!fullName.includes(filters.name.toLowerCase())) {
+          return false;
+        }
+      }
+
+      // Position filter
+      if (filters.position && employee.position !== filters.position) {
+        return false;
+      }
+
+      // Branch filter
+      if (filters.branchId && employee.branchId.toString() !== filters.branchId) {
+        return false;
+      }
+
+      // Hire date range filter
+      if (filters.hireDateFrom && employee.hireDate < filters.hireDateFrom) {
+        return false;
+      }
+
+      if (filters.hireDateTo && employee.hireDate > filters.hireDateTo) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [employees, filters]);
 
   return (
     <div className="space-y-6">
@@ -83,43 +129,37 @@ const Employees = () => {
         </Button>
       </div>
 
-      <div className="flex items-center gap-2">
-        <div className="relative flex-1">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search employees..."
-            className="pl-8"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-        <Button variant="outline">
-          Filters
-        </Button>
-      </div>
-
       {isLoading ? (
         <div className="text-center text-muted-foreground">Loading employees...</div>
       ) : (
-        <>
-          <EmployeesTable 
-            employees={filteredEmployees}
-            onEmployeeClick={handleEmployeeClick}
-          />
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="lg:col-span-1">
+            <EmployeeFilters 
+              onFilterChange={handleFilterChange}
+              onReset={handleResetFilters}
+            />
+          </div>
           
-          <Pagination
-            currentPage={currentPage}
-            pageSize={pageSize}
-            totalPages={totalPages}
-            totalCount={totalCount}
-            hasPreviousPage={hasPreviousPage}
-            hasNextPage={hasNextPage}
-            pageSizeOptions={PAGE_SIZE_OPTIONS}
-            onPageChange={handlePageChange}
-            onPageSizeChange={handlePageSizeChange}
-            itemName="employees"
-          />
-        </>
+          <div className="lg:col-span-3 space-y-6">
+            <EmployeesTable 
+              employees={filteredEmployees}
+              onEmployeeClick={handleEmployeeClick}
+            />
+            
+            <Pagination
+              currentPage={currentPage}
+              pageSize={pageSize}
+              totalPages={totalPages}
+              totalCount={filteredEmployees.length}
+              hasPreviousPage={hasPreviousPage}
+              hasNextPage={hasNextPage}
+              pageSizeOptions={PAGE_SIZE_OPTIONS}
+              onPageChange={handlePageChange}
+              onPageSizeChange={handlePageSizeChange}
+              itemName="employees"
+            />
+          </div>
+        </div>
       )}
     </div>
   );

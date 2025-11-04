@@ -1,13 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import { Plus, Search } from "lucide-react";
-import { useState, useEffect } from "react";
+import { Plus } from "lucide-react";
+import { useState, useEffect, useMemo } from "react";
 
 import { GuestsTable } from "@/components/guests/GuestsTable";
+import { GuestFilters, type GuestFilterValues } from "@/components/guests/GuestFilters";
 import type { GuestResponse } from "@/types/api/guest";
 import { guestService } from "@/services/guestService";
 import { ROUTES } from "@/constants/routes";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Pagination } from "@/components/pagination/Pagination";
 import { PAGE_SIZE_OPTIONS } from "@/constants/pagination";
 
@@ -15,13 +15,19 @@ const Guests = () => {
   const navigate = useNavigate();
   const [guests, setGuests] = useState<GuestResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [hasPreviousPage, setHasPreviousPage] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(false);
+  const [filters, setFilters] = useState<GuestFilterValues>({
+    name: "",
+    phone: "",
+    email: "",
+    gender: "",
+    idProofType: "",
+  });
 
   useEffect(() => {
     const fetchGuests = async () => {
@@ -42,10 +48,6 @@ const Guests = () => {
     fetchGuests();
   }, [currentPage, pageSize]);
 
-  const filtered = guests.filter(g =>
-    `${g.firstName} ${g.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   const handleGuestClick = (guest: GuestResponse) => {
     navigate(`${ROUTES.GUESTS}/${guest.id}`);
   };
@@ -58,6 +60,57 @@ const Guests = () => {
     setPageSize(size);
     setCurrentPage(1);
   };
+
+  const handleFilterChange = (newFilters: GuestFilterValues) => {
+    setFilters(newFilters);
+    setCurrentPage(1);
+  };
+
+  const handleResetFilters = () => {
+    setFilters({
+      name: "",
+      phone: "",
+      email: "",
+      gender: "",
+      idProofType: "",
+    });
+    setCurrentPage(1);
+  };
+
+  // Apply client-side filtering
+  const filteredGuests = useMemo(() => {
+    return guests.filter((guest) => {
+      // Name filter
+      if (filters.name) {
+        const fullName = `${guest.firstName} ${guest.lastName}`.toLowerCase();
+        if (!fullName.includes(filters.name.toLowerCase())) {
+          return false;
+        }
+      }
+
+      // Phone filter
+      if (filters.phone && !guest.phone.includes(filters.phone)) {
+        return false;
+      }
+
+      // Email filter
+      if (filters.email && guest.email && !guest.email.toLowerCase().includes(filters.email.toLowerCase())) {
+        return false;
+      }
+
+      // Gender filter
+      if (filters.gender && guest.gender !== filters.gender) {
+        return false;
+      }
+
+      // ID Proof Type filter
+      if (filters.idProofType && guest.idProofType !== filters.idProofType) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [guests, filters]);
 
   return (
     <div className="space-y-6">
@@ -74,43 +127,39 @@ const Guests = () => {
         </Button>
       </div>
 
-      <div className="flex items-center gap-2">
-        <div className="relative flex-1">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search guests..."
-            className="pl-8"
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-          />
-        </div>
-        <Button variant="outline">Filters</Button>
-      </div>
-
       {isLoading ? (
         <div className="text-center text-muted-foreground">
           Loading guests...
         </div>
       ) : (
-        <>
-          <GuestsTable
-            guests={filtered}
-            onGuestClick={handleGuestClick}
-          />
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="lg:col-span-1">
+            <GuestFilters 
+              onFilterChange={handleFilterChange}
+              onReset={handleResetFilters}
+            />
+          </div>
           
-          <Pagination
-            currentPage={currentPage}
-            pageSize={pageSize}
-            totalPages={totalPages}
-            totalCount={totalCount}
-            hasPreviousPage={hasPreviousPage}
-            hasNextPage={hasNextPage}
-            pageSizeOptions={PAGE_SIZE_OPTIONS}
-            onPageChange={handlePageChange}
-            onPageSizeChange={handlePageSizeChange}
-            itemName="guests"
-          />
-        </>
+          <div className="lg:col-span-3 space-y-6">
+            <GuestsTable
+              guests={filteredGuests}
+              onGuestClick={handleGuestClick}
+            />
+            
+            <Pagination
+              currentPage={currentPage}
+              pageSize={pageSize}
+              totalPages={totalPages}
+              totalCount={filteredGuests.length}
+              hasPreviousPage={hasPreviousPage}
+              hasNextPage={hasNextPage}
+              pageSizeOptions={PAGE_SIZE_OPTIONS}
+              onPageChange={handlePageChange}
+              onPageSizeChange={handlePageSizeChange}
+              itemName="guests"
+            />
+          </div>
+        </div>
       )}
     </div>
   );
