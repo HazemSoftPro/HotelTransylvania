@@ -19,7 +19,6 @@ const Branches = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
-  const [totalCount, setTotalCount] = useState(0);
   const [hasPreviousPage, setHasPreviousPage] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [filters, setFilters] = useState<BranchFilterValues>({
@@ -36,7 +35,6 @@ const Branches = () => {
         const response = await branchService.getAll(currentPage, pageSize);
         setBranches(response.items);
         setTotalPages(response.totalPages);
-        setTotalCount(response.totalCount);
         setHasPreviousPage(response.hasPreviousPage);
         setHasNextPage(response.hasNextPage);
       } catch (error) {

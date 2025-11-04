@@ -18,7 +18,6 @@ const Guests = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
-  const [totalCount, setTotalCount] = useState(0);
   const [hasPreviousPage, setHasPreviousPage] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [filters, setFilters] = useState<GuestFilterValues>({
@@ -36,7 +35,6 @@ const Guests = () => {
         const response = await guestService.getAll(currentPage, pageSize);
         setGuests(response.items);
         setTotalPages(response.totalPages);
-        setTotalCount(response.totalCount);
         setHasPreviousPage(response.hasPreviousPage);
         setHasNextPage(response.hasNextPage);
       } catch (error) {
@@ -89,7 +87,7 @@ const Guests = () => {
       }
 
       // Phone filter
-      if (filters.phone && !guest.phone.includes(filters.phone)) {
+      if (filters.phone && guest.phone && !guest.phone.includes(filters.phone)) {
         return false;
       }
 

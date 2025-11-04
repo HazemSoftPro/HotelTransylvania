@@ -20,7 +20,6 @@ const Rooms = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(8);
   const [totalPages, setTotalPages] = useState(0);
-  const [totalCount, setTotalCount] = useState(0);
   const [hasPreviousPage, setHasPreviousPage] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [filters, setFilters] = useState<RoomFilterValues>({
@@ -38,7 +37,6 @@ const Rooms = () => {
         const response = await roomService.getAll(currentPage, pageSize);
         setRooms(response.items);
         setTotalPages(response.totalPages);
-        setTotalCount(response.totalCount);
         setHasPreviousPage(response.hasPreviousPage);
         setHasNextPage(response.hasNextPage);
 
