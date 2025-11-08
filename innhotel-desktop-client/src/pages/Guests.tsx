@@ -97,12 +97,12 @@ const Guests = () => {
       }
 
       // Gender filter
-      if (filters.gender && guest.gender !== filters.gender) {
+      if (filters.gender && filters.gender !== "all" && guest.gender !== filters.gender) {
         return false;
       }
 
       // ID Proof Type filter
-      if (filters.idProofType && guest.idProofType !== filters.idProofType) {
+      if (filters.idProofType && filters.idProofType !== "all" && guest.idProofType !== filters.idProofType) {
         return false;
       }
 

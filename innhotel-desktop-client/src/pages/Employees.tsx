@@ -90,12 +90,12 @@ const Employees = () => {
       }
 
       // Position filter
-      if (filters.position && employee.position !== filters.position) {
+      if (filters.position && filters.position !== "all" && employee.position !== filters.position) {
         return false;
       }
 
       // Branch filter
-      if (filters.branchId && employee.branchId.toString() !== filters.branchId) {
+      if (filters.branchId && filters.branchId !== "all" && employee.branchId.toString() !== filters.branchId) {
         return false;
       }
 

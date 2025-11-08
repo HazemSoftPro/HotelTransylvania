@@ -121,7 +121,7 @@ export const GuestFilters = ({ onFilterChange, onReset }: GuestFiltersProps) => 
               <SelectValue placeholder="All genders" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All genders</SelectItem>
+              <SelectItem value="all">All genders</SelectItem>
               <SelectItem value="Male">Male</SelectItem>
               <SelectItem value="Female">Female</SelectItem>
             </SelectContent>
@@ -139,7 +139,7 @@ export const GuestFilters = ({ onFilterChange, onReset }: GuestFiltersProps) => 
               <SelectValue placeholder="All ID types" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All ID types</SelectItem>
+              <SelectItem value="all">All ID types</SelectItem>
               <SelectItem value="Passport">Passport</SelectItem>
               <SelectItem value="DriverLicense">Driver's License</SelectItem>
               <SelectItem value="NationalId">National ID</SelectItem>

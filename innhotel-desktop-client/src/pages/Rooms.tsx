@@ -91,7 +91,7 @@ const Rooms = () => {
       }
 
       // Status filter
-      if (filters.status && room.status.toString() !== filters.status) {
+      if (filters.status && filters.status !== "all" && room.status.toString() !== filters.status) {
         return false;
       }
 
@@ -101,12 +101,12 @@ const Rooms = () => {
       }
 
       // Branch filter
-      if (filters.branchId && room.branchId.toString() !== filters.branchId) {
+      if (filters.branchId && filters.branchId !== "all-branches" && room.branchId.toString() !== filters.branchId) {
         return false;
       }
 
       // Room Type filter
-      if (filters.roomTypeId && room.roomTypeId.toString() !== filters.roomTypeId) {
+      if (filters.roomTypeId && filters.roomTypeId !== "all-types" && room.roomTypeId.toString() !== filters.roomTypeId) {
         return false;
       }
 

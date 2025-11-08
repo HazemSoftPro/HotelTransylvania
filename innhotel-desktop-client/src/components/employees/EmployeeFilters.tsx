@@ -122,7 +122,7 @@ export const EmployeeFilters = ({ onFilterChange, onReset }: EmployeeFiltersProp
               <SelectValue placeholder="All positions" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All positions</SelectItem>
+              <SelectItem value="all">All positions</SelectItem>
               {positions.map((position) => (
                 <SelectItem key={position} value={position}>
                   {position}
@@ -148,7 +148,7 @@ export const EmployeeFilters = ({ onFilterChange, onReset }: EmployeeFiltersProp
               />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All branches</SelectItem>
+              <SelectItem value="all">All branches</SelectItem>
               {branches.map((branch) => (
                 <SelectItem key={branch.id} value={branch.id.toString()}>
                   {branch.name}

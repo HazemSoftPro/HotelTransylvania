@@ -128,7 +128,7 @@ export const RoomFilters = ({ onFilterChange, onReset }: RoomFiltersProps) => {
               <SelectValue placeholder="All statuses" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All statuses</SelectItem>
+              <SelectItem value="all">All statuses</SelectItem>
               <SelectItem value="0">Available</SelectItem>
               <SelectItem value="1">Occupied</SelectItem>
               <SelectItem value="2">Under Maintenance</SelectItem>
@@ -164,7 +164,7 @@ export const RoomFilters = ({ onFilterChange, onReset }: RoomFiltersProps) => {
               />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All branches</SelectItem>
+              <SelectItem value="all-branches">All branches</SelectItem>
               {branches.map((branch) => (
                 <SelectItem key={branch.id} value={branch.id.toString()}>
                   {branch.name}
@@ -190,7 +190,7 @@ export const RoomFilters = ({ onFilterChange, onReset }: RoomFiltersProps) => {
               />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All room types</SelectItem>
+              <SelectItem value="all-types">All room types</SelectItem>
               {roomTypes.map((roomType) => (
                 <SelectItem key={roomType.id} value={roomType.id.toString()}>
                   {roomType.name}

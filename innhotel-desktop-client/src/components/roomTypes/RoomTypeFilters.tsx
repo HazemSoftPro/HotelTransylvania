@@ -118,7 +118,7 @@ export const RoomTypeFilters = ({ onFilterChange, onReset }: RoomTypeFiltersProp
               />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All branches</SelectItem>
+              <SelectItem value="all">All branches</SelectItem>
               {branches.map((branch) => (
                 <SelectItem key={branch.id} value={branch.id.toString()}>
                   {branch.name}
