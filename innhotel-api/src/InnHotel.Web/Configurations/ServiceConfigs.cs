@@ -1,7 +1,8 @@
-﻿using InnHotel.Core.Interfaces;
+using InnHotel.Core.Interfaces;
 using InnHotel.Infrastructure;
 using InnHotel.Infrastructure.Email;
 using InnHotel.Web.Services;
+using System.Text.Json.Serialization;
 
 namespace InnHotel.Web.Configurations;
 

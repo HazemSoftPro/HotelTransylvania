@@ -1,11 +1,11 @@
 import * as signalR from '@microsoft/signalr';
 import { logger } from '@/utils/logger';
-import type { RoomResponse } from '@/types/api/room';
+import type { RoomResponse, RoomStatus } from '@/types/api/room';
 
 export interface RoomStatusUpdate {
   roomId: number;
   branchId: number;
-  newStatus: number;
+  newStatus: RoomStatus;
   timestamp: string;
   data: Record<string, unknown>;
 }

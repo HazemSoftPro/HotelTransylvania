@@ -149,7 +149,7 @@ export const useRoomsStore = create<RoomsStore>()(
             const { updateRoom } = get();
             const room = get().rooms.find(r => r.id === update.roomId);
             if (room) {
-              updateRoom({ ...room, status: update.newStatus as RoomStatus });
+              updateRoom({ ...room, status: update.newStatus });
               toast.success(`Room ${room.roomNumber} status updated to ${update.newStatus}`);
             }
           });

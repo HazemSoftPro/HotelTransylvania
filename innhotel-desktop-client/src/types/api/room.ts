@@ -1,10 +1,5 @@
-export const RoomStatus = {
-  Available: 0,
-  Occupied: 1,
-  UnderMaintenance: 2
-} as const;
-
-export type RoomStatus = typeof RoomStatus[keyof typeof RoomStatus];
+// RoomStatus as string enum to match API
+export type RoomStatus = 'Available' | 'Occupied' | 'UnderMaintenance';
 
 // Request type for creating a new room
 export interface CreateRoomRequest {

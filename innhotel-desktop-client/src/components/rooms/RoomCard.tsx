@@ -10,18 +10,18 @@ interface RoomCardProps {
 }
 
 const statusStyles: Record<RoomStatus, { color: string; bg: string; lightBg: string; dot: string }> = {
-  0: { color: 'text-green-700', bg: 'bg-green-500', lightBg: 'bg-green-100', dot: 'bg-green-700' }, // Available
-  1: { color: 'text-red-700', bg: 'bg-red-500', lightBg: 'bg-red-100', dot: 'bg-red-700' }, // Occupied
-  2: { color: 'text-yellow-700', bg: 'bg-yellow-500', lightBg: 'bg-yellow-100', dot: 'bg-yellow-700' }, // UnderMaintenance
+  Available: { color: 'text-green-700', bg: 'bg-green-500', lightBg: 'bg-green-100', dot: 'bg-green-700' },
+  Occupied: { color: 'text-red-700', bg: 'bg-red-500', lightBg: 'bg-red-100', dot: 'bg-red-700' },
+  UnderMaintenance: { color: 'text-yellow-700', bg: 'bg-yellow-500', lightBg: 'bg-yellow-100', dot: 'bg-yellow-700' },
 };
 
 const getStatusText = (status: RoomStatus): string => {
   switch (status) {
-    case 0:
+    case 'Available':
       return 'Available';
-    case 1:
+    case 'Occupied':
       return 'Occupied';
-    case 2:
+    case 'UnderMaintenance':
       return 'Under Maintenance';
     default:
       return 'Unknown';
@@ -30,7 +30,7 @@ const getStatusText = (status: RoomStatus): string => {
 
 export const RoomCard = ({ room, onClick }: RoomCardProps) => {
   const { roomNumber, status, roomTypeName, floor, branchName, manualPrice } = room;
-  const statusStyle = statusStyles[status];
+  const statusStyle = statusStyles[status] || statusStyles.Available; // Fallback to Available if status is undefined
 
   return (
     <Card
@@ -82,11 +82,12 @@ export const RoomCard = ({ room, onClick }: RoomCardProps) => {
               className={cn(
                 "font-medium text-xs tracking-wide flex items-center gap-1.5",
                 "bg-background hover:bg-background",
-                "border text-blue-600 border-current/20"
+                "border text-blue-600 border-current/20",
+                "max-w-full"
               )}
             >
-              <BedDouble className="h-3 w-3" />
-              {roomTypeName}
+              <BedDouble className="h-3 w-3 flex-shrink-0" />
+              <span className="truncate">{roomTypeName}</span>
             </Badge>
           </div>
         </div>

@@ -91,7 +91,7 @@ const Rooms = () => {
       }
 
       // Status filter
-      if (filters.status && filters.status !== "all" && room.status.toString() !== filters.status) {
+      if (filters.status && filters.status !== "all" && room.status !== filters.status) {
         return false;
       }
 

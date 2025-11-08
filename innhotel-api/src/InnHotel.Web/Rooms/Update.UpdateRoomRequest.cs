@@ -17,7 +17,7 @@ public class UpdateRoomRequest
     public string RoomNumber { get; set; } = string.Empty;
     
     [Required]
-    public int Status { get; set; }
+    public RoomStatus Status { get; set; }
     
     [Required]
     [Range(0, 100)]

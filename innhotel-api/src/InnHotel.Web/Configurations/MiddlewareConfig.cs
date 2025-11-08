@@ -1,4 +1,4 @@
-﻿using Ardalis.ListStartupServices;
+using Ardalis.ListStartupServices;
 using InnHotel.Infrastructure.Data;
 using InnHotel.Web.Hubs;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +21,11 @@ public static class MiddlewareConfig
     }
 
     // wire up FastEndpoints + Swagger/static files
-    app.UseFastEndpoints(c =>   c.Endpoints.RoutePrefix = "api") // set a global prefix for all endpoints
+    app.UseFastEndpoints(c =>
+    {
+      c.Endpoints.RoutePrefix = "api"; // set a global prefix for all endpoints
+      c.Serializer.Options.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter()); // serialize enums as strings
+    })
        .UseSwaggerGen();
 
     app.UseHttpsRedirection();

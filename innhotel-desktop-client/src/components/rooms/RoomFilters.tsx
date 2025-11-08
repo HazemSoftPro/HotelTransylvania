@@ -129,9 +129,9 @@ export const RoomFilters = ({ onFilterChange, onReset }: RoomFiltersProps) => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All statuses</SelectItem>
-              <SelectItem value="0">Available</SelectItem>
-              <SelectItem value="1">Occupied</SelectItem>
-              <SelectItem value="2">Under Maintenance</SelectItem>
+              <SelectItem value="Available">Available</SelectItem>
+              <SelectItem value="Occupied">Occupied</SelectItem>
+              <SelectItem value="UnderMaintenance">Under Maintenance</SelectItem>
             </SelectContent>
           </Select>
         </div>

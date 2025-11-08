@@ -13,20 +13,21 @@ import { CardTitle, CardDescription } from "@/components/ui/card";
 import { BedDouble, Building2, DollarSign } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import type { RoomStatus } from "@/types/api/room";
 
-const statusStyles = {
-  0: { color: 'text-green-700' }, // Available
-  1: { color: 'text-red-700' }, // Occupied
-  2: { color: 'text-yellow-700' }, // UnderMaintenance
+const statusStyles: Record<RoomStatus, { color: string }> = {
+  Available: { color: 'text-green-700' },
+  Occupied: { color: 'text-red-700' },
+  UnderMaintenance: { color: 'text-yellow-700' },
 };
 
-const getStatusText = (status: number): string => {
+const getStatusText = (status: RoomStatus): string => {
   switch (status) {
-    case 0:
+    case 'Available':
       return 'Available';
-    case 1:
+    case 'Occupied':
       return 'Occupied';
-    case 2:
+    case 'UnderMaintenance':
       return 'Under Maintenance';
     default:
       return 'Unknown';

@@ -21,10 +21,10 @@ const roomSchema = z.object({
       message: "Room number must be a positive number greater than zero"
     }),
   
-  status: z.number({
+  status: z.enum(['Available', 'Occupied', 'UnderMaintenance'], {
     required_error: "Please select a room status",
-    invalid_type_error: "Status must be a number"
-  }).min(0).max(2, "Invalid room status"),
+    invalid_type_error: "Status must be a valid room status"
+  }),
   
   floor: z.number({
     required_error: "Floor number is required",

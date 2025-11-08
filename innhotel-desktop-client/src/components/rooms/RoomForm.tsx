@@ -114,7 +114,7 @@ export const RoomForm = ({ mode, onSubmit, defaultValues, isLoading }: RoomFormP
       branchId: 0,
       roomTypeId: 0,
       roomNumber: '',
-      status: 0,
+      status: 'Available',
       floor: 0,
       manualPrice: 0,
       ...defaultValues,
@@ -128,7 +128,7 @@ export const RoomForm = ({ mode, onSubmit, defaultValues, isLoading }: RoomFormP
           branchId: data.branchId,
           roomTypeId: data.roomTypeId,
           roomNumber: data.roomNumber,
-          status: data.status as RoomStatus,
+          status: data.status,
           floor: data.floor,
           manualPrice: data.manualPrice,
         };
@@ -138,7 +138,7 @@ export const RoomForm = ({ mode, onSubmit, defaultValues, isLoading }: RoomFormP
         const request: UpdateRoomRequest = {
           roomTypeId: data.roomTypeId,
           roomNumber: data.roomNumber,
-          status: data.status as RoomStatus,
+          status: data.status,
           floor: data.floor,
           manualPrice: data.manualPrice,
         };
@@ -272,8 +272,8 @@ export const RoomForm = ({ mode, onSubmit, defaultValues, isLoading }: RoomFormP
             <FormItem>
               <FormLabel>Status <span className="text-destructive">*</span></FormLabel>
               <Select
-                onValueChange={(value) => field.onChange(parseInt(value))}
-                value={String(field.value)}
+                onValueChange={field.onChange}
+                value={field.value}
               >
                 <FormControl>
                   <SelectTrigger className="w-full">
@@ -282,8 +282,8 @@ export const RoomForm = ({ mode, onSubmit, defaultValues, isLoading }: RoomFormP
                 </FormControl>
                 <SelectContent>
                   {roomStatusOptions.map((status) => (
-                    <SelectItem key={status.id} value={String(status.id)}>
-                      {status.name}
+                    <SelectItem key={status.value} value={status.value}>
+                      {status.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
