@@ -1105,7 +1105,7 @@ SELECT pg_catalog.setval('public."reservation_services_Id_seq"', 19, false);
 -- Name: reservations_Id_seq; Type: SEQUENCE SET; Schema: public; Owner: innhotel_user
 --
 
-SELECT pg_catalog.setval('public."reservations_Id_seq"', 1, true);
+SELECT pg_catalog.setval('public."reservations_Id_seq"', 3, true);
 
 
 --
