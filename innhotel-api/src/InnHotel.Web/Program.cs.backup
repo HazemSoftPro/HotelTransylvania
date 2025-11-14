@@ -170,7 +170,6 @@ static void ConfigureServices(WebApplicationBuilder builder)
   builder.Services
       .AddOptionConfigs(builder.Configuration, logger, builder)
       .AddServiceConfigs(logger, builder)
-        .AddIntegrationServices()
       .AddFastEndpoints()
       .SwaggerDocument(o => {
         o.ShortSchemaNames = true;
@@ -181,9 +180,6 @@ static void ConfigureServices(WebApplicationBuilder builder)
 static async Task ConfigureApplication(WebApplication app)
 {
   await app.UseAppMiddlewareAndSeedDatabase();
-    
-    // Configure SignalR hubs
-    app.UseIntegrationHubs();
 }
 
 public partial class Program { }
