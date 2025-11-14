@@ -1,5 +1,5 @@
 import { HubConnectionBuilder, HubConnection, LogLevel } from '@microsoft/signalr';
-import { API_BASE_URL } from '../config/constants';
+import { getApiBaseUrl } from '../utils/getApiBaseUrl';
 
 export interface DashboardMetrics {
   totalRooms: number;
@@ -51,7 +51,7 @@ class SignalRService {
   async connect(token: string): Promise<void> {
     try {
       this.connection = new HubConnectionBuilder()
-        .withUrl(`${API_BASE_URL}/hotelHub`, {
+        .withUrl(`${getApiBaseUrl()}/hotelHub`, {
           accessTokenFactory: () => token,
         })
         .withAutomaticReconnect({
